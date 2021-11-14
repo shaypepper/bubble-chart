@@ -4,5 +4,6 @@
     },
     // Add those two lines:
     "editor.formatOnSave": true, // Tell VSCode to format files on save
-    "editor.defaultFormatter": "esbenp.prettier-vscode" // Tell VSCode to use Prettier as default file formatter
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "compile-hero.disable-compile-files-on-did-save-code": false // Tell VSCode to use Prettier as default file formatter
   }

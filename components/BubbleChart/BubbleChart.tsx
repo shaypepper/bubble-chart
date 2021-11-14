@@ -1,118 +1,145 @@
-import React from 'react'
-import { width, height, squareSize } from './tokens'
-import orgChart from './org-chart.json'
-import d3 from 'd3'
+import React, { useContext, useState } from 'react'
+import { width, height, margin } from './tokens'
+import { pack } from 'd3'
+import { WorkerDataContext } from './WorkerDataProvider'
+import { getBubbleFillColor, getTextcolor } from './utils'
 
-type EmployeeNode = {
-  [x: string]: EmployeeNode | null
-}
+// const legendSize = height * 0.001
 
-type FlattenedNode = {
-  parents: string[]
-  name: string
-  children: EmployeeNode | null
-  backgroundColor: string
-  textColor: string
-}
+// const strat = stratify<Worker>()
+//   .id((d) => d?.[state.nameColumn || ''])
+//   .parentId((d) => d?.[state.groupingColumn || ''])
 
-function flatten(
-  parents: string[],
-  children: EmployeeNode | null,
-  name: string,
-  managers: Set<string>,
-  isParentNode = false
-): [FlattenedNode[], Set<string>] {
-  const result = []
-
-  const node: FlattenedNode = {
-    parents,
-    name,
-    children,
-    backgroundColor: 'rgba(150,150,150,0.5)',
-    textColor: 'white',
-  }
-
-  result.push(node)
-  if (children) {
-    managers.add(name)
-    Object.entries(children).forEach(([childName, grandchildren]) => {
-      result.push(
-        ...flatten([...parents, name], grandchildren, childName, managers)[0]
-      )
-    })
-  }
-  return [result, managers]
-}
-
-const rollUpMethods = [
-  (d: FlattenedNode): string => d.parents[0],
-  (d: FlattenedNode): string => d.parents[1] || '',
-  (d: FlattenedNode): string => d.parents[2] || '',
-  (d: FlattenedNode): string => d.parents[3] || '',
-  (d: FlattenedNode): string => d.parents[4] || '',
-  (d: FlattenedNode): string => d.name,
-]
-const individualDepth = rollUpMethods.length
-const getFillColor = (d) => d.data[1].bubbleColor || 'rgba(0, 0, 0, 0.1)'
-const getTextColor = (d) => d.data[1].textColor
-const isIC = (d) => d.depth === individualDepth
-const legendSize = height * 0.001
+const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
+  width + margin * 2
+}`
 
 const BubbleChart: React.FC = () => {
-  const [flattenedData, managers] = flatten(
-    [],
-    orgChart,
-    'Org',
-    new Set(),
-    true
-  )
+  const [viewBox, setViewBox] = useState<string>(defaultViewBox)
+  let textArcPaths: RadiusMap = {}
 
-  let workers = flattenedData.filter(({ name }) => !managers.has(name))
-  console.log(workers)
+  const { stratifiedData } = useContext(WorkerDataContext)
 
-  const rolledUpTypes = d3.rollup(
-    workers,
-    (v: [FlattenedNode]) => ({
-      name: v[0].name,
-      count: v.length,
-      // notes: v[0].Notes,
-      bubbleColor: v[0].backgroundColor,
-      textColor: v[0].textColor,
-    }), // reduce function
-    ...rollUpMethods
-  )
+  const bubbleData =
+    stratifiedData && stratifiedData
+      ? pack().padding(0.005)(stratifiedData).descendants()
+      : []
 
-  const root = d3
-    .hierarchy([null, rolledUpTypes], ([_, values]) => values)
-    .sum(([key, values]) => values.count)
-    .sort((a, b) => b.value - a.value)
+  type RadiusMap = {
+    [n: number]: {
+      grouping: string
+      worker: string
+    }
+  }
+
+  textArcPaths =
+    bubbleData?.reduce<RadiusMap>((memo: RadiusMap, d) => {
+      if (memo[d.r]) return memo
+
+      const r = d.r * height
+      const groupingR = r
+      const workerR = r * 0.7
+      let getTextPath = (R: number) =>
+        `M 0,${R} a ${R},${R} 0 1,1 0,${-2 * R} a ${R},${R} 0 1,1 0,${2 * R} `
+
+      memo[d.r] = {
+        grouping: getTextPath(groupingR),
+        worker: getTextPath(workerR),
+      }
+      return memo
+    }, {}) || []
+
   return (
     <div>
-      <svg viewBox={`-10 -10 ${height + 20} ${width + 20}`}>
+      <button
+        onClick={(e) => {
+          setViewBox(defaultViewBox)
+          e.preventDefault()
+        }}
+      >
+        Reset zoom
+      </button>
+      <svg
+        viewBox={viewBox}
+        xmlns="http://www.w3.org/2000/svg"
+        height={'100%'}
+        width={'100%'}
+      >
         <rect
-          height={height + 20}
-          width={width + 20}
-          fill="white"
-          x="-10"
-          y="-10"
-        ></rect>
+          height={height + margin * 2}
+          width={width + margin * 2}
+          fill="gainsboro"
+          x={-margin}
+          y={-margin}
+        />
+        {Object.entries(textArcPaths).map(([r, paths]) => {
+          return (
+            <>
+              <path
+                id={`worker-text-arc-${r}`}
+                d={paths.worker}
+                fill={'transparent'}
+              />
+              <path
+                id={`grouping-text-arc-${r}`}
+                d={paths.grouping}
+                fill={'transparent'}
+              />
+            </>
+          )
+        })}
 
+        {bubbleData?.map((d, idx) => {
+          const isWorker = !d.children
+          const translation = {
+            x: (idx ? d.x : 0.5) * width,
+            y: (idx ? d.y : 0.5) * height,
+          }
+          const r = d.r * height
+
+          return (
+            <g
+              key={d.id}
+              className={'leaf'}
+              transform={`translate(${translation.x},${translation.y})`}
+              onClick={() => {
+                setViewBox(
+                  `${translation.x - r - 10} ${translation.y - r - 10} ${
+                    r * 2 + 20
+                  } ${r * 2 + 20}`
+                )
+              }}
+            >
+              <circle
+                r={r}
+                fill={getBubbleFillColor(isWorker, d.data.Assessment)}
+                strokeWidth={isWorker ? 0 : 2}
+                stroke={'darkgray'}
+              />
+
+              <text>
+                <textPath
+                  href={`#${isWorker ? 'worker' : 'grouping'}-text-arc-${d.r}`}
+                  fill={getTextcolor(isWorker, d.data.Assessment)}
+                  textAnchor={'middle'}
+                  startOffset={'50%'}
+                  fontSize={
+                    isWorker
+                      ? d.r * height * 0.333
+                      : (d.r * height) / (15 - d.depth * 1.5)
+                  }
+                >
+                  {d.data.Name}
+                </textPath>
+              </text>
+            </g>
+          )
+        })}
         {/* TODO: Add legend **/}
       </svg>
-      <button>Print SVG</button>
     </div>
   )
 }
-
-//   const rootPack = d3.pack(root).padding(0.002)
-
-//   // + CALL LAYOUT FUNCTION ON YOUR ROOT DATA
-//   const leaf = svg
-//       .selectAll(`g.leaf`)
-//       .data(rootPack(root).descendants())
-//       .join("g")
-//       .attr('class', 'leaf')
-//       .attr("transform", d => `translate(${d.x * width},${d.y * height})`);
 
 //   // + CREATE GRAPHICAL ELEMENTS
 //   const circle = leaf
@@ -122,21 +149,11 @@ const BubbleChart: React.FC = () => {
 //       .attr("stroke-width", d => (6 - d.depth) * 0.2)
 //       .attr("stroke", d => d.data[1].notes?.Assessment == "1" ? "white" : null)
 
-//   // Create path that text can follow (this is what makes the names round)
-//   leaf.append("path")
-//       .attr('id', d => `arcpath-${d.data[0]}`)
-//       .attr('d', d => {
-//         const relativeSize = isIC(d) ? 0.7 : 1;
-//         const R = (relativeSize * d.r * height);
-//         return `M 0,${R} a ${R},${R} 0 1,1 0,${-2 * R} a ${R},${R} 0 1,1 0,${2 * R} `
-//       })
-//       .attr('fill', 'transparent')
-
 //   // Write name to arc path
 //   leaf.append("text")
 //       .append("textPath")
 //       .attr('href', d => `#arcpath-${d.data[0]}`)
-//       .attr("font-size", d => isIC(d) ?
+//       .attr("font-size", d => isWorker(d) ?
 //         d.r * height * 0.333 :
 //         d.r * height / (15 - (d.depth * 1.5)))
 //       .html((d) => d.data[0])
@@ -148,7 +165,7 @@ const BubbleChart: React.FC = () => {
 //   leaf.append("text")
 //       .html(d => {
 //         const assessment = +d.data[1].notes?.Assessment || '?';
-//         return isIC(d) ? assessment : "";
+//         return isWorker(d) ? assessment : "";
 //       })
 //       .attr("font-size", d => (d.r * height) * 0.41)
 //       .attr("transform", d => `translate(${-0.5 * d.r * height} ${-0.2 * d.r * height})`)
@@ -157,7 +174,7 @@ const BubbleChart: React.FC = () => {
 //   // Write point person
 //   leaf.append("text")
 //       .html(d => {
-//         if (!isIC(d)) return "";
+//         if (!isWorker(d)) return "";
 //         if (d.data[1].notes?.Assessment == 1) return 'Organizer';
 
 //         const PP = d.data[1].notes?.['Point Person'].split(" ")[0] || "🤷🏻‍♀️";
@@ -200,13 +217,5 @@ const BubbleChart: React.FC = () => {
 //       .attr('x', legendSize * 10)
 //       .attr('y', (d, idx) => legendSize * 3)
 //       .html(d => d)
-
-const WorkerBubble: React.FC = () => {
-  return <circle></circle>
-}
-
-const BossBubble: React.FC = () => {
-  return <circle></circle>
-}
 
 export default BubbleChart
