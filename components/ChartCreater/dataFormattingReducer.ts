@@ -1,19 +1,11 @@
 import {
-  autoType,
-  csvParse,
   DSVParsedArray,
   DSVRowArray,
   HierarchyNode,
   stratify,
   StratifyOperator,
 } from 'd3'
-import React, {
-  Dispatch,
-  Reducer,
-  ReducerAction,
-  ReducerState,
-  ReducerWithoutAction,
-} from 'react'
+import { Reducer } from 'react'
 
 export type Person = {
   [key: string | number]: any

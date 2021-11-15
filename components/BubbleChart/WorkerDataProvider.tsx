@@ -1,32 +1,14 @@
 import React, {
   createContext,
   Dispatch,
-  useEffect,
   useReducer,
   useRef,
   useState,
 } from 'react'
-import { width, height, squareSize } from './tokens'
-import orgChart from './org-chart.json'
-import {
-  rollup,
-  hierarchy,
-  pack,
-  csv,
-  csvParse,
-  stratify,
-  HierarchyNode,
-  PackLayout,
-  HierarchyCircularNode,
-  DSVRowArray,
-  autoType,
-  interpolateCubehelixLong,
-} from 'd3'
+import { csvParse, HierarchyNode, HierarchyCircularNode } from 'd3'
 import dataFormattingReducer, {
   Action,
-  ColumnMap,
   FormatAction,
-  Person,
   State,
 } from '../ChartCreater/dataFormattingReducer'
 
@@ -35,8 +17,8 @@ type Worker = {
 }
 
 type WorkerDataType = {
-  convertWorkerCsv: (files: FileList) => void
-  convertGroupingCsv: (files: FileList) => void
+  convertWorkerCsv: (files: FileList, dispatch: Dispatch<Action>) => void
+  convertGroupingCsv: (files: FileList, dispatch: Dispatch<Action>) => void
   workerHeirarchy?: HierarchyNode<unknown>
   dispatch: Dispatch<Action>
 } & State
@@ -48,48 +30,16 @@ export const WorkerDataContext = createContext<WorkerDataType>({
 })
 
 const WorkerDataProvider: React.FC = ({ children }) => {
-  const [workerHeirarchy, setWorkerHeirarchy] =
-    useState<HierarchyNode<unknown>>()
-  const [bubbleData, setBubbleData] = useState<
-    HierarchyCircularNode<unknown>[]
-  >([])
-
   const [state, dispatch] = useReducer(dataFormattingReducer, { columnMap: {} })
-  console.log(state, dispatch)
-
-  const [workerData, setWorkerData] = useState<Worker[]>([])
-  const workerSet = useRef<Set<string>>(new Set())
-
-  const convertCsv =
-    (
-      action:
-        | FormatAction.UPLOAD_WORKERS_CSV
-        | FormatAction.UPLOAD_GROUPINGS_CSV
-    ) =>
-    (files: FileList) => {
-      let reader = new FileReader()
-      let file = files[0]
-
-      if (file != null && file.size > 0) {
-        let t = reader.readAsText(file)
-      }
-      reader.addEventListener('loadend', () => {
-        if (typeof reader.result !== 'string') return
-        const parsedWorkerData = csvParse(reader.result)
-        console.log({ parsedWorkerData })
-
-        dispatch({
-          type: action,
-          parsedData: parsedWorkerData,
-        })
-      })
-    }
 
   return (
     <WorkerDataContext.Provider
       value={{
-        convertWorkerCsv: convertCsv(FormatAction.UPLOAD_WORKERS_CSV),
-        convertGroupingCsv: convertCsv(FormatAction.UPLOAD_GROUPINGS_CSV),
+        convertWorkerCsv: convertCsv(FormatAction.UPLOAD_WORKERS_CSV, dispatch),
+        convertGroupingCsv: convertCsv(
+          FormatAction.UPLOAD_GROUPINGS_CSV,
+          dispatch
+        ),
         ...state,
         dispatch,
       }}
@@ -102,6 +52,27 @@ const WorkerDataProvider: React.FC = ({ children }) => {
 
 export default WorkerDataProvider
 
+function convertCsv(
+  action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
+  dispatch: Dispatch<Action>
+) {
+  return (files: FileList) => {
+    let reader = new FileReader()
+    let file = files[0]
+
+    if (file != null && file.size > 0) {
+      reader.readAsText(file)
+    }
+    reader.addEventListener('loadend', () => {
+      if (typeof reader.result !== 'string') return
+      const parsedWorkerData = csvParse(reader.result)
+      dispatch({
+        type: action,
+        parsedData: parsedWorkerData,
+      })
+    })
+  }
+}
 // const strat = stratify<Worker>()
 // .id((d) => d?.[state.nameColumn || ''])
 // .parentId((d) => d?.[state.groupingColumn || ''])
