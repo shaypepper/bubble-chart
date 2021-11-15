@@ -7,11 +7,19 @@ import {
   stratify,
   StratifyOperator,
 } from 'd3'
-import { Reducer, ReducerAction, ReducerState } from 'react'
+import React, {
+  Dispatch,
+  Reducer,
+  ReducerAction,
+  ReducerState,
+  ReducerWithoutAction,
+} from 'react'
 
-type Person = {
+export type Person = {
   [key: string]: number | string | Date
 }
+
+const s = (v: any) => `${v}`
 
 enum StandardColumn {
   NAME = 'name',
@@ -36,7 +44,7 @@ export interface State {
   columnMap: ColumnMap
 
   /** List of available columns from CSV */
-  columns?: string[]
+  columns?: (string | number)[]
 
   /** set of all names */
   allPeople?: Set<string>
@@ -63,17 +71,17 @@ export enum FormatAction {
   SET_COLUMN_MAP = 'seetColumnMap',
   SELECT_NAME_FIELD = 'selectNameField',
   SELECT_grouping_FIELD = 'selectgroupingField',
-  UPLOAD_groupingS_CSV = 'uploadGroupings',
+  UPLOAD_GROUPINGS_CSV = 'uploadGroupings',
   STRATIFY_DATA = 'stratifyData',
 }
 
-type Action =
+export type Action =
   | {
       type: FormatAction.UPLOAD_WORKERS_CSV
       parsedData: DSVParsedArray<Person>
     }
   | {
-      type: FormatAction.UPLOAD_groupingS_CSV
+      type: FormatAction.UPLOAD_GROUPINGS_CSV
       parsedData: DSVParsedArray<Person>
     }
   | {
@@ -97,14 +105,17 @@ export interface FormatActionArg {
   payload: any
 }
 
-const dataFormattingReducer: Reducer<State, Action> = (state, action) => {
+const dataFormattingReducer: Reducer<State, Action> = (
+  state,
+  action
+): State => {
   console.log('dispatch', state, action)
   switch (action.type) {
     case FormatAction.UPLOAD_WORKERS_CSV:
       return uploadWorkers(state, action.parsedData)
     case FormatAction.SET_COLUMN_MAP:
       return createColumnMap(state, action.columnMap)
-    case FormatAction.UPLOAD_groupingS_CSV:
+    case FormatAction.UPLOAD_GROUPINGS_CSV:
       return uploadGroupings(state, action.parsedData)
     case FormatAction.STRATIFY_DATA:
       return stratifyData(state)
@@ -130,19 +141,22 @@ function uploadGroupings(
   state: State,
   parsedData: DSVParsedArray<Person>
 ): State {
-  const { name: nameKey, grouping: groupingKey } = state.columnMap
+  const nameKey = state.columnMap.name || ''
+  const groupingKey = state.columnMap.grouping || ''
+
   const newUnmappedGroupingset = new Set(state.unmappedGroupings)
   const newAllPeople = new Set(state.allPeople)
   parsedData.forEach((grouping) => {
-    if (newUnmappedGroupingset.has(grouping[nameKey])) {
-      newUnmappedGroupingset.delete(grouping[nameKey])
+    const groupingName = s(grouping[nameKey])
+    if (newUnmappedGroupingset.has(groupingName)) {
+      newUnmappedGroupingset.delete(groupingName)
     }
 
-    if (!newUnmappedGroupingset.has(grouping[nameKey])) {
-      newUnmappedGroupingset.delete(grouping[nameKey])
+    if (!newUnmappedGroupingset.has(groupingName)) {
+      newUnmappedGroupingset.delete(groupingName)
     }
 
-    newAllPeople.add(grouping[nameKey])
+    newAllPeople.add(groupingName)
   })
   return {
     ...state,
@@ -158,19 +172,19 @@ function createColumnMap(state: State, columnMap: ColumnMap): State {
       worker[key] = worker[mappedKey]
     })
   })
-  const nameKey = columnMap.name
-  const groupingKey = columnMap.grouping
+  const nameKey = columnMap.name || ''
+  const groupingKey = columnMap.grouping || ''
   const workerNameList = new Set<string>()
   state?.workersData?.forEach((worker) => {
-    workerNameList.add(worker[nameKey])
+    workerNameList.add(s(worker[nameKey]))
   })
 
   const unlistedGroupingset = new Set<string>()
 
   state?.workersData?.forEach((worker) => {
-    console.log(worker, groupingKey, workerNameList.has(worker[groupingKey]))
-    if (!workerNameList.has(worker[groupingKey])) {
-      unlistedGroupingset.add(worker[groupingKey])
+    const workerGroup = s(worker[groupingKey])
+    if (!workerNameList.has(workerGroup)) {
+      unlistedGroupingset.add(workerGroup)
     }
   })
 
@@ -185,8 +199,8 @@ function createColumnMap(state: State, columnMap: ColumnMap): State {
 
 function stratifyData(state: State): State {
   const strat = stratify<Person>()
-    .id((d) => d?.[state.columnMap.name || ''])
-    .parentId((d) => d?.[state.columnMap.grouping || ''])
+    .id((d) => `${d?.[state.columnMap.name || '']}`)
+    .parentId((d) => `${d?.[state.columnMap.grouping || '']}`)
   if (!state.workersData || !state.groupingsData) {
     return state
   }

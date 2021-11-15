@@ -6,7 +6,7 @@ import BubbleChart from '../BubbleChart'
 
 const FileInput: React.FC = () => {
   const {
-    convertgroupingCsv,
+    convertGroupingCsv,
     convertWorkerCsv,
     columns,
     workersData,
@@ -45,7 +45,9 @@ const FileInput: React.FC = () => {
               onChange={() => {
                 if (!outreachDataInputRef.current) return
                 const files = outreachDataInputRef.current.files
-                convertWorkerCsv(files)
+                if (files) {
+                  convertWorkerCsv(files)
+                }
               }}
             />
           </Form.Label>
@@ -56,7 +58,7 @@ const FileInput: React.FC = () => {
           {Object.entries(tempColumnMap).map(([key, label]) => (
             <React.Fragment key={key}>
               <Form.Label>
-                Which column should be used for the workers' {key}?
+                Which column should be used for the workers&apos; {key}?
                 <Dropdown
                   role="select"
                   onSelect={(eventKey, event) => {
@@ -101,7 +103,7 @@ const FileInput: React.FC = () => {
           <Form.Label htmlFor="grouping-data">
             It seems that you are missing some grouping data. There are{' '}
             {Array.from(unmappedGroupings || []).length} workers whose groupings
-            haven't been uploaded (Ex.{' '}
+            haven&apos;t been uploaded (Ex.{' '}
             {Array.from(unmappedGroupings || [])
               .slice(0, 2)
               .join(', ')}
@@ -115,7 +117,9 @@ const FileInput: React.FC = () => {
               onChange={() => {
                 if (!groupingListInputRef.current) return
                 const files = groupingListInputRef.current.files
-                convertgroupingCsv(files)
+                if (files) {
+                  convertGroupingCsv(files)
+                }
               }}
             />
           </Form.Label>

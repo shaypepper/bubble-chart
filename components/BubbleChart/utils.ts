@@ -1,6 +1,11 @@
-export const getBubbleFillColor = (isWorker: boolean, assessment: string) => {
+export const getBubbleFillColor = (
+  isWorker: boolean,
+  assessment: string | number | Date
+) => {
   if (!isWorker) {
     return 'rgba(50,50,50, 0.2)'
+  } else if (typeof assessment !== 'string') {
+    return `hsl(${assessment}, 50%, 50%)`
   } else {
     return {
       '1': 'maroon',
@@ -13,9 +18,14 @@ export const getBubbleFillColor = (isWorker: boolean, assessment: string) => {
   }
 }
 
-export const getTextcolor = (isWorker: boolean, assessment: string) => {
+export const getTextcolor = (
+  isWorker: boolean,
+  assessment: string | number | Date
+) => {
   if (!isWorker) {
     return 'black'
+  } else if (typeof assessment !== 'string') {
+    return `hsl(${assessment}, 100%, 100%)`
   } else {
     return (
       {

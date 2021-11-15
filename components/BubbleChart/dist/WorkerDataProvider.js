@@ -16,14 +16,16 @@ var react_1 = require("react");
 var d3_1 = require("d3");
 var dataFormattingReducer_1 = require("../ChartCreater/dataFormattingReducer");
 exports.WorkerDataContext = react_1.createContext({
-    convertWorkerCsv: function (files) { return files && null; },
-    convertgroupingCsv: function (files) { return files && null; }
+    convertWorkerCsv: function (files) { return files && undefined; },
+    convertGroupingCsv: function (files) { return files && undefined; },
+    columnMap: {},
+    dispatch: function () { return undefined; }
 });
 var WorkerDataProvider = function (_a) {
     var children = _a.children;
     var _b = react_1.useState(), workerHeirarchy = _b[0], setWorkerHeirarchy = _b[1];
     var _c = react_1.useState([]), bubbleData = _c[0], setBubbleData = _c[1];
-    var _d = react_1.useReducer(dataFormattingReducer_1["default"], {}), state = _d[0], dispatch = _d[1];
+    var _d = react_1.useReducer(dataFormattingReducer_1["default"], { columnMap: {} }), state = _d[0], dispatch = _d[1];
     console.log(state, dispatch);
     var _e = react_1.useState([]), workerData = _e[0], setWorkerData = _e[1];
     var workerSet = react_1.useRef(new Set());
@@ -37,7 +39,7 @@ var WorkerDataProvider = function (_a) {
             reader.addEventListener('loadend', function () {
                 if (typeof reader.result !== 'string')
                     return;
-                var parsedWorkerData = d3_1.csvParse(reader.result, d3_1.autoType);
+                var parsedWorkerData = d3_1.csvParse(reader.result);
                 console.log({ parsedWorkerData: parsedWorkerData });
                 dispatch({
                     type: action,
@@ -46,7 +48,7 @@ var WorkerDataProvider = function (_a) {
             });
         };
     };
-    return (react_1["default"].createElement(exports.WorkerDataContext.Provider, { value: __assign(__assign({ convertWorkerCsv: convertCsv(dataFormattingReducer_1.FormatAction.UPLOAD_WORKERS_CSV), convertgroupingCsv: convertCsv(dataFormattingReducer_1.FormatAction.UPLOAD_groupingS_CSV) }, state), { dispatch: dispatch }) },
+    return (react_1["default"].createElement(exports.WorkerDataContext.Provider, { value: __assign(__assign({ convertWorkerCsv: convertCsv(dataFormattingReducer_1.FormatAction.UPLOAD_WORKERS_CSV), convertGroupingCsv: convertCsv(dataFormattingReducer_1.FormatAction.UPLOAD_GROUPINGS_CSV) }, state), { dispatch: dispatch }) },
         ' ',
         children));
 };

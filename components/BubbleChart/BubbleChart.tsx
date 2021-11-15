@@ -3,6 +3,7 @@ import { width, height, margin } from './tokens'
 import { pack } from 'd3'
 import { WorkerDataContext } from './WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
+import { Person } from '../ChartCreater/dataFormattingReducer'
 
 // const legendSize = height * 0.001
 
@@ -20,9 +21,9 @@ const BubbleChart: React.FC = () => {
 
   const { stratifiedData } = useContext(WorkerDataContext)
 
-  const bubbleData =
+  const bubbleData: d3.HierarchyCircularNode<Person>[] =
     stratifiedData && stratifiedData
-      ? pack().padding(0.005)(stratifiedData).descendants()
+      ? pack<Person>().padding(0.005)(stratifiedData).descendants()
       : []
 
   type RadiusMap = {
@@ -89,7 +90,7 @@ const BubbleChart: React.FC = () => {
           )
         })}
 
-        {bubbleData?.map((d, idx) => {
+        {bubbleData?.map((d: d3.HierarchyCircularNode<Person>, idx) => {
           const isWorker = !d.children
           const translation = {
             x: (idx ? d.x : 0.5) * width,

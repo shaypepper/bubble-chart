@@ -35,6 +35,10 @@ exports.FormatAction = void 0;
 
 var d3_1 = require('d3');
 
+var s = function s(v) {
+  return '' + v;
+};
+
 var StandardColumn;
 
 (function (StandardColumn) {
@@ -50,7 +54,7 @@ var FormatAction;
   FormatAction['SET_COLUMN_MAP'] = 'seetColumnMap';
   FormatAction['SELECT_NAME_FIELD'] = 'selectNameField';
   FormatAction['SELECT_grouping_FIELD'] = 'selectgroupingField';
-  FormatAction['UPLOAD_groupingS_CSV'] = 'uploadGroupings';
+  FormatAction['UPLOAD_GROUPINGS_CSV'] = 'uploadGroupings';
   FormatAction['STRATIFY_DATA'] = 'stratifyData';
 })(FormatAction = exports.FormatAction || (exports.FormatAction = {}));
 
@@ -64,7 +68,7 @@ var dataFormattingReducer = function dataFormattingReducer(state, action) {
     case FormatAction.SET_COLUMN_MAP:
       return createColumnMap(state, action.columnMap);
 
-    case FormatAction.UPLOAD_groupingS_CSV:
+    case FormatAction.UPLOAD_GROUPINGS_CSV:
       return uploadGroupings(state, action.parsedData);
 
     case FormatAction.STRATIFY_DATA:
@@ -85,21 +89,22 @@ function uploadWorkers(state, parsedData) {
 }
 
 function uploadGroupings(state, parsedData) {
-  var _a = state.columnMap,
-      nameKey = _a.name,
-      groupingKey = _a.grouping;
+  var nameKey = state.columnMap.name || '';
+  var groupingKey = state.columnMap.grouping || '';
   var newUnmappedGroupingset = new Set(state.unmappedGroupings);
   var newAllPeople = new Set(state.allPeople);
   parsedData.forEach(function (grouping) {
-    if (newUnmappedGroupingset.has(grouping[nameKey])) {
-      newUnmappedGroupingset['delete'](grouping[nameKey]);
+    var groupingName = s(grouping[nameKey]);
+
+    if (newUnmappedGroupingset.has(groupingName)) {
+      newUnmappedGroupingset['delete'](groupingName);
     }
 
-    if (!newUnmappedGroupingset.has(grouping[nameKey])) {
-      newUnmappedGroupingset['delete'](grouping[nameKey]);
+    if (!newUnmappedGroupingset.has(groupingName)) {
+      newUnmappedGroupingset['delete'](groupingName);
     }
 
-    newAllPeople.add(grouping[nameKey]);
+    newAllPeople.add(groupingName);
   });
   return __assign(__assign({}, state), {
     groupingsData: parsedData,
@@ -118,18 +123,18 @@ function createColumnMap(state, columnMap) {
       worker[key] = worker[mappedKey];
     });
   });
-  var nameKey = columnMap.name;
-  var groupingKey = columnMap.grouping;
+  var nameKey = columnMap.name || '';
+  var groupingKey = columnMap.grouping || '';
   var workerNameList = new Set();
   (_b = state === null || state === void 0 ? void 0 : state.workersData) === null || _b === void 0 ? void 0 : _b.forEach(function (worker) {
-    workerNameList.add(worker[nameKey]);
+    workerNameList.add(s(worker[nameKey]));
   });
   var unlistedGroupingset = new Set();
   (_c = state === null || state === void 0 ? void 0 : state.workersData) === null || _c === void 0 ? void 0 : _c.forEach(function (worker) {
-    console.log(worker, groupingKey, workerNameList.has(worker[groupingKey]));
+    var workerGroup = s(worker[groupingKey]);
 
-    if (!workerNameList.has(worker[groupingKey])) {
-      unlistedGroupingset.add(worker[groupingKey]);
+    if (!workerNameList.has(workerGroup)) {
+      unlistedGroupingset.add(workerGroup);
     }
   });
   return __assign(__assign({}, state), {
@@ -142,9 +147,9 @@ function createColumnMap(state, columnMap) {
 
 function stratifyData(state) {
   var strat = d3_1.stratify().id(function (d) {
-    return d === null || d === void 0 ? void 0 : d[state.columnMap.name || ''];
+    return '' + (d === null || d === void 0 ? void 0 : d[state.columnMap.name || '']);
   }).parentId(function (d) {
-    return d === null || d === void 0 ? void 0 : d[state.columnMap.grouping || ''];
+    return '' + (d === null || d === void 0 ? void 0 : d[state.columnMap.grouping || '']);
   });
 
   if (!state.workersData || !state.groupingsData) {

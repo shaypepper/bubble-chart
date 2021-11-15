@@ -32,7 +32,7 @@ var FileInput = function FileInput() {
   var _a;
 
   var _b = react_1.useContext(WorkerDataProvider_1.WorkerDataContext),
-      convertgroupingCsv = _b.convertgroupingCsv,
+      convertGroupingCsv = _b.convertGroupingCsv,
       convertWorkerCsv = _b.convertWorkerCsv,
       columns = _b.columns,
       workersData = _b.workersData,
@@ -68,7 +68,10 @@ var FileInput = function FileInput() {
     onChange: function onChange() {
       if (!outreachDataInputRef.current) return;
       var files = outreachDataInputRef.current.files;
-      convertWorkerCsv(files);
+
+      if (files) {
+        convertWorkerCsv(files);
+      }
     }
   }))), workersData && !columnMap && react_1['default'].createElement(react_bootstrap_1.Form.Group, null, Object.entries(tempColumnMap).map(function (_a) {
     var key = _a[0],
@@ -105,7 +108,7 @@ var FileInput = function FileInput() {
     }
   }, 'Apply')), !!(unmappedGroupings === null || unmappedGroupings === void 0 ? void 0 : unmappedGroupings.size) && react_1['default'].createElement(react_bootstrap_1.Form.Group, null, react_1['default'].createElement(react_bootstrap_1.Form.Label, {
     htmlFor: 'grouping-data'
-  }, 'It seems that you are missing some grouping data. Upload your grouping data here:', react_1['default'].createElement(react_bootstrap_1.Form.Control, {
+  }, 'It seems that you are missing some grouping data. There are', ' ', Array.from(unmappedGroupings || []).length, " workers whose groupings haven't been uploaded (Ex.", ' ', Array.from(unmappedGroupings || []).slice(0, 2).join(', '), '...). Upload your grouping data here:', react_1['default'].createElement(react_bootstrap_1.Form.Control, {
     className: 'form-control',
     ref: groupingListInputRef,
     type: 'file',
@@ -114,7 +117,10 @@ var FileInput = function FileInput() {
     onChange: function onChange() {
       if (!groupingListInputRef.current) return;
       var files = groupingListInputRef.current.files;
-      convertgroupingCsv(files);
+
+      if (files) {
+        convertGroupingCsv(files);
+      }
     }
   }))), !(unmappedGroupings === null || unmappedGroupings === void 0 ? void 0 : unmappedGroupings.size) && workersData && columnMap && react_1['default'].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {

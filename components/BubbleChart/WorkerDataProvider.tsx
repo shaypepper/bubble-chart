@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  Dispatch,
   useEffect,
   useReducer,
   useRef,
@@ -22,8 +23,10 @@ import {
   interpolateCubehelixLong,
 } from 'd3'
 import dataFormattingReducer, {
+  Action,
   ColumnMap,
   FormatAction,
+  Person,
   State,
 } from '../ChartCreater/dataFormattingReducer'
 
@@ -33,13 +36,15 @@ type Worker = {
 
 type WorkerDataType = {
   convertWorkerCsv: (files: FileList) => void
-  convertgroupingCsv: (files: FileList) => void
+  convertGroupingCsv: (files: FileList) => void
   workerHeirarchy?: HierarchyNode<unknown>
-  columns?: string[]
+  dispatch: Dispatch<Action>
 } & State
 export const WorkerDataContext = createContext<WorkerDataType>({
-  convertWorkerCsv: (files) => files && null,
-  convertgroupingCsv: (files) => files && null,
+  convertWorkerCsv: (files) => files && undefined,
+  convertGroupingCsv: (files) => files && undefined,
+  columnMap: {},
+  dispatch: () => undefined,
 })
 
 const WorkerDataProvider: React.FC = ({ children }) => {
@@ -49,7 +54,7 @@ const WorkerDataProvider: React.FC = ({ children }) => {
     HierarchyCircularNode<unknown>[]
   >([])
 
-  const [state, dispatch] = useReducer(dataFormattingReducer, {})
+  const [state, dispatch] = useReducer(dataFormattingReducer, { columnMap: {} })
   console.log(state, dispatch)
 
   const [workerData, setWorkerData] = useState<Worker[]>([])
@@ -59,7 +64,7 @@ const WorkerDataProvider: React.FC = ({ children }) => {
     (
       action:
         | FormatAction.UPLOAD_WORKERS_CSV
-        | FormatAction.UPLOAD_groupingS_CSV
+        | FormatAction.UPLOAD_GROUPINGS_CSV
     ) =>
     (files: FileList) => {
       let reader = new FileReader()
@@ -70,7 +75,7 @@ const WorkerDataProvider: React.FC = ({ children }) => {
       }
       reader.addEventListener('loadend', () => {
         if (typeof reader.result !== 'string') return
-        const parsedWorkerData = csvParse(reader.result, autoType)
+        const parsedWorkerData = csvParse(reader.result)
         console.log({ parsedWorkerData })
 
         dispatch({
@@ -84,7 +89,7 @@ const WorkerDataProvider: React.FC = ({ children }) => {
     <WorkerDataContext.Provider
       value={{
         convertWorkerCsv: convertCsv(FormatAction.UPLOAD_WORKERS_CSV),
-        convertgroupingCsv: convertCsv(FormatAction.UPLOAD_groupingS_CSV),
+        convertGroupingCsv: convertCsv(FormatAction.UPLOAD_GROUPINGS_CSV),
         ...state,
         dispatch,
       }}
