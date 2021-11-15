@@ -33,8 +33,5 @@
   "type": "module",
   "exports": {
     "require": "./dist/d3-dsv.js"
-  },
-  "engines": {
-    "node": "12.14.1"
   }
 }
