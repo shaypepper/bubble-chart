@@ -16,7 +16,7 @@ import React, {
 } from 'react'
 
 export type Person = {
-  [key: string]: number | string | Date
+  [key: string | number]: any
 }
 
 const s = (v: any) => `${v}`
