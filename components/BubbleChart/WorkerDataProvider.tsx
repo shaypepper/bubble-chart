@@ -17,8 +17,8 @@ type Worker = {
 }
 
 type WorkerDataType = {
-  convertWorkerCsv: (files: FileList, dispatch: Dispatch<Action>) => void
-  convertGroupingCsv: (files: FileList, dispatch: Dispatch<Action>) => void
+  convertWorkerCsv: (files: FileList) => void
+  convertGroupingCsv: (files: FileList) => void
   workerHeirarchy?: HierarchyNode<unknown>
   dispatch: Dispatch<Action>
 } & State

@@ -7,7 +7,7 @@ const WorkersInput: React.FC = () => {
     useContext(WorkerDataContext)
 
   const outreachDataInputRef = useRef<HTMLInputElement>(null)
-
+  console.log('smile!')
   return workersData ? null : (
     <Form.Group>
       <Form.Label htmlFor="outreach-data">
