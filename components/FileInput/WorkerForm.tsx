@@ -1,84 +1,28 @@
 import React, { useContext, useRef, useState } from 'react'
 import { WorkerDataContext } from '../BubbleChart/WorkerDataProvider'
-import { Button, Dropdown, Form } from 'react-bootstrap'
-import { ColumnMap, FormatAction } from '../ChartCreater/dataFormattingReducer'
+import { Button, Form } from 'react-bootstrap'
+import { FormatAction, Steps } from '../ChartCreater/data/dataFormattingReducer'
 import BubbleChart from '../BubbleChart'
 import WorkersInput from './WorkersInput'
 import GroupingsInput from './GroupingsInput'
-import ColorInput from './ColorPicker'
+import ColorPicker from './ColorPicker'
+import MapColumns from './MapColumns'
 
 const FileInput: React.FC = () => {
-  const {
-    convertGroupingCsv,
-    convertWorkerCsv,
-    columns,
-    workersData,
-    columnMap,
-    dispatch,
-    unmappedGroupings,
-    stratifiedData,
-  } = useContext(WorkerDataContext)
-
-  console.log({ unmappedGroupings, workersData })
-  const outreachDataInputRef = useRef<HTMLInputElement>(null)
-  const groupingListInputRef = useRef<HTMLInputElement>(null)
-  const [tempColumnMap, setTempColumnMap] = useState<ColumnMap>({
-    name: undefined,
-    grouping: undefined,
-  })
+  const { dispatch, unmappedGroupings, stratifiedData, currentStep } =
+    useContext(WorkerDataContext)
 
   return (
     <Form>
-      <ColorInput />
-      {!workersData && <WorkersInput />}
-      {workersData && !columnMap && (
-        <Form.Group>
-          {Object.entries(tempColumnMap).map(([key, label]) => (
-            <React.Fragment key={key}>
-              <Form.Label>
-                Which column should be used for the workers&apos; {key}?
-                <Dropdown
-                  role="select"
-                  onSelect={(eventKey, event) => {
-                    setTempColumnMap((currentTempColumnMap) => ({
-                      ...currentTempColumnMap,
-                      [key]: eventKey,
-                    }))
-                  }}
-                >
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    {label}
-                  </Dropdown.Toggle>
+      {currentStep === Steps.UPLOAD_WORKERS && <WorkersInput />}
 
-                  <Dropdown.Menu role="select">
-                    {(columns || []).map((col) => (
-                      <Dropdown.Item key={col} eventKey={col} as={Button}>
-                        {col}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Form.Label>
-              <br />
-            </React.Fragment>
-          ))}
+      {currentStep === Steps.CHOOSE_COLUMNS && <MapColumns />}
 
-          <Button
-            onClick={() => {
-              dispatch({
-                type: FormatAction.SET_COLUMN_MAP,
-                columnMap: tempColumnMap,
-              })
-            }}
-          >
-            Apply
-          </Button>
-        </Form.Group>
-      )}
+      {currentStep === Steps.UPLOAD_GROUPINGS && <GroupingsInput />}
 
-      {!!unmappedGroupings?.size && <GroupingsInput />}
+      {currentStep === Steps.CHOOSE_COLOR_SCHEME && <ColorPicker />}
 
-      {!unmappedGroupings?.size && workersData && columnMap && (
+      {currentStep === Steps.DRAW && (
         <Button
           onClick={() => {
             dispatch({ type: FormatAction.STRATIFY_DATA })

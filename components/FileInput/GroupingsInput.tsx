@@ -9,7 +9,7 @@ const GroupingsInput: React.FC = () => {
   const groupingListInputRef = useRef<HTMLInputElement>(null)
   const unmappedGroupingsArray = Array.from(unmappedGroupings || [])
 
-  return unmappedGroupings?.size ? null : (
+  return (
     <Form.Group>
       <Form.Label htmlFor="grouping-data">
         It seems that you are missing some grouping data. There are{' '}

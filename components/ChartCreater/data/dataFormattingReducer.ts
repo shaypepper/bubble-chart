@@ -11,6 +11,10 @@ export type Person = {
   [key: string | number]: any
 }
 
+export type ColorMap = {
+  [key: string | number]: string
+}
+
 const s = (v: any) => `${v}`
 
 enum StandardColumn {
@@ -23,9 +27,12 @@ export type ColumnMap = {
   name?: string
   grouping?: string
   assessment?: number
+  colorBasis?: string
 }
 
 export interface State {
+  /**  Current step in the process */
+  currentStep: Steps
   /** Uploaded csv workers data  */
   workersData?: DSVParsedArray<Person>
   /** Uploaded csv groupings data  */
@@ -58,13 +65,22 @@ export interface State {
   }
 }
 
+export enum Steps {
+  UPLOAD_WORKERS = 1,
+  CHOOSE_COLUMNS = 2,
+  UPLOAD_GROUPINGS = 3,
+  CHOOSE_COLOR_SCHEME = 4,
+  DRAW = 5,
+}
+
 export enum FormatAction {
   UPLOAD_WORKERS_CSV = 'uploadWorkers',
-  SET_COLUMN_MAP = 'seetColumnMap',
+  SET_COLUMN_MAP = 'setColumnMap',
   SELECT_NAME_FIELD = 'selectNameField',
   SELECT_grouping_FIELD = 'selectgroupingField',
   UPLOAD_GROUPINGS_CSV = 'uploadGroupings',
   STRATIFY_DATA = 'stratifyData',
+  SET_COLORS = 'setColors',
 }
 
 export type Action =
@@ -89,6 +105,10 @@ export type Action =
       groupingColumn: string
     }
   | {
+      type: FormatAction.SET_COLORS
+      colorMap: ColorMap
+    }
+  | {
       type: FormatAction.STRATIFY_DATA
     }
 
@@ -111,6 +131,10 @@ const dataFormattingReducer: Reducer<State, Action> = (
       return uploadGroupings(state, action.parsedData)
     case FormatAction.STRATIFY_DATA:
       return stratifyData(state)
+
+    case FormatAction.SET_COLORS:
+      console.log(action.colorMap)
+      return { ...state, colorMap: action.colorMap, currentStep: Steps.DRAW }
     default:
       return state
   }
@@ -122,39 +146,45 @@ function uploadWorkers(
   state: State,
   parsedData: DSVParsedArray<Person>
 ): State {
+  if (!parsedData.length) {
+    return state
+  }
+
   return {
     ...state,
     workersData: parsedData,
     columns: parsedData.columns,
+    currentStep: Steps.CHOOSE_COLUMNS,
   }
 }
 
 function uploadGroupings(
-  state: State,
+  prevState: State,
   parsedData: DSVParsedArray<Person>
 ): State {
-  const nameKey = state.columnMap.name || ''
-  const groupingKey = state.columnMap.grouping || ''
+  const nameKey = prevState.columnMap.name || ''
+  const groupingKey = prevState.columnMap.grouping || ''
 
-  const newUnmappedGroupingset = new Set(state.unmappedGroupings)
-  const newAllPeople = new Set(state.allPeople)
+  const unmappedGroupings = new Set(prevState.unmappedGroupings)
+  const newAllPeople = new Set(prevState.allPeople)
   parsedData.forEach((grouping) => {
     const groupingName = s(grouping[nameKey])
-    if (newUnmappedGroupingset.has(groupingName)) {
-      newUnmappedGroupingset.delete(groupingName)
+    if (unmappedGroupings.has(groupingName)) {
+      unmappedGroupings.delete(groupingName)
     }
 
-    if (!newUnmappedGroupingset.has(groupingName)) {
-      newUnmappedGroupingset.delete(groupingName)
+    if (!unmappedGroupings.has(groupingName)) {
+      unmappedGroupings.delete(groupingName)
     }
 
     newAllPeople.add(groupingName)
   })
   return {
-    ...state,
+    ...prevState,
     groupingsData: parsedData,
-    unmappedGroupings: newUnmappedGroupingset,
+    unmappedGroupings,
     allPeople: newAllPeople,
+    currentStep: Steps.CHOOSE_COLOR_SCHEME,
   }
 }
 
@@ -166,26 +196,33 @@ function createColumnMap(state: State, columnMap: ColumnMap): State {
   })
   const nameKey = columnMap.name || ''
   const groupingKey = columnMap.grouping || ''
+  const colorBasis = columnMap.colorBasis || ''
+
   const workerNameList = new Set<string>()
   state?.workersData?.forEach((worker) => {
     workerNameList.add(s(worker[nameKey]))
   })
 
-  const unlistedGroupingset = new Set<string>()
+  const unmappedGroupings = new Set<string>()
 
-  state?.workersData?.forEach((worker) => {
+  state.workersData?.forEach((worker) => {
     const workerGroup = s(worker[groupingKey])
     if (!workerNameList.has(workerGroup)) {
-      unlistedGroupingset.add(workerGroup)
+      unmappedGroupings.add(workerGroup)
     }
   })
+
+  const colorValueSet = new Set(
+    state.workersData?.map((worker) => worker[colorBasis])
+  )
 
   return {
     ...state,
     workersData: state.workersData,
-    unmappedGroupings: unlistedGroupingset,
+    unmappedGroupings,
     allPeople: workerNameList,
     columnMap,
+    currentStep: Steps.UPLOAD_GROUPINGS,
   }
 }
 

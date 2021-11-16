@@ -10,7 +10,8 @@ import dataFormattingReducer, {
   Action,
   FormatAction,
   State,
-} from '../ChartCreater/dataFormattingReducer'
+  Steps,
+} from '../ChartCreater/data/dataFormattingReducer'
 
 type Worker = {
   [k: string]: string
@@ -27,10 +28,14 @@ export const WorkerDataContext = createContext<WorkerDataType>({
   convertGroupingCsv: (files) => files && undefined,
   columnMap: {},
   dispatch: () => undefined,
+  currentStep: Steps.UPLOAD_WORKERS,
 })
 
 const WorkerDataProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(dataFormattingReducer, { columnMap: {} })
+  const [state, dispatch] = useReducer(dataFormattingReducer, {
+    columnMap: {},
+    currentStep: Steps.UPLOAD_WORKERS,
+  })
 
   return (
     <WorkerDataContext.Provider

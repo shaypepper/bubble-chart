@@ -1,15 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { width, height, margin } from './tokens'
-import { pack } from 'd3'
+import { pack, zoom, select } from 'd3'
 import { WorkerDataContext } from './WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
-import { Person } from '../ChartCreater/dataFormattingReducer'
+import { Person } from '../ChartCreater/data/dataFormattingReducer'
 
 // const legendSize = height * 0.001
 
 // const strat = stratify<Worker>()
 //   .id((d) => d?.[state.nameColumn || ''])
 //   .parentId((d) => d?.[state.groupingColumn || ''])
+
+const myZoom = zoom().scaleExtent([1, 100])
 
 const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
   width + margin * 2
@@ -18,8 +20,15 @@ const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
 const BubbleChart: React.FC = () => {
   const [viewBox, setViewBox] = useState<string>(defaultViewBox)
   let textArcPaths: RadiusMap = {}
+  const bubbleChartSVG = useRef<SVGElement>(null)
 
-  const { stratifiedData } = useContext(WorkerDataContext)
+  useEffect(() => {
+    if (bubbleChartSVG?.current) {
+      select(bubbleChartSVG.current).call(myZoom)
+    }
+  }, [])
+
+  const { stratifiedData, colorMap } = useContext(WorkerDataContext)
 
   const bubbleData: d3.HierarchyCircularNode<Person>[] =
     stratifiedData && stratifiedData
@@ -65,6 +74,7 @@ const BubbleChart: React.FC = () => {
         xmlns="http://www.w3.org/2000/svg"
         height={'100%'}
         width={'100%'}
+        ref={bubbleChartSVG}
       >
         <rect
           height={height + margin * 2}
@@ -113,7 +123,11 @@ const BubbleChart: React.FC = () => {
             >
               <circle
                 r={r}
-                fill={getBubbleFillColor(isWorker, d.data.Assessment)}
+                fill={getBubbleFillColor(
+                  isWorker,
+                  d.data.Assessment,
+                  colorMap || {}
+                )}
                 strokeWidth={isWorker ? 0 : 2}
                 stroke={'darkgray'}
               />
@@ -121,7 +135,11 @@ const BubbleChart: React.FC = () => {
               <text>
                 <textPath
                   href={`#${isWorker ? 'worker' : 'grouping'}-text-arc-${d.r}`}
-                  fill={getTextcolor(isWorker, d.data.Assessment)}
+                  fill={getTextcolor(
+                    isWorker,
+                    d.data.Assessment,
+                    colorMap || {}
+                  )}
                   textAnchor={'middle'}
                   startOffset={'50%'}
                   fontSize={
