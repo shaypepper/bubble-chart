@@ -1,6 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { width, height, margin } from './tokens'
-import { pack, zoom, select } from 'd3'
+import { pack, select } from 'd3'
+// import { pack, zoom, select } from 'd3'
 import { WorkerDataContext } from './WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
 import { Person } from '../ChartCreater/data/dataFormattingReducer'
@@ -11,7 +12,7 @@ import { Person } from '../ChartCreater/data/dataFormattingReducer'
 //   .id((d) => d?.[state.nameColumn || ''])
 //   .parentId((d) => d?.[state.groupingColumn || ''])
 
-const myZoom = zoom().scaleExtent([1, 100])
+// const myZoom = zoom().scaleExtent([1, 100])
 
 const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
   width + margin * 2
@@ -22,11 +23,11 @@ const BubbleChart: React.FC = () => {
   let textArcPaths: RadiusMap = {}
   const bubbleChartSVG = useRef<SVGElement>(null)
 
-  useEffect(() => {
-    if (bubbleChartSVG?.current) {
-      select(bubbleChartSVG.current).call(myZoom)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (bubbleChartSVG?.current) {
+  //     select(bubbleChartSVG.current).call(myZoom)
+  //   }
+  // }, [])
 
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
 

@@ -3,13 +3,14 @@ exports.__esModule = true;
 var react_1 = require("react");
 var tokens_1 = require("./tokens");
 var d3_1 = require("d3");
+// import { pack, zoom, select } from 'd3'
 var WorkerDataProvider_1 = require("./WorkerDataProvider");
 var utils_1 = require("./utils");
 // const legendSize = height * 0.001
 // const strat = stratify<Worker>()
 //   .id((d) => d?.[state.nameColumn || ''])
 //   .parentId((d) => d?.[state.groupingColumn || ''])
-var myZoom = d3_1.zoom().scaleExtent([1, 100]);
+// const myZoom = zoom().scaleExtent([1, 100])
 var defaultViewBox = "-" + tokens_1.margin + " -" + tokens_1.margin + " " + (tokens_1.height + tokens_1.margin * 2) + " " + (tokens_1.width + tokens_1.margin * 2);
 var BubbleChart = function () {
     var _a = react_1.useState(defaultViewBox), viewBox = _a[0], setViewBox = _a[1];
