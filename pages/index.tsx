@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.container}>
           <main className={styles.main}>
-            <h1>Organized workers for organizing</h1>
+            <h1>Organized organizers</h1>
             <ChartCreater />
           </main>
           <footer className={styles.footer}></footer>

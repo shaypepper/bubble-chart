@@ -166,24 +166,24 @@ function uploadGroupings(
   const groupingKey = prevState.columnMap.grouping || ''
 
   const unmappedGroupings = new Set(prevState.unmappedGroupings)
-  const newAllPeople = new Set(prevState.allPeople)
-  parsedData.forEach((grouping) => {
-    const groupingName = s(grouping[nameKey])
-    if (unmappedGroupings.has(groupingName)) {
-      unmappedGroupings.delete(groupingName)
-    }
+  // const newAllPeople = new Set(prevState.allPeople)
+  // parsedData.forEach((grouping) => {
+  //   const groupingName = s(grouping[nameKey])
+  //   if (unmappedGroupings.has(groupingName)) {
+  //     unmappedGroupings.delete(groupingName)
+  //   }
 
-    if (!unmappedGroupings.has(groupingName)) {
-      unmappedGroupings.delete(groupingName)
-    }
+  //   if (!unmappedGroupings.has(groupingName)) {
+  //     unmappedGroupings.delete(groupingName)
+  //   }
 
-    newAllPeople.add(groupingName)
-  })
+  //   newAllPeople.add(groupingName)
+  // })
   return {
     ...prevState,
     groupingsData: parsedData,
     unmappedGroupings,
-    allPeople: newAllPeople,
+    // allPeople: newAllPeople,
     currentStep: Steps.CHOOSE_COLOR_SCHEME,
   }
 }
@@ -233,7 +233,13 @@ function stratifyData(state: State): State {
   if (!state.workersData || !state.groupingsData) {
     return state
   }
-  const stratifiedData = strat([...state.workersData, ...state.groupingsData])
+
+  const wtf = [...state.workersData, ...state.groupingsData].filter(
+    (d) => !!d?.[state.columnMap.name || '']
+  )
+  console.log(wtf.map((d) => d.Group))
+  const stratifiedData = strat(wtf)
+    // const stratifiedData = strat([...state.workersData])
     .sum(() => 1)
     .sort((a, b) => (b?.value || 0) - (a?.value || 0))
 

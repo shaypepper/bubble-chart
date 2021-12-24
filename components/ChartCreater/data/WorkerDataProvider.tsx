@@ -11,7 +11,7 @@ import dataFormattingReducer, {
   FormatAction,
   State,
   Steps,
-} from '../ChartCreater/data/dataFormattingReducer'
+} from './dataFormattingReducer'
 
 type Worker = {
   [k: string]: string

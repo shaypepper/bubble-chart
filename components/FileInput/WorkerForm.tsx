@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { WorkerDataContext } from '../BubbleChart/WorkerDataProvider'
+import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { Button, Form } from 'react-bootstrap'
 import { FormatAction, Steps } from '../ChartCreater/data/dataFormattingReducer'
 import BubbleChart from '../BubbleChart'
@@ -7,6 +7,7 @@ import WorkersInput from './WorkersInput'
 import GroupingsInput from './GroupingsInput'
 import ColorPicker from './ColorPicker'
 import MapColumns from './MapColumns'
+import BubbleChartCanvas from '../BubbleChart/BubbleChartCanvas'
 
 const FileInput: React.FC = () => {
   const { dispatch, unmappedGroupings, stratifiedData, currentStep } =
@@ -32,7 +33,8 @@ const FileInput: React.FC = () => {
         </Button>
       )}
 
-      {stratifiedData && <BubbleChart />}
+      {/* {stratifiedData && <BubbleChart />} */}
+      {stratifiedData && <BubbleChartCanvas />}
 
       {Array.from(unmappedGroupings || [])?.map((m) => (
         <p key={m}>{m}</p>

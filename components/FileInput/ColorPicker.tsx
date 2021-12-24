@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { WorkerDataContext } from '../BubbleChart/WorkerDataProvider'
+import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 import {
   ColorMap,
@@ -12,22 +12,33 @@ const ColorPicker: React.FC = () => {
 
   const colorMap = useRef<ColorMap>({})
 
+  let nWorkers = workersData?.length
+
   const uniqueValues = [
-    ...new Set(workersData?.map((w) => w[columnMap?.colorBasis || ''])),
+    ...new Set(workersData?.map((w, i) => w[columnMap?.colorBasis || ''])),
   ].sort((a, b) => (a < b ? -1 : 1))
+
+  const startingColors = []
+  for (let v of uniqueValues) {
+    startingColors.push({
+      value: v,
+      color: 'hsl(318, 73%, 22%)',
+    })
+  }
 
   return (
     <React.Fragment>
       <Form.Group>
         How would you like to map your values to colors?
-        {uniqueValues.map((v) => (
-          <InputGroup key={v}>
-            <InputGroup.Text>{v}</InputGroup.Text>
+        {startingColors.map(({ value, color }) => (
+          <InputGroup key={value}>
+            <InputGroup.Text>{value}</InputGroup.Text>
             <FormControl
               type="color"
+              value={color}
               onBlur={(e) => {
                 console.log('blur', e.target.value)
-                colorMap.current[v] = e.target.value
+                colorMap.current[value] = e.target.value
               }}
             ></FormControl>
           </InputGroup>

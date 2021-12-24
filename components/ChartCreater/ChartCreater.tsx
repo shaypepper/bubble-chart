@@ -1,7 +1,7 @@
 import React from 'react'
 import BubbleChart from '../BubbleChart'
 import FileInput from '../FileInput'
-import WorkerDataProvider from '../BubbleChart/WorkerDataProvider'
+import WorkerDataProvider from './data/WorkerDataProvider'
 
 const ChartCreater = ({}) => {
   return (

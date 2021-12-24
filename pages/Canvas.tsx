@@ -6,14 +6,15 @@ import WorkerDataProvider from '../components/ChartCreater/data/WorkerDataProvid
 import ChartCreater from '../components/ChartCreater'
 // import BubbleChart from '../components/BubbleChartJS.jsx'
 import styles from '../styles/Home.module.css'
+import BubbleChartCanvas from '../components/BubbleChart/BubbleChartCanvas'
 
-const Home: NextPage = () => {
+const Canvas: NextPage = () => {
   return (
     <>
       <div className={styles.container}>
         <main className={styles.main}>
           <h1>Organized organizers</h1>
-          <ChartCreater />
+          <BubbleChartCanvas />
         </main>
         <footer className={styles.footer}></footer>
       </div>
@@ -21,4 +22,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Canvas

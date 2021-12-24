@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { WorkerDataContext } from '../BubbleChart/WorkerDataProvider'
+import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { Form } from 'react-bootstrap'
 
 const GroupingsInput: React.FC = () => {

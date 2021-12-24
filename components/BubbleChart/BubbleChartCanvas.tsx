@@ -4,6 +4,7 @@ import { pack, zoom, select } from 'd3'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
 import { Person } from '../ChartCreater/data/dataFormattingReducer'
+import { drawTextArc } from './draw'
 
 // const legendSize = height * 0.001
 
@@ -17,16 +18,10 @@ const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
   width + margin * 2
 }`
 
-const BubbleChart: React.FC = () => {
+const BubbleChartCanvas: React.FC = () => {
   const [viewBox, setViewBox] = useState<string>(defaultViewBox)
   let textArcPaths: RadiusMap = {}
-  const bubbleChartSVG = useRef<SVGElement>(null)
-
-  // useEffect(() => {
-  //   if (bubbleChartSVG?.current) {
-  //     select(bubbleChartSVG.current).call(myZoom)
-  //   }
-  // }, [])
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
 
@@ -59,103 +54,43 @@ const BubbleChart: React.FC = () => {
       return memo
     }, {}) || []
 
+  useEffect(() => {
+    let canvas = canvasRef.current
+    let context = canvas?.getContext('2d')
+
+    if (context === null || context === undefined) return
+    context.canvas.width = width
+    context.canvas.height = height
+
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+  }, [])
+
+  useEffect(() => {
+    let canvas = canvasRef.current
+    let context = canvas?.getContext('2d')
+    bubbleData?.forEach((d: d3.HierarchyCircularNode<Person>, idx) => {
+      if (context === null || context === undefined) return
+      const translation = {
+        x: (idx ? d.x : 0.5) * width,
+        y: (idx ? d.y : 0.5) * height,
+        // x: d.x * height,
+        // y: d.y * height,
+      }
+      const r = d.r * height
+
+      context.fillStyle = 'hsla(0, 0%, 0%, 0.2)'
+      context.beginPath()
+      context.arc(translation.x, translation.y, r, 0, 2 * Math.PI)
+      context.fill()
+
+      drawTextArc(context, translation.x, translation.y, r, d)
+    })
+  }, [bubbleData])
+
   return (
     <div>
-      {/* <button
-        onClick={(e) => {
-          setViewBox(defaultViewBox)
-          e.preventDefault()
-        }}
-      >
-        Reset zoom
-      </button> */}
-      <svg
-        viewBox={viewBox}
-        xmlns="http://www.w3.org/2000/svg"
-        height={'100%'}
-        width={'100%'}
-        ref={bubbleChartSVG}
-      >
-        <rect
-          height={height + margin * 2}
-          width={width + margin * 2}
-          fill="gainsboro"
-          x={-margin}
-          y={-margin}
-        />
-        {Object.entries(textArcPaths).map(([r, paths]) => {
-          return (
-            <>
-              <path
-                id={`worker-text-arc-${r}`}
-                d={paths.worker}
-                fill={'transparent'}
-              />
-              <path
-                id={`grouping-text-arc-${r}`}
-                d={paths.grouping}
-                fill={'transparent'}
-              />
-            </>
-          )
-        })}
-
-        {bubbleData?.map((d: d3.HierarchyCircularNode<Person>, idx) => {
-          const isWorker = !d.children
-          const translation = {
-            x: (idx ? d.x : 0.5) * width,
-            y: (idx ? d.y : 0.5) * height,
-          }
-          const r = d.r * height
-
-          return (
-            <g
-              key={d.id}
-              className={'leaf'}
-              transform={`translate(${translation.x},${translation.y})`}
-              // onClick={() => {
-              //   setViewBox(
-              //     `${translation.x - r - 10} ${translation.y - r - 10} ${
-              //       r * 2 + 20
-              //     } ${r * 2 + 20}`
-              //   )
-              // }}
-            >
-              <circle
-                r={r}
-                fill={getBubbleFillColor(
-                  isWorker,
-                  d.data.Assessment,
-                  colorMap || {}
-                )}
-                strokeWidth={isWorker ? 0 : 2}
-                stroke={'darkgray'}
-              />
-
-              <text>
-                <textPath
-                  href={`#${isWorker ? 'worker' : 'grouping'}-text-arc-${d.r}`}
-                  fill={getTextcolor(
-                    isWorker,
-                    d.data.Assessment,
-                    colorMap || {}
-                  )}
-                  textAnchor={'middle'}
-                  startOffset={'50%'}
-                  fontSize={
-                    isWorker
-                      ? d.r * height * 0.333
-                      : (d.r * height) / (15 - d.depth * 1.5)
-                  }
-                >
-                  {d.data.Name}
-                </textPath>
-              </text>
-            </g>
-          )
-        })}
-        {/* TODO: Add legend **/}
-      </svg>
+      <canvas ref={canvasRef}></canvas>
     </div>
   )
 }
@@ -237,4 +172,4 @@ const BubbleChart: React.FC = () => {
 //       .attr('y', (d, idx) => legendSize * 3)
 //       .html(d => d)
 
-export default BubbleChart
+export default BubbleChartCanvas
