@@ -20,7 +20,7 @@ const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
 const BubbleChart: React.FC = () => {
   const [viewBox, setViewBox] = useState<string>(defaultViewBox)
   let textArcPaths: RadiusMap = {}
-  const bubbleChartSVG = useRef<SVGElement>(null)
+  const bubbleChartSVG = useRef<SVGSVGElement>(null)
 
   // useEffect(() => {
   //   if (bubbleChartSVG?.current) {
@@ -137,8 +137,8 @@ const BubbleChart: React.FC = () => {
                   href={`#${isWorker ? 'worker' : 'grouping'}-text-arc-${d.r}`}
                   fill={getTextcolor(
                     isWorker,
-                    d.data.Assessment,
-                    colorMap || {}
+                    d.data.Assessment
+                    // colorMap || {}
                   )}
                   textAnchor={'middle'}
                   startOffset={'50%'}
