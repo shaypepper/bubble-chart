@@ -7,39 +7,30 @@ export function drawGroupingBubble() {}
 export function drawBubble(
   d: d3.HierarchyCircularNode<Person>,
   context: CanvasRenderingContext2D,
-  height: number,
-  width: number,
+  chartDimensions,
   idx: number
 ) {
   if (context === null || context === undefined) return
+  const { height, width } = chartDimensions
+
   const translation = {
     x: (idx ? d.x : 0.5) * width,
     y: (idx ? d.y : 0.5) * height,
   }
   const r = d.r * height
-  console.log({ d, translation, r })
+  const textR = d.children ? r : r * 0.8
 
-  context.fillStyle = 'hsla(0, 0%, 0%, 0.2)'
+  drawCircle(context, translation, r)
+  drawTextAlongArc(context, d.data.Name, translation.x, translation.y, textR)
+}
+
+export function drawCircle(context: CanvasRenderingContext2D, translation, r) {
+  // context.fillStyle = 'hsla(0, 0%, 0%, 0.4)'
+  context.fillStyle = 'white'
+  context.strokeStyle = 'yellow'
   context.beginPath()
   context.arc(translation.x, translation.y, r, 0, 2 * Math.PI)
   context.fill()
-}
-
-export function drawTextArc(
-  context: CanvasRenderingContext2D,
-  centerX: number,
-  centerY: number,
-  radius: number,
-  d: d3.HierarchyCircularNode<Person>
-) {
-  console.log({ context, centerX, centerY, radius })
-  context.font = '12pt helvetica'
-  context.textAlign = 'center'
-  context.fillStyle = 'yellow'
-  context.strokeStyle = 'blue'
-  context.lineWidth = 1
-
-  drawTextAlongArc(context, d.data.Name || '', centerX, centerY, radius)
 }
 
 export function drawTextAlongArc(
@@ -49,8 +40,16 @@ export function drawTextAlongArc(
   centerY: number,
   radius: number
 ) {
-  let angle = Math.PI * 0.6
+  const fontSize = Math.min(Math.sqrt(radius) * 1.5, 50)
+  context.font = `${fontSize}pt monaco`
+  context.textAlign = 'center'
+  context.fillStyle = 'grey'
+  context.strokeStyle = 'green'
+  context.lineWidth = 1
+
   let len = str.length
+  let angle = Math.PI * (len / Math.pow(fontSize, 1.2))
+  // let angle = Math.PI * ((radius * len) / (400 * fontSize))
   context.save()
   context.translate(centerX, centerY)
   context.rotate((-1 * angle) / 2)

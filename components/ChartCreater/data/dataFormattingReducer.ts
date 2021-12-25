@@ -189,6 +189,8 @@ function uploadGroupings(
 }
 
 function createColumnMap(state: State, columnMap: ColumnMap): State {
+  let newState = { ...state, columnMap }
+
   state.workersData?.forEach((worker) => {
     Object.entries(columnMap).forEach(([key, mappedKey]) => {
       worker[key] = worker[mappedKey]
@@ -212,32 +214,34 @@ function createColumnMap(state: State, columnMap: ColumnMap): State {
     }
   })
 
+  newState.allPeople = workerNameList
+
   const colorValueSet = new Set(
     state.workersData?.map((worker) => worker[colorBasis])
   )
 
-  return {
-    ...state,
-    workersData: state.workersData,
-    unmappedGroupings,
-    allPeople: workerNameList,
-    columnMap,
-    currentStep: Steps.UPLOAD_GROUPINGS,
+  if (unmappedGroupings.size == 1) {
+    newState.unmappedGroupings = new Set()
+    newState.currentStep = Steps.CHOOSE_COLOR_SCHEME
+  } else {
+    newState.unmappedGroupings = unmappedGroupings
+    newState.currentStep = Steps.UPLOAD_GROUPINGS
   }
+
+  return newState
 }
 
 function stratifyData(state: State): State {
   const strat = stratify<Person>()
     .id((d) => `${d?.[state.columnMap.name || '']}`)
     .parentId((d) => `${d?.[state.columnMap.grouping || '']}`)
-  if (!state.workersData || !state.groupingsData) {
+  if (!state.workersData) {
     return state
   }
 
-  const wtf = [...state.workersData, ...state.groupingsData].filter(
+  const wtf = [...state.workersData, ...(state.groupingsData || [])].filter(
     (d) => !!d?.[state.columnMap.name || '']
   )
-  console.log(wtf.map((d) => d.Group))
   const stratifiedData = strat(wtf)
     // const stratifiedData = strat([...state.workersData])
     .sum(() => 1)

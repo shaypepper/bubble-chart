@@ -1,12 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
-import { width, height, margin } from './tokens'
+import { chartDimensions } from './tokens'
 import { pack, zoom, select } from 'd3'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
 import { Person } from '../ChartCreater/data/dataFormattingReducer'
-import { drawTextArc } from './draw'
+import { drawBubble } from './draw'
 
-// const legendSize = height * 0.001
+// const legendSize = chartDimensions.height * 0.001
 
 // const strat = stratify<Worker>()
 //   .id((d) => d?.[state.nameColumn || ''])
@@ -14,9 +14,9 @@ import { drawTextArc } from './draw'
 
 // const myZoom = zoom().scaleExtent([1, 100])
 
-const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
-  width + margin * 2
-}`
+const defaultViewBox = `-${chartDimensions.margin} -${chartDimensions.margin} ${
+  chartDimensions.height + chartDimensions.margin * 2
+} ${chartDimensions.width + chartDimensions.margin * 2}`
 
 const BubbleChartCanvas: React.FC = () => {
   const [viewBox, setViewBox] = useState<string>(defaultViewBox)
@@ -41,7 +41,7 @@ const BubbleChartCanvas: React.FC = () => {
     bubbleData?.reduce<RadiusMap>((memo: RadiusMap, d) => {
       if (memo[d.r]) return memo
 
-      const r = d.r * height
+      const r = d.r * chartDimensions.height
       const groupingR = r
       const workerR = r * 0.7
       let getTextPath = (R: number) =>
@@ -59,10 +59,12 @@ const BubbleChartCanvas: React.FC = () => {
     let context = canvas?.getContext('2d')
 
     if (context === null || context === undefined) return
-    context.canvas.width = width
-    context.canvas.height = height
+    context.canvas.width = chartDimensions.width + chartDimensions.margin * 2
+    context.canvas.height = chartDimensions.height + chartDimensions.margin * 2
 
-    context.fillStyle = 'red'
+    context.translate(chartDimensions.margin, chartDimensions.margin)
+
+    context.fillStyle = 'green'
     context.fillRect(0, 0, context.canvas.width, context.canvas.height)
   }, [])
 
@@ -71,26 +73,13 @@ const BubbleChartCanvas: React.FC = () => {
     let context = canvas?.getContext('2d')
     bubbleData?.forEach((d: d3.HierarchyCircularNode<Person>, idx) => {
       if (context === null || context === undefined) return
-      const translation = {
-        x: (idx ? d.x : 0.5) * width,
-        y: (idx ? d.y : 0.5) * height,
-        // x: d.x * height,
-        // y: d.y * height,
-      }
-      const r = d.r * height
-
-      context.fillStyle = 'hsla(0, 0%, 0%, 0.2)'
-      context.beginPath()
-      context.arc(translation.x, translation.y, r, 0, 2 * Math.PI)
-      context.fill()
-
-      drawTextArc(context, translation.x, translation.y, r, d)
+      drawBubble(d, context, chartDimensions, idx)
     })
   }, [bubbleData])
 
   return (
     <div>
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} width="100%"></canvas>
     </div>
   )
 }
@@ -98,9 +87,9 @@ const BubbleChartCanvas: React.FC = () => {
 //   // + CREATE GRAPHICAL ELEMENTS
 //   const circle = leaf
 //       .append("circle")
-//       .attr("r", d => d.r * height)
+//       .attr("r", d => d.r * chartDimensions.height)
 //       .attr('fill', getFillColor)
-//       .attr("stroke-width", d => (6 - d.depth) * 0.2)
+//       .attr("stroke-chartDimensions.width", d => (6 - d.depth) * 0.2)
 //       .attr("stroke", d => d.data[1].notes?.Assessment == "1" ? "white" : null)
 
 //   // Write name to arc path
@@ -108,8 +97,8 @@ const BubbleChartCanvas: React.FC = () => {
 //       .append("textPath")
 //       .attr('href', d => `#arcpath-${d.data[0]}`)
 //       .attr("font-size", d => isWorker(d) ?
-//         d.r * height * 0.333 :
-//         d.r * height / (15 - (d.depth * 1.5)))
+//         d.r * chartDimensions.height * 0.333 :
+//         d.r * chartDimensions.height / (15 - (d.depth * 1.5)))
 //       .html((d) => d.data[0])
 //       .attr("fill", getTextColor)
 //       .attr('text-anchor', 'middle')
@@ -121,8 +110,8 @@ const BubbleChartCanvas: React.FC = () => {
 //         const assessment = +d.data[1].notes?.Assessment || '?';
 //         return isWorker(d) ? assessment : "";
 //       })
-//       .attr("font-size", d => (d.r * height) * 0.41)
-//       .attr("transform", d => `translate(${-0.5 * d.r * height} ${-0.2 * d.r * height})`)
+//       .attr("font-size", d => (d.r * chartDimensions.height) * 0.41)
+//       .attr("transform", d => `translate(${-0.5 * d.r * chartDimensions.height} ${-0.2 * d.r * chartDimensions.height})`)
 //       .attr("fill", getTextColor)
 
 //   // Write point person
@@ -134,8 +123,8 @@ const BubbleChartCanvas: React.FC = () => {
 //         const PP = d.data[1].notes?.['Point Person'].split(" ")[0] || "🤷🏻‍♀️";
 //         return `PP: ${PP}`
 //       })
-//       .attr("font-size", d => (d.r * height) *0.2)
-//       .attr("transform", d => `translate(${-0.85 * d.r * height} ${0.2 * d.r * height})`)
+//       .attr("font-size", d => (d.r * chartDimensions.height) *0.2)
+//       .attr("transform", d => `translate(${-0.85 * d.r * chartDimensions.height} ${0.2 * d.r * chartDimensions.height})`)
 //       .attr("fill", getTextColor)
 
 //   console.log("SVG", svg)
