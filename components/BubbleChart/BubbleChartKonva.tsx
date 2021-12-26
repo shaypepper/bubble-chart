@@ -38,15 +38,22 @@ const BubbleChartKonva: React.FC = () => {
   const layerRef: React.RefObject<LayerType> = useRef(null)
   const [scale, setScale] = useState(1)
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
+  const [bubbleData, setBubbleData] = useState<
+    d3.HierarchyCircularNode<Person>[]
+  >([])
 
-  const bubbleData: d3.HierarchyCircularNode<Person>[] =
-    stratifiedData && stratifiedData
-      ? pack<Person>()
-          .padding((d) => {
-            return d.height == 1 ? 0.0 : 0.002
-          })(stratifiedData)
-          .descendants()
-      : []
+  useEffect(() => {
+    const packedData =
+      stratifiedData && stratifiedData
+        ? pack<Person>()
+            .padding((d) => {
+              console.log('this is being called AGAIN')
+              return d.height == 1 ? 0.0 : 0.002
+            })(stratifiedData)
+            .descendants()
+        : []
+    setBubbleData(packedData)
+  }, [stratifiedData])
 
   type RadiusMap = {
     [n: number]: {
@@ -122,7 +129,7 @@ const BubbleChartKonva: React.FC = () => {
           <Rect
             height={height + margin * 2}
             width={width + margin * 2}
-            fill="gainsboro"
+            fill="white"
             stroke="fuschia"
           />
 
@@ -132,7 +139,7 @@ const BubbleChartKonva: React.FC = () => {
               x: (idx ? d.x : 0.5) * width,
               y: (idx ? d.y : 0.5) * height,
             }
-            const r = d.r * height * (isWorker ? 0.8 : 1)
+            const r = d.r * height * (isWorker ? 0.8 : 1.05)
             const circleR = d.r * height
 
             return (
@@ -188,7 +195,11 @@ const BubbleChartKonva: React.FC = () => {
                     -2 * r
                   } a ${r},${r} 0 1,1 0,${2 * r} `}
                   fill={'black'}
-                  fontSize={width / bubbleData.length}
+                  fontSize={
+                    isWorker
+                      ? width / bubbleData.length
+                      : Math.floor(Math.sqrt(r) / 2)
+                  }
                   listening={false}
                   fontFamily={'Monaco'}
                   rotationDeg={90}
