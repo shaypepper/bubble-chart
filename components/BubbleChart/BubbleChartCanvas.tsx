@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { chartDimensions } from './tokens'
-import { pack, zoom, select } from 'd3'
+import { pack, zoom, select, zoomIdentity, zoomTransform } from 'd3'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { getBubbleFillColor, getTextcolor } from './utils'
 import { Person } from '../ChartCreater/data/dataFormattingReducer'
@@ -57,8 +57,8 @@ const BubbleChartCanvas: React.FC = () => {
   useEffect(() => {
     let canvas = canvasRef.current
     let context = canvas?.getContext('2d')
+    if (context === null || context === undefined || !canvas) return
 
-    if (context === null || context === undefined) return
     context.canvas.width = chartDimensions.width + chartDimensions.margin * 2
     context.canvas.height = chartDimensions.height + chartDimensions.margin * 2
 

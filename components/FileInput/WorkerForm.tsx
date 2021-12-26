@@ -8,6 +8,7 @@ import GroupingsInput from './GroupingsInput'
 import ColorPicker from './ColorPicker'
 import MapColumns from './MapColumns'
 import BubbleChartCanvas from '../BubbleChart/BubbleChartCanvas'
+import BubbleChartKonva from '../BubbleChart/BubbleChartKonva'
 
 const FileInput: React.FC = () => {
   const { dispatch, unmappedGroupings, stratifiedData, currentStep } =
@@ -34,7 +35,8 @@ const FileInput: React.FC = () => {
       )}
 
       {/* {stratifiedData && <BubbleChart />} */}
-      {stratifiedData && <BubbleChartCanvas />}
+      {stratifiedData && <BubbleChartKonva />}
+      {/* {stratifiedData && <BubbleChartCanvas />} */}
 
       {Array.from(unmappedGroupings || [])?.map((m) => (
         <p key={m}>{m}</p>

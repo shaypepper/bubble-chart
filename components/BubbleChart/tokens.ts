@@ -1,7 +1,7 @@
-export const width = 3000,
-  height = 3000,
-  squareSize = 3000,
-  margin = 100
+export const width = 500,
+  height = 500,
+  squareSize = 500,
+  margin = 10
 
 export const chartDimensions = {
   width,
