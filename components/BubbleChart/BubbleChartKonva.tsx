@@ -36,7 +36,7 @@ const BubbleChartKonva: React.FC = () => {
   const bubbleChartSVG = useRef<SVGSVGElement>(null)
   const stageRef: React.RefObject<StageType> = useRef(null)
   const layerRef: React.RefObject<LayerType> = useRef(null)
-
+  const [scale, setScale] = useState(1)
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
 
   const bubbleData: d3.HierarchyCircularNode<Person>[] =
@@ -56,12 +56,19 @@ const BubbleChartKonva: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log('update this position', layerRef.current.to)
     layerRef.current?.to({
       ...position,
       duration: 0.3,
     })
   }, [position])
+
+  useEffect(() => {
+    layerRef.current?.to({
+      scaleX: scale,
+      scaleY: scale,
+      duration: 0.2,
+    })
+  }, [scale])
 
   textArcPaths =
     bubbleData?.reduce<RadiusMap>((memo: RadiusMap, d) => {
@@ -96,6 +103,7 @@ const BubbleChartKonva: React.FC = () => {
             y: 0,
           }
           setPosition(newPosition)
+          setScale(1)
         }}
       >
         Reset frame
@@ -124,7 +132,7 @@ const BubbleChartKonva: React.FC = () => {
               x: (idx ? d.x : 0.5) * width,
               y: (idx ? d.y : 0.5) * height,
             }
-            const r = d.r * height * (isWorker ? 0.7 : 1)
+            const r = d.r * height * (isWorker ? 0.8 : 1)
             const circleR = d.r * height
 
             return (
@@ -143,16 +151,16 @@ const BubbleChartKonva: React.FC = () => {
               >
                 <Circle
                   radius={circleR}
-                  fill={isWorker ? 'green' : 'white'}
-                  strokeWidth={isWorker ? 0 : 2}
+                  fill={isWorker ? 'green' : 'grey'}
+                  strokeWidth={0}
                   stroke={'darkgray'}
-                  opacity={0.2}
+                  opacity={isWorker ? 0.2 : 0.4}
                   onClick={function (evt) {
                     if (isWorker) {
                       // evt.target.attrs.fill = 'green'
                       evt.target.to({
                         opacity: evt.target.opacity() == 0.8 ? 0.2 : 0.8,
-                        duration: 0.25,
+                        duration: 1,
                       })
                       // evt.target.to({
                       //   opacity: 0.5,
@@ -163,23 +171,28 @@ const BubbleChartKonva: React.FC = () => {
                       //   },
                       // })
                     } else {
+                      const newScale = width / circleR
                       const newPosition = {
-                        x: circleR - translation.x,
-                        y: circleR - translation.y,
+                        x: (circleR - translation.x) * newScale,
+                        y: (circleR - translation.y) * newScale,
                       }
                       console.log(newPosition)
+
                       setPosition(newPosition)
+                      setScale(newScale)
                     }
                   }}
                 />
-
                 <TextPath
                   data={`M 0,${r} a ${r},${r} 0 1,1 0,${
                     -2 * r
                   } a ${r},${r} 0 1,1 0,${2 * r} `}
                   fill={'black'}
-                  fontSize={width / 400}
+                  fontSize={width / bubbleData.length}
                   listening={false}
+                  fontFamily={'Monaco'}
+                  rotationDeg={90}
+                  opacity={circleR > width / (30 * scale) ? 1 : 0}
                   // fill={getTextcolor(
                   //   isWorker,
                   //   d.data.Assessment
