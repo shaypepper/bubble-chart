@@ -1,6 +1,6 @@
-export const width = 500,
-  height = 500,
-  squareSize = 500,
+export const width = 300,
+  height = 300,
+  squareSize = 300,
   margin = 10
 
 export const chartDimensions = {

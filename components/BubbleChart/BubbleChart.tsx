@@ -1,226 +1,127 @@
-import React, { useContext, useState, useRef, useEffect } from 'react'
-import { width, height, margin } from './tokens'
-import { pack, zoom, select } from 'd3'
+import { useContext, useState, useRef, useEffect, FC, RefObject } from 'react'
+import { width, height } from './tokens'
+import { pack } from 'd3'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
-import { getBubbleFillColor, getTextcolor } from './utils'
 import { Person } from '../ChartCreater/data/dataFormattingReducer'
+import { Layer, Stage, Rect, TextPath } from 'react-konva'
+import { Stage as StageType } from 'konva/types/Stage'
+import { Layer as LayerType } from 'konva/types/Layer'
+import Bubble from './Bubble'
+import { downloadURI } from './utils'
+import { useBubbleChartContext } from './BubbleChartContext'
 
-// const legendSize = height * 0.001
-
-// const strat = stratify<Worker>()
-//   .id((d) => d?.[state.nameColumn || ''])
-//   .parentId((d) => d?.[state.groupingColumn || ''])
-
-// const myZoom = zoom().scaleExtent([1, 100])
-
-const defaultViewBox = `-${margin} -${margin} ${height + margin * 2} ${
-  width + margin * 2
-}`
-
-const BubbleChart: React.FC = () => {
-  const [viewBox, setViewBox] = useState<string>(defaultViewBox)
-  let textArcPaths: RadiusMap = {}
-  const bubbleChartSVG = useRef<SVGSVGElement>(null)
-
-  // useEffect(() => {
-  //   if (bubbleChartSVG?.current) {
-  //     select(bubbleChartSVG.current).call(myZoom)
-  //   }
-  // }, [])
-
+const BubbleChart: FC = () => {
+  const [position, setPosition] = useState<{ [z: string]: number }>({
+    x: 0,
+    y: 0,
+  })
+  const layerRef: RefObject<LayerType> = useRef(null)
+  const stageRef: RefObject<StageType> = useRef(null)
+  const [scale, setScale] = useState(1)
+  const [bubbleData, setBubbleData] = useState<
+    d3.HierarchyCircularNode<Person>[]
+  >([])
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
+  const things = useBubbleChartContext()
+  console.log(things)
 
-  const bubbleData: d3.HierarchyCircularNode<Person>[] =
-    stratifiedData && stratifiedData
-      ? pack<Person>().padding(0.005)(stratifiedData).descendants()
-      : []
-
-  type RadiusMap = {
-    [n: number]: {
-      grouping: string
-      worker: string
+  useEffect(() => {
+    if (stratifiedData) {
+      setBubbleData(
+        pack<Person>()
+          .padding((d) => (d.height == 1 ? 0.0 : d.depth == 1 ? 0.008 : 0.002))(
+            stratifiedData
+          )
+          .descendants()
+      )
     }
-  }
+  }, [stratifiedData])
 
-  textArcPaths =
-    bubbleData?.reduce<RadiusMap>((memo: RadiusMap, d) => {
-      if (memo[d.r]) return memo
-
-      const r = d.r * height
-      const groupingR = r
-      const workerR = r * 0.7
-      let getTextPath = (R: number) =>
-        `M 0,${R} a ${R},${R} 0 1,1 0,${-2 * R} a ${R},${R} 0 1,1 0,${2 * R} `
-
-      memo[d.r] = {
-        grouping: getTextPath(groupingR),
-        worker: getTextPath(workerR),
-      }
-      return memo
-    }, {}) || []
+  useEffect(() => {
+    layerRef.current?.to({
+      ...position,
+      scaleX: scale,
+      scaleY: scale,
+      duration: 0.3,
+    })
+  }, [position, scale])
 
   return (
     <div>
-      {/* <button
+      <p>
+        {layerRef.current?.position().x} {layerRef.current?.position().y}
+      </p>
+      <p>
+        {position.x} {position.y}
+      </p>
+      <button
         onClick={(e) => {
-          setViewBox(defaultViewBox)
           e.preventDefault()
+          const newPosition = {
+            x: 0,
+            y: 0,
+          }
+          setPosition(newPosition)
+          setScale(1)
         }}
       >
-        Reset zoom
-      </button> */}
-      <svg
-        viewBox={viewBox}
-        xmlns="http://www.w3.org/2000/svg"
-        height={'100%'}
-        width={'100%'}
-        ref={bubbleChartSVG}
+        Reset frame
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault()
+          if (!stageRef.current) return
+          console.log('printing')
+          const dataUrl = stageRef.current.toDataURL({
+            pixelRatio: 20, // or other value you need
+          })
+          downloadURI(dataUrl, 'stage.png')
+        }}
       >
-        <rect
-          height={height + margin * 2}
-          width={width + margin * 2}
-          fill="gainsboro"
-          x={-margin}
-          y={-margin}
-        />
-        {Object.entries(textArcPaths).map(([r, paths]) => {
-          return (
-            <>
-              <path
-                id={`worker-text-arc-${r}`}
-                d={paths.worker}
-                fill={'transparent'}
+        Save image
+      </button>
+      <Stage width={width * 2} height={height * 2} ref={stageRef}>
+        <Layer ref={layerRef} draggable={true}>
+          <Rect height={height} width={width} fill={'white'} strokeWidth={0} />
+          {bubbleData?.map((d: d3.HierarchyCircularNode<Person>, idx) => {
+            const isWorker = !d.children
+            const translation = {
+              x: (idx ? d.x : 0.5) * width,
+              y: (idx ? d.y : 0.5) * height,
+            }
+            const r = d.r * height * (isWorker ? 0.8 : 1.05)
+            const circleR = d.r * height
+            return (
+              <Bubble
+                key={d.id}
+                radius={d.r}
+                idx={idx}
+                d={d}
+                fillColor={isWorker ? 'green' : 'grey'}
+                textColor={isWorker ? 'white' : 'black'}
+                translation={translation}
+                onClick={function () {
+                  const newScale = width / circleR
+                  setPosition({
+                    x: (circleR - translation.x) * newScale,
+                    y: (circleR - translation.y) * newScale,
+                  })
+                  setScale(newScale)
+                }}
+                isLeaf={isWorker}
+                listLength={bubbleData.length}
+                scale={scale}
+                name={d.data.Name || d.data.name || '*******'}
               />
-              <path
-                id={`grouping-text-arc-${r}`}
-                d={paths.grouping}
-                fill={'transparent'}
-              />
-            </>
-          )
-        })}
-
-        {bubbleData?.map((d: d3.HierarchyCircularNode<Person>, idx) => {
-          const isWorker = !d.children
-          const translation = {
-            x: (idx ? d.x : 0.5) * width,
-            y: (idx ? d.y : 0.5) * height,
-          }
-          const r = d.r * height
-
-          return (
-            <g
-              key={d.id}
-              className={'leaf'}
-              transform={`translate(${translation.x},${translation.y})`}
-              // onClick={() => {
-              //   setViewBox(
-              //     `${translation.x - r - 10} ${translation.y - r - 10} ${
-              //       r * 2 + 20
-              //     } ${r * 2 + 20}`
-              //   )
-              // }}
-            >
-              <circle
-                r={r}
-                fill={getBubbleFillColor(
-                  isWorker,
-                  d.data.Assessment,
-                  colorMap || {}
-                )}
-                strokeWidth={isWorker ? 0 : 2}
-                stroke={'darkgray'}
-              />
-
-              <text>
-                <textPath
-                  href={`#${isWorker ? 'worker' : 'grouping'}-text-arc-${d.r}`}
-                  fill={getTextcolor(
-                    isWorker,
-                    d.data.Assessment
-                    // colorMap || {}
-                  )}
-                  textAnchor={'middle'}
-                  startOffset={'50%'}
-                  fontSize={
-                    isWorker
-                      ? d.r * height * 0.333
-                      : (d.r * height) / (15 - d.depth * 1.5)
-                  }
-                >
-                  {d.data.Name}
-                </textPath>
-              </text>
-            </g>
-          )
-        })}
-        {/* TODO: Add legend **/}
-      </svg>
+            )
+          })}
+        </Layer>
+      </Stage>
     </div>
   )
 }
 
-//   // + CREATE GRAPHICAL ELEMENTS
-//   const circle = leaf
-//       .append("circle")
-//       .attr("r", d => d.r * height)
-//       .attr('fill', getFillColor)
-//       .attr("stroke-width", d => (6 - d.depth) * 0.2)
-//       .attr("stroke", d => d.data[1].notes?.Assessment == "1" ? "white" : null)
-
-//   // Write name to arc path
-//   leaf.append("text")
-//       .append("textPath")
-//       .attr('href', d => `#arcpath-${d.data[0]}`)
-//       .attr("font-size", d => isWorker(d) ?
-//         d.r * height * 0.333 :
-//         d.r * height / (15 - (d.depth * 1.5)))
-//       .html((d) => d.data[0])
-//       .attr("fill", getTextColor)
-//       .attr('text-anchor', 'middle')
-//       .attr('startOffset', '50%')
-
-//   // Write assessment #
-//   leaf.append("text")
-//       .html(d => {
-//         const assessment = +d.data[1].notes?.Assessment || '?';
-//         return isWorker(d) ? assessment : "";
-//       })
-//       .attr("font-size", d => (d.r * height) * 0.41)
-//       .attr("transform", d => `translate(${-0.5 * d.r * height} ${-0.2 * d.r * height})`)
-//       .attr("fill", getTextColor)
-
-//   // Write point person
-//   leaf.append("text")
-//       .html(d => {
-//         if (!isWorker(d)) return "";
-//         if (d.data[1].notes?.Assessment == 1) return 'Organizer';
-
-//         const PP = d.data[1].notes?.['Point Person'].split(" ")[0] || "🤷🏻‍♀️";
-//         return `PP: ${PP}`
-//       })
-//       .attr("font-size", d => (d.r * height) *0.2)
-//       .attr("transform", d => `translate(${-0.85 * d.r * height} ${0.2 * d.r * height})`)
-//       .attr("fill", getTextColor)
-
-//   console.log("SVG", svg)
-// }
-
-// // we need to handle a user gesture to use 'open'
-// document.getElementById("btn").onclick = (evt) => {
-//   // const svg = document.querySelector("svg");
-//   // convert to a valid XML source
-//   const as_text = new XMLSerializer().serializeToString(svg.node());
-//   // store in a Blob
-//   const blob = new Blob([as_text], { type: "image/svg+xml" });
-//   //const blob = new Blob([svg], { type: "image/svg+xml" });
-//   // create an URI pointing to that blob
-//   const url = URL.createObjectURL(blob);
-//   const win = open(url);
-//   // so the Garbage Collector can collect the blob
-//   win.onload = (evt) => URL.revokeObjectURL(url);
-//   win.print();
-// };
+export default BubbleChart
 
 //   const legend = svg.selectAll('g.legendRow')
 //     .data(Object.keys(colors))
@@ -236,5 +137,3 @@ const BubbleChart: React.FC = () => {
 //       .attr('x', legendSize * 10)
 //       .attr('y', (d, idx) => legendSize * 3)
 //       .html(d => d)
-
-export default BubbleChart
