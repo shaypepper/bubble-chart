@@ -1,4 +1,5 @@
-import React, { useContext, useRef, useState } from 'react'
+import * as React from 'react'
+import { useContext, useRef, useState } from 'react'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { Button, Dropdown, Form } from 'react-bootstrap'
 import {
