@@ -73,8 +73,9 @@ const Bubble: React.FC<BubbleProps> = ({
     <Group className={'leaf'} x={translation.x} y={translation.y}>
       <Circle
         radius={circleR}
-        // fill={isLeaf ? fillColor : theme.group.fillColor}
-        fill={isLeaf ? timesStatusMap[d?.data?.Status]?.fillColor : 'grey'}
+        fill={isLeaf ? fillColor : theme.group.fillColor}
+        // fill={isLeaf ? timesStatusMap[d?.data?.Status]?.fillColor : 'grey'}
+        // fill={isLeaf ? timesStatusMap[d?.data?.Status]?.fillColor : 'grey'}
         opacity={isLeaf ? 1 : 0.2}
         onClick={onClick}
         ref={circleRef}
@@ -85,12 +86,12 @@ const Bubble: React.FC<BubbleProps> = ({
         data={`M 0,${textR} a ${textR},${textR} 0 1,1 0,${
           -2 * textR
         } a ${textR},${textR} 0 1,1 0,${2 * textR} `}
-        // fill={isLeaf ? textColor : theme.group.textColor}
-        fill={
-          isLeaf
-            ? timesStatusMap[d?.data?.Status]?.textColor
-            : theme.group.textColor
-        }
+        fill={isLeaf ? textColor : theme.group.textColor}
+        // fill={
+        //   isLeaf
+        //     ? timesStatusMap[d?.data?.Status]?.textColor
+        //     : theme.group.textColor
+        // }
         fontSize={isLeaf ? textR / 4.5 : Math.floor(Math.sqrt(textR) / 2)}
         listening={false}
         fontFamily={theme.font}
@@ -101,11 +102,11 @@ const Bubble: React.FC<BubbleProps> = ({
       />
 
       <Text
-        fill={
-          isLeaf
-            ? timesStatusMap[d?.data?.Status]?.textColor
-            : theme.group.textColor
-        } // fill={isLeaf ? timesStatusMap[d.data.Status] : theme.group.textColor}
+        // fill={
+        //   isLeaf
+        //     ? timesStatusMap[d?.data?.Status]?.textColor
+        //     : theme.group.textColor
+        // fill={isLeaf ? timesStatusMap[d.data.Status] : theme.group.textColor}
         fontSize={isLeaf ? textR / 1.5 : Math.floor(Math.sqrt(textR) / 2)}
         // fontSize={100}
         listening={false}
@@ -120,9 +121,10 @@ const Bubble: React.FC<BubbleProps> = ({
 
       <Text
         fill={
-          isLeaf
-            ? timesStatusMap[d?.data?.Status]?.textColor
-            : theme.group.textColor
+          'black'
+          // isLeaf
+          //   ? timesStatusMap[d?.data?.Status]?.textColor
+          //   : theme.group.textColor
         } // fill={isLeaf ? timesStatusMap[d.data.Status] : theme.group.textColor}
         fontSize={isLeaf ? textR / 7 : Math.floor(Math.sqrt(textR) / 2)}
         // fontSize={100}
@@ -138,9 +140,10 @@ const Bubble: React.FC<BubbleProps> = ({
 
       <Text
         fill={
-          isLeaf
-            ? timesStatusMap[d?.data?.Status]?.textColor
-            : theme.group.textColor
+          'black'
+          // isLeaf
+          //   ? timesStatusMap[d?.data?.Status]?.textColor
+          //   : theme.group.textColor
         } // fill={isLeaf ? timesStatusMap[d.data.Status] : theme.group.textColor}
         fontSize={isLeaf ? textR / 7 : Math.floor(Math.sqrt(textR) / 2)}
         // fontSize={100}
