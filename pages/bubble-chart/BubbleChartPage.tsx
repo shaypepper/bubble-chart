@@ -13,7 +13,6 @@ const footerClass = css``
 const BubbleChartPage: NextPage = () => {
   return (
     <Layout currentPage={DataForPowerPages.BUBBLE_CHART}>
-      <h1>Organized organizers</h1>
       <ChartCreater />
     </Layout>
   )

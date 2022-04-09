@@ -1,5 +1,5 @@
 import { Selection, select } from 'd3'
-import React from 'react'
+import * as React from 'react'
 import SillyBillyComponent from './SillyBilly'
 import { renderToString } from 'react-dom/server'
 
@@ -204,41 +204,38 @@ import { renderToString } from 'react-dom/server'
 // }
 
 export function dummySVG() {
-  const svgDomElement = document.createElement('svg')
-  const svg = select(svgDomElement)
-    .append('svg')
-    .attr('font-family', 'sans-serif')
-    .attr('viewBox', `-10 -10 ${120} ${120}`)
-
-  svg
-    .append('rect')
-    .attr('height', 120)
-    .attr('width', 120)
-    .attr('fill', 'green')
-    .attr('x', -10)
-    .attr('y', -10)
-
-  const as_text = new XMLSerializer().serializeToString(svg.node())
-  // store in a Blob
-  const blob = new Blob([as_text], { type: 'image/svg+xml' })
-  //const blob = new Blob([svg], { type: "image/svg+xml" });
-  // create an URI pointing to that blob
-  const url = URL.createObjectURL(blob)
-  const win = open(url)
-  // so the Garbage Collector can collect the blob
-  win.onload = (evt) => URL.revokeObjectURL(url)
-  win.print()
+  // const svgDomElement = document.createElement('svg')
+  // const svg = select(svgDomElement)
+  //   .append('svg')
+  //   .attr('font-family', 'sans-serif')
+  //   .attr('viewBox', `-10 -10 ${120} ${120}`)
+  // svg
+  //   .append('rect')
+  //   .attr('height', 120)
+  //   .attr('width', 120)
+  //   .attr('fill', 'green')
+  //   .attr('x', -10)
+  //   .attr('y', -10)
+  // const as_text = new XMLSerializer().serializeToString(svg.node())
+  // // store in a Blob
+  // const blob = new Blob([as_text], { type: 'image/svg+xml' })
+  // //const blob = new Blob([svg], { type: "image/svg+xml" });
+  // // create an URI pointing to that blob
+  // const url = URL.createObjectURL(blob)
+  // const win = open(url)
+  // // so the Garbage Collector can collect the blob
+  // win.onload = (evt) => URL.revokeObjectURL(url)
+  // win.print()
 }
 
 export function otherDummySVG() {
-  const as_text = renderToString(<SillyBillyComponent shayIsCool />)
-
-  const blob = new Blob([as_text], { type: 'image/svg+xml' })
-  //const blob = new Blob([svg], { type: "image/svg+xml" });
-  // create an URI pointing to that blob
-  const url = URL.createObjectURL(blob)
-  const win = open(url)
-  // so the Garbage Collector can collect the blob
-  win.onload = (evt) => URL.revokeObjectURL(url)
-  win.print()
+  // const as_text = renderToString(<SillyBillyComponent shayIsCool />)
+  // const blob = new Blob([as_text], { type: 'image/svg+xml' })
+  // //const blob = new Blob([svg], { type: "image/svg+xml" });
+  // // create an URI pointing to that blob
+  // const url = URL.createObjectURL(blob)
+  // const win = open(url)
+  // // so the Garbage Collector can collect the blob
+  // win.onload = (evt) => URL.revokeObjectURL(url)
+  // win.print()
 }

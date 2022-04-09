@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
-} from 'react'
+import { FC, useContext, useRef, useState, useCallback, useEffect } from 'react'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import {
   Button,
@@ -35,7 +29,7 @@ enum ColorBasisDataType {
   NUMERIC = 'Numeric',
 }
 
-const ColorPicker: React.FC = () => {
+const ColorPicker: FC = () => {
   const { workersData, unmappedGroupings, columns, columnMap, dispatch } =
     useContext(WorkerDataContext)
 
@@ -78,7 +72,7 @@ const ColorPicker: React.FC = () => {
   useEffect(() => {}, [dataType])
 
   return (
-    <React.Fragment>
+    <>
       <Form.Group key={'wtf'}>
         <Form.Label>
           What type of data are you visualizing?
@@ -87,7 +81,7 @@ const ColorPicker: React.FC = () => {
             onSelect={(e) => {
               console.log('something was selected', e)
               // colorMap.current[value] = e.value
-              setDataType(e)
+              // setDataType(e)
             }}
           >
             <Dropdown.Toggle variant="success" size="sm">
@@ -165,7 +159,7 @@ const ColorPicker: React.FC = () => {
           )
         })}
       </div>
-    </React.Fragment>
+    </>
   )
 }
 

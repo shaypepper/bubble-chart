@@ -1,8 +1,8 @@
-import React, { useContext, useRef, useState } from 'react'
+import { useContext, useRef, useState, FC } from 'react'
 import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
 import { Form } from 'react-bootstrap'
 
-const GroupingsInput: React.FC = () => {
+const GroupingsInput: FC = () => {
   const { convertGroupingCsv, unmappedGroupings } =
     useContext(WorkerDataContext)
 

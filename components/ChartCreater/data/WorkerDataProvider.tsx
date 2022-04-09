@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  Dispatch,
-  useReducer,
-  useRef,
-  useState,
-} from 'react'
+import { createContext, Dispatch, useReducer, useRef, useState } from 'react'
 import { csvParse, HierarchyNode, HierarchyCircularNode } from 'd3'
 import dataFormattingReducer, {
   Action,

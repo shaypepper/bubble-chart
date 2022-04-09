@@ -6,11 +6,10 @@ import { Person } from '../ChartCreater/data/dataFormattingReducer'
 import { Layer, Stage, Rect, TextPath } from 'react-konva'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
-import Bubble from './Bubble'
 import { downloadURI } from './utils'
 import { useBubbleChartContext } from './BubbleChartContext'
-import { timesGuildTheme } from './themes'
-import { dummySVG, otherDummySVG } from './helpers'
+import { otherDummySVG } from './helpers'
+import { BubbleKonva, GroupingBubble } from './Bubble'
 
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
@@ -99,31 +98,41 @@ const BubbleChart: FC = () => {
               x: (idx ? d.x : 0.5) * width,
               y: (idx ? d.y : 0.5) * height,
             }
+
+            function refocus() {
+              const newScale = width / circleR
+              setPosition({
+                x: (circleR - translation.x) * newScale,
+                y: (circleR - translation.y) * newScale,
+              })
+              setScale(newScale)
+            }
             const r = d.r * height * (isWorker ? 0.8 : 1.05)
             const circleR = d.r * height
-            return (
-              <Bubble
+            return !isWorker ? (
+              <GroupingBubble
                 key={d.id}
                 radius={d.r}
-                d={d}
-                fillColor={isWorker ? 'hsl(226, 100%, 69%)' : 'grey'}
-                textColor={isWorker ? 'white' : 'black'}
                 translation={translation}
-                onClick={function () {
-                  const newScale = width / circleR
-                  setPosition({
-                    x: (circleR - translation.x) * newScale,
-                    y: (circleR - translation.y) * newScale,
-                  })
-                  setScale(newScale)
-                }}
-                isLeaf={isWorker}
-                listLength={bubbleData.length}
-                scale={scale}
-                name={d.data.Name || d.data.name || '*******'}
-                theme={timesGuildTheme}
-                height={height}
-                width={width}
+                onClick={refocus}
+                displayName={
+                  d.data.Name.split(' ')[0] ||
+                  d.data.name.split(' ')[0] ||
+                  '*******'
+                }
+              />
+            ) : (
+              <BubbleKonva
+                key={d.id}
+                radius={d.r}
+                translation={translation}
+                showStars={[true, true, true]}
+                onClick={refocus}
+                displayName={
+                  d.data.Name.split(' ')[0] ||
+                  d.data.name.split(' ')[0] ||
+                  '*******'
+                }
               />
             )
           })}
@@ -134,18 +143,3 @@ const BubbleChart: FC = () => {
 }
 
 export default BubbleChart
-
-//   const legend = svg.selectAll('g.legendRow')
-//     .data(Object.keys(colors))
-//     .join('g')
-//     .attr('class', 'legendRow')
-//     .attr("transform", (d, idx) => `translate(${legendSize},${idx * legendSize * 12})`)
-//     legend.append('circle')
-//       .attr('r', legendSize * 5)
-//       .attr('fill', d => colors[d])
-//       .attr('stroke', d => colors[d] == "white" ? "black" : "none")
-//     legend.append('text')
-//       .attr('font-size', legendSize * 10)
-//       .attr('x', legendSize * 10)
-//       .attr('y', (d, idx) => legendSize * 3)
-//       .html(d => d)

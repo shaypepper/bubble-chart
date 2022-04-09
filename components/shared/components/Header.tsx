@@ -3,7 +3,7 @@ import { css } from 'pretty-lights'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'
 import Scabby from '../icons/Scabby'
-import { bungeeFont, doppioOneFont } from '../tokens/fonts'
+import { molleFont, latoFont } from '../tokens/fonts'
 import Link from 'next/link'
 
 export enum DataForPowerPages {
@@ -21,15 +21,16 @@ const headerClass = css`
 
 const titleClass = css`
   color: ${yellow};
-  font-family: ${bungeeFont};
+  font-family: ${molleFont};
   flex-grow: 1;
   margin: ${pxToRem(12)} 0;
   line-height: 1;
+  font-size: ${pxToRem(48)};
 `
 
 const navClass = css`
   display: flex;
-  font-family: ${doppioOneFont};
+  font-family: ${latoFont};
   align-items: center;
 `
 const navItemClass = css`
