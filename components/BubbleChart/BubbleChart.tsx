@@ -1,14 +1,12 @@
 import { useContext, useState, useRef, useEffect, FC, RefObject } from 'react'
 import { width, height } from './tokens'
 import { pack } from 'd3'
-import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
-import { Person } from '../ChartCreater/data/dataFormattingReducer'
+import { WorkerDataContext } from './data/WorkerDataProvider'
+import { Person } from './data/dataFormattingReducer'
 import { Layer, Stage, Rect, TextPath } from 'react-konva'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
-import { useBubbleChartContext } from './BubbleChartContext'
-import { otherDummySVG } from './helpers'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 
 const BubbleChart: FC = () => {
@@ -23,8 +21,6 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Person>[]
   >([])
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
-  const things = useBubbleChartContext()
-  console.log(things)
 
   useEffect(() => {
     if (stratifiedData) {
@@ -80,14 +76,6 @@ const BubbleChart: FC = () => {
         }}
       >
         Save image
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          otherDummySVG()
-        }}
-      >
-        Export to SVG
       </button>
       <Stage width={width * 2} height={height * 2} ref={stageRef}>
         <Layer ref={layerRef} draggable={true}>

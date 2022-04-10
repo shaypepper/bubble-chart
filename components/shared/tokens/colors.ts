@@ -7,9 +7,8 @@ export const green = '#138800'
 export const white = '#FFFFFF'
 
 export const deepGrey = '#303030'
-export const beige = '#FFFBE9'
 
-export const colors = {
+const colors = {
   yellow: { default: '#FED500', scale: ['', '', '', '', '', '', ''] },
   orange: { default: '#FF9142', scale: ['', '', '', '', '', '', ''] },
   red: { default: '#ED315E', scale: ['', '', '', '', '', '', ''] },

@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { useContext, useRef, useState } from 'react'
-import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
+import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Button, Dropdown, Form } from 'react-bootstrap'
-import {
-  ColumnMap,
-  FormatAction,
-} from '../ChartCreater/data/dataFormattingReducer'
+import { ColumnMap, FormatAction } from '../data/dataFormattingReducer'
 
 const MapColumns: React.FC = () => {
   const { columns, workersData, dispatch, unmappedGroupings } =

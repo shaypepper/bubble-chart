@@ -9,6 +9,7 @@ const Lessons = () => {
     <>
       <Header currentPage={DataForPowerPages.LESSONS} />
       <h1>here we gooooo</h1>
+      {/* <FauxBubble />
       <FauxBubble />
       <FauxBubble />
       <FauxBubble />
@@ -18,8 +19,7 @@ const Lessons = () => {
       <FauxBubble />
       <FauxBubble />
       <FauxBubble />
-      <FauxBubble />
-      <BubbleKonva />
+      <BubbleKonva /> */}
     </>
   )
 }

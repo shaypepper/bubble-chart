@@ -1,17 +1,15 @@
 import * as React from 'react'
 import { useContext } from 'react'
-import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
+import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Button, Form } from 'react-bootstrap'
-import { FormatAction, Steps } from '../ChartCreater/data/dataFormattingReducer'
+import { FormatAction, Steps } from '../data/dataFormattingReducer'
 import WorkersInput from './WorkersInput'
 import GroupingsInput from './GroupingsInput'
-import ColorPicker from './ColorPicker'
 import MapColumns from './MapColumns'
-import BubbleChart from '../BubbleChart'
-import { BubbleChartProvider } from '../BubbleChart/BubbleChartContext'
+import BubbleChart from '..'
 
 const FileInput: React.FC = () => {
-  const { dispatch, unmappedGroupings, stratifiedData, currentStep } =
+  const { dispatch, stratifiedData, currentStep } =
     useContext(WorkerDataContext)
 
   return (
@@ -21,8 +19,6 @@ const FileInput: React.FC = () => {
       {currentStep === Steps.CHOOSE_COLUMNS && <MapColumns />}
 
       {currentStep === Steps.UPLOAD_GROUPINGS && <GroupingsInput />}
-
-      {currentStep === Steps.CHOOSE_COLOR_SCHEME && <ColorPicker />}
 
       {currentStep === Steps.DRAW && (
         <Button
@@ -34,11 +30,7 @@ const FileInput: React.FC = () => {
         </Button>
       )}
 
-      {stratifiedData && (
-        <BubbleChartProvider>
-          <BubbleChart />
-        </BubbleChartProvider>
-      )}
+      {stratifiedData && <BubbleChart />}
     </Form>
   )
 }

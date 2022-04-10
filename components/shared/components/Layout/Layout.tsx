@@ -1,8 +1,8 @@
-import { css } from 'pretty-lights'
+import { css, styled } from 'pretty-lights'
 import * as React from 'react'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
-import { deepGrey, red, green, blue, white } from '../../tokens/colors'
+import { blue, white } from '../../tokens/colors'
 import { bangersFont, latoFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 import Header, { DataForPowerPages } from './../Header'
@@ -10,14 +10,13 @@ import Header, { DataForPowerPages } from './../Header'
 const mainClass = css`
   display: flex;
   flex-direction: column;
-  min-height: 90vh;
   font-family: ${latoFont};
 `
 
 const signClass = css`
   border: ${pxToRem(10)} ${blue} solid;
   max-width: 824px;
-  width: 100%;
+  width: max-content;
   margin: ${pxToRem(20)} auto 0;
   border-radius: ${pxToRem(30)};
   flex-grow: 1;
@@ -44,14 +43,34 @@ const mainContentClass = css`
   flex-grow: 1;
 `
 
-const signHolderClass = css`
+const SignHolder = styled.div`
   display: flex;
   justify-content: end;
   align-items: end;
+  transition: 'transform 400ms ease';
+  transform: ${(props) =>
+    props.collapsed ? 'translate(40vw, 0)' : 'translate(0,0)'};
+  marginbottom: ${pxToRem(20)};
 `
 
 const handHoldClass = css`
   margin-left: calc(50vw - 50px);
+`
+
+const chartTitle = css`
+  display: 'inline-flex';
+  width: '100%';
+  align-items: 'flex-end';
+  padding: 0;
+  margin: ${pxToRem(8)} 0;
+`
+const armClass = css`
+  backgroundcolor: green;
+  height: '48px';
+  marginbottom: '24px';
+  flexgrow: 1;
+  display: 'flex';
+  alignitems: 'center';
 `
 
 const Layout: React.FC<{ currentPage: DataForPowerPages }> = ({
@@ -66,38 +85,16 @@ const Layout: React.FC<{ currentPage: DataForPowerPages }> = ({
       <main className={mainClass}>
         <div className={signClass}>
           <div className={pageTitleClass}>
-            <h2
-              style={{
-                display: 'inline-flex',
-                width: '100%',
-                alignItems: 'flex-end',
-              }}
-            >
+            <h2 className={chartTitle}>
               <span className={stepClass}>Step 1</span>
               <span>Upload your worker list</span>
             </h2>
           </div>
           <div className={mainContentClass}>{children}</div>
         </div>
-        <div
-          className={signHolderClass}
-          style={{
-            transition: 'transform 400ms ease',
-            transform: collapsed ? 'translate(40vw, 0)' : 'translate(0,0)',
-            marginBottom: pxToRem(20),
-          }}
-        >
+        <SignHolder collapsed={collapsed}>
           <HandHoldingSign stickLength={20} className={handHoldClass} />
-          <div
-            style={{
-              backgroundColor: green,
-              height: '48px',
-              marginBottom: '24px',
-              flexGrow: 1,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div className={armClass}>
             <MinimalArrow
               height={24}
               direction={collapsed ? 'left' : 'right'}
@@ -106,7 +103,7 @@ const Layout: React.FC<{ currentPage: DataForPowerPages }> = ({
               }}
             />
           </div>
-        </div>
+        </SignHolder>
       </main>
     </>
   )

@@ -1,15 +1,13 @@
 import * as React from 'react'
-import FileInput from '../FileInput'
+import FileInput from './FileInput'
 import WorkerDataProvider from './data/WorkerDataProvider'
 
 const ChartCreater = ({}) => {
   return (
-    <>
-      <WorkerDataProvider>
-        <FileInput />
-        {/* <BubbleChart /> */}
-      </WorkerDataProvider>
-    </>
+    <WorkerDataProvider>
+      <FileInput />
+      {/* <BubbleChart /> */}
+    </WorkerDataProvider>
   )
 }
 

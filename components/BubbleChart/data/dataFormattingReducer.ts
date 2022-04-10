@@ -112,7 +112,7 @@ export type Action =
       type: FormatAction.STRATIFY_DATA
     }
 
-export interface FormatActionArg {
+interface FormatActionArg {
   type: FormatAction
   payload: any
 }

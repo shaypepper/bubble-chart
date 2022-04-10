@@ -39,7 +39,7 @@ const textClass = css`
   font-weight: 300;
 `
 
-export const BubbleSVG: FC<BubbleProps> = ({
+const BubbleSVG: FC<BubbleProps> = ({
   displayName = 'Angelique',
   fullName = 'Shay Culpepper',
   radius = 50,
@@ -312,7 +312,7 @@ const den = 110
 const fOffset = 0.46
 const gOffset = 0.37
 
-export const Star2 = ({ size = 50, color = red }) => {
+const Star2 = ({ size = 50, color = red }) => {
   const f = (n: number): number => (n * size) / den - size * fOffset
   const g = (n: number): number => (n * size) / den - size * gOffset
   const pathCommands = [
@@ -331,7 +331,7 @@ export const Star2 = ({ size = 50, color = red }) => {
   return <Path data={pathCommands} fill={color} />
 }
 
-export const Star3 = ({ size = 50, color = red }) => {
+const Star3 = ({ size = 50, color = red }) => {
   const f = (n: number): number => (n * size) / den - size * fOffset
   const g = (n: number): number => (n * size) / den - size * gOffset
   const pathCommands = [
@@ -350,7 +350,7 @@ export const Star3 = ({ size = 50, color = red }) => {
   return <Path data={pathCommands} fill={color} />
 }
 
-export const Star1 = ({ size = 50, color = red }) => {
+const Star1 = ({ size = 50, color = red }) => {
   const f = (n: number): number => (n * size) / den - size * fOffset
   const g = (n: number): number => (n * size) / den - size * gOffset
   const pathCommands = [

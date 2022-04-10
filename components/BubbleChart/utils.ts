@@ -1,4 +1,4 @@
-import { ColorMap } from '../ChartCreater/data/dataFormattingReducer'
+import { ColorMap } from './data/dataFormattingReducer'
 
 export const getBubbleFillColor = (
   isWorker: boolean,

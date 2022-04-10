@@ -65,6 +65,7 @@ function convertCsv(
     reader.addEventListener('loadend', () => {
       if (typeof reader.result !== 'string') return
       const parsedWorkerData = csvParse(reader.result)
+
       dispatch({
         type: action,
         parsedData: parsedWorkerData,

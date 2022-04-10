@@ -1,14 +1,12 @@
-import React, { useContext, useRef, useState } from 'react'
-import { WorkerDataContext } from '../ChartCreater/data/WorkerDataProvider'
+import { useContext, useRef } from 'react'
+import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Form } from 'react-bootstrap'
 
 const WorkersInput: React.FC = () => {
-  const { convertWorkerCsv, workersData, unmappedGroupings } =
-    useContext(WorkerDataContext)
+  const { convertWorkerCsv } = useContext(WorkerDataContext)
 
   const outreachDataInputRef = useRef<HTMLInputElement>(null)
-  console.log('smile!')
-  return workersData ? null : (
+  return (
     <Form.Group>
       <Form.Label htmlFor="outreach-data">
         Upload your outreach data:

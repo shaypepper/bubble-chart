@@ -23,9 +23,9 @@ const titleClass = css`
   color: ${yellow};
   font-family: ${molleFont};
   flex-grow: 1;
-  margin: ${pxToRem(12)} 0;
+  margin: ${pxToRem(8)} 0;
   line-height: 1;
-  font-size: ${pxToRem(48)};
+  font-size: ${pxToRem(32)};
 `
 
 const navClass = css`
