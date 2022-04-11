@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import ChartCreater from '../components/ChartCreater'
+import ChartCreater from '../components/BubbleChart/ChartCreater'
 import styles from '../styles/Home.module.css'
 import Header, {
   DataForPowerPages,

@@ -17,13 +17,14 @@ const headerClass = css`
   width: 100%;
   padding: 0 ${pxToRem(12)};
   background-color: ${deepGrey};
+  box-shadow: black 0px 0px 8px;
 `
 
 const titleClass = css`
-  color: ${yellow};
+  color: ${white};
   font-family: ${molleFont};
   flex-grow: 1;
-  margin: ${pxToRem(8)} 0;
+  margin: ${pxToRem(10)} 0 0;
   line-height: 1;
   font-size: ${pxToRem(32)};
 `

@@ -6,39 +6,41 @@ import dataFormattingReducer, {
   State,
   Steps,
 } from './dataFormattingReducer'
+import { ChartOptions } from '../types'
 
 type Worker = {
   [k: string]: string
 }
 
 type WorkerDataType = {
-  convertWorkerCsv: (files: FileList) => void
-  convertGroupingCsv: (files: FileList) => void
+  convertWorkerCsv?: (files: FileList) => void
+  convertGroupingCsv?: (files: FileList) => void
+  convertCsv: (
+    action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
+    files: FileList
+  ) => void
   workerHeirarchy?: HierarchyNode<unknown>
   dispatch: Dispatch<Action>
 } & State
 export const WorkerDataContext = createContext<WorkerDataType>({
   convertWorkerCsv: (files) => files && undefined,
   convertGroupingCsv: (files) => files && undefined,
-  columnMap: {},
+  convertCsv: (action, files) => [action, files] && undefined,
   dispatch: () => undefined,
   currentStep: Steps.UPLOAD_WORKERS,
+  chartOptions: new ChartOptions(),
 })
 
 const WorkerDataProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(dataFormattingReducer, {
-    columnMap: {},
     currentStep: Steps.UPLOAD_WORKERS,
+    chartOptions: new ChartOptions(),
   })
 
   return (
     <WorkerDataContext.Provider
       value={{
-        convertWorkerCsv: convertCsv(FormatAction.UPLOAD_WORKERS_CSV, dispatch),
-        convertGroupingCsv: convertCsv(
-          FormatAction.UPLOAD_GROUPINGS_CSV,
-          dispatch
-        ),
+        convertCsv: generateConvertCsvFunction(dispatch),
         ...state,
         dispatch,
       }}
@@ -51,11 +53,11 @@ const WorkerDataProvider: React.FC = ({ children }) => {
 
 export default WorkerDataProvider
 
-function convertCsv(
-  action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
-  dispatch: Dispatch<Action>
-) {
-  return (files: FileList) => {
+function generateConvertCsvFunction(dispatch: Dispatch<Action>) {
+  return (
+    action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
+    files: FileList
+  ) => {
     let reader = new FileReader()
     let file = files[0]
 

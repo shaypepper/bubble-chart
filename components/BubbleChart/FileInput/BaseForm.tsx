@@ -5,7 +5,6 @@ import { Button, Form } from 'react-bootstrap'
 import { FormatAction, Steps } from '../data/dataFormattingReducer'
 import WorkersInput from './WorkersInput'
 import GroupingsInput from './GroupingsInput'
-import MapColumns from './MapColumns'
 import BubbleChart from '..'
 
 const BaseForm: React.FC = ({ children }) => {

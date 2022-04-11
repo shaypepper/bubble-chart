@@ -8,7 +8,13 @@ import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
+import { styled } from 'pretty-lights'
 
+const ButtonBar = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+`
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
     x: 0,
@@ -21,9 +27,11 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Person>[]
   >([])
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
+  console.log('Bubble chart re-render')
 
   useEffect(() => {
     if (stratifiedData) {
+      console.log('stratifiedData changed')
       setBubbleData(
         pack<Person>()
           .padding((d) => (d.height == 1 ? 0.0 : d.depth == 1 ? 0.008 : 0.002))(
@@ -45,38 +53,34 @@ const BubbleChart: FC = () => {
 
   return (
     <div>
-      <p>
-        {layerRef.current?.position().x} {layerRef.current?.position().y}
-      </p>
-      <p>
-        {position.x} {position.y}
-      </p>
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          const newPosition = {
-            x: 0,
-            y: 0,
-          }
-          setPosition(newPosition)
-          setScale(1)
-        }}
-      >
-        Reset frame
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          if (!stageRef.current) return
-          console.log('printing')
-          const dataUrl = stageRef.current.toDataURL({
-            pixelRatio: 20, // or other value you need
-          })
-          downloadURI(dataUrl, 'stage.png')
-        }}
-      >
-        Save image
-      </button>
+      <ButtonBar>
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            const newPosition = {
+              x: 0,
+              y: 0,
+            }
+            setPosition(newPosition)
+            setScale(1)
+          }}
+        >
+          Reset frame
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            if (!stageRef.current) return
+            console.log('printing')
+            const dataUrl = stageRef.current.toDataURL({
+              pixelRatio: 20, // or other value you need
+            })
+            downloadURI(dataUrl, 'stage.png')
+          }}
+        >
+          Save image
+        </button>
+      </ButtonBar>
       <Stage width={width * 2} height={height * 2} ref={stageRef}>
         <Layer ref={layerRef} draggable={true}>
           <Rect height={height} width={width} fill={'white'} strokeWidth={0} />
@@ -103,11 +107,7 @@ const BubbleChart: FC = () => {
                 radius={d.r}
                 translation={translation}
                 onClick={refocus}
-                displayName={
-                  d.data.Name.split(' ')[0] ||
-                  d.data.name.split(' ')[0] ||
-                  '*******'
-                }
+                displayName={d.data?.displayName}
               />
             ) : (
               <BubbleKonva
@@ -117,8 +117,8 @@ const BubbleChart: FC = () => {
                 showStars={[true, true, true]}
                 onClick={refocus}
                 displayName={
-                  d.data.Name.split(' ')[0] ||
-                  d.data.name.split(' ')[0] ||
+                  d.data?.displayName?.split(' ')[0] ||
+                  d.data?.name?.split(' ')[0] ||
                   '*******'
                 }
               />
