@@ -4,20 +4,35 @@ import { State } from '../dataFormattingReducer'
 export function setStarOption(
   state: State,
   optionType: StarOptionsKeys,
-  value: Value,
+  value: string | boolean | Value,
   starIndex: number
 ) {
   const newChartOptions = state.chartOptions.duplicate()
 
   if (!newChartOptions.stars[starIndex]) {
     newChartOptions.stars[starIndex] = {
-      color: '',
-      column: '',
-      value: '',
-      label: '',
+      [StarOptionsKeys.COLOR]: '',
+      [StarOptionsKeys.COLUMN]: '',
+      [StarOptionsKeys.VALUE]: '',
+      [StarOptionsKeys.LABEL]: '',
+      [StarOptionsKeys.USE]: false,
     }
   }
-  newChartOptions.stars[starIndex][optionType] = value
+
+  switch (optionType) {
+    case StarOptionsKeys.USE:
+      if (typeof value === 'boolean') {
+        newChartOptions.stars[starIndex][StarOptionsKeys.USE] = value
+      }
+      break
+
+    case StarOptionsKeys.VALUE:
+    case StarOptionsKeys.VALUE:
+    case StarOptionsKeys.VALUE:
+    case StarOptionsKeys.VALUE:
+      if (typeof value === 'string')
+        newChartOptions.stars[starIndex][optionType] = value
+  }
 
   return { ...state, chartOptions: newChartOptions }
 }

@@ -5,8 +5,10 @@ import SignModal from '../../shared/components/SignModal'
 import { pxToRem } from '../../shared/tokens/spacing'
 import BubbleSVG from '../Bubble'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
+import FillColorOptions from './Panels/FillColorOptions'
 import StarOptions from './Panels/StarOptions'
 import TextLineOptions from './Panels/TextLineOptions'
+import { configTitleClass } from './styles'
 
 const containerClass = css`
   display: grid;
@@ -22,7 +24,6 @@ export type ConfigPanel = {
 }
 export const configPanels: ConfigPanel[] = [
   { name: 'Fill colors', index: 0, type: 'fill', translate: { x: 5, y: -5 } },
-  { name: 'Display name', index: 0, type: 'name', translate: { x: 80, y: -7 } },
   {
     name: 'Text line 1',
     index: 0,
@@ -31,19 +32,19 @@ export const configPanels: ConfigPanel[] = [
   },
   {
     name: 'Text line 2',
-    index: 0,
+    index: 1,
     type: 'textLine',
     translate: { x: 80, y: 14 },
   },
   {
     name: 'Text line 3',
-    index: 0,
+    index: 2,
     type: 'textLine',
     translate: { x: 80, y: 20 },
   },
   { name: 'Star 1', index: 0, type: 'star', translate: { x: 31, y: -40 } },
-  { name: 'Star 2', index: 0, type: 'star', translate: { x: 48, y: -42 } },
-  { name: 'Star 3', index: 0, type: 'star', translate: { x: 64, y: -40 } },
+  { name: 'Star 2', index: 1, type: 'star', translate: { x: 48, y: -42 } },
+  { name: 'Star 3', index: 2, type: 'star', translate: { x: 64, y: -40 } },
 ]
 
 const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
@@ -52,18 +53,20 @@ const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [currentConfigPanel, setCurrentConfigPanel] =
     React.useState<ConfigPanel>()
 
+  const textLines = chartOptions.textLineColumns.map((c) =>
+    c
+      ? `${c}: ${workersData?.list[3].rawData[c]}`
+      : 'Give us a column to visualize here'
+  )
+
   return (
     <SignModal onDismiss={onDismiss}>
       <div className={containerClass}>
         <div>
           <BubbleSVG
-            displayName={'Shay'}
+            displayName={workersData?.list[3].displayName}
             mode={'edit'}
-            textLines={[
-              'Something: Something else',
-              'Mousaka is very pretty',
-              'Singing is the best',
-            ]}
+            textLines={textLines}
             width={'50vmin'}
             showStars={chartOptions.stars.map((s) => s.use)}
             starColors={chartOptions.stars.map((s) => s.color)}
@@ -75,14 +78,24 @@ const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
           />
         </div>
         <div>
-          <div>{currentConfigPanel?.name}</div>
+          <h3 className={configTitleClass}>
+            {currentConfigPanel?.name} options
+          </h3>
           {currentConfigPanel?.type === 'star' && (
-            <StarOptions starIndex={currentConfigPanel.index} />
+            <StarOptions
+              starIndex={currentConfigPanel.index}
+              key={`star${currentConfigPanel.index}`}
+            />
           )}
 
           {currentConfigPanel?.type === 'textLine' && (
-            <TextLineOptions index={currentConfigPanel.index} />
+            <TextLineOptions
+              index={currentConfigPanel.index}
+              key={`textLine${currentConfigPanel.index}`}
+            />
           )}
+
+          {currentConfigPanel?.type === 'fill' && <FillColorOptions />}
         </div>
       </div>
     </SignModal>

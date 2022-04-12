@@ -1,21 +1,13 @@
-import { FC, ReactEventHandler, useState } from 'react'
+import { FC, useState } from 'react'
 import { Button, Dropdown, Form, FormControl } from 'react-bootstrap'
 
-import { Column } from '../../BubbleChart/types'
-
-const ListOfColumns: FC<{
-  columnList: Column[]
+const DropdownWithFilter: FC<{
+  list: string[]
   label?: string
   toggleText: string
   onSelect: (eventKey: any) => void
   disabled?: boolean
-}> = ({
-  columnList,
-  label = 'Column',
-  onSelect,
-  toggleText,
-  disabled = false,
-}) => {
+}> = ({ list, label = 'Label TK', onSelect, toggleText, disabled = false }) => {
   const [value, setValue] = useState<string>()
   return (
     <Form.Group>
@@ -38,12 +30,12 @@ const ListOfColumns: FC<{
               onChange={(e) => setValue(e.target.value)}
               value={value}
             />
-            {columnList
+            {list
               .filter(
-                (col) =>
+                (col: string) =>
                   !value || col.toLowerCase().startsWith(value.toLowerCase())
               )
-              .map((col) => (
+              .map((col: string) => (
                 <Dropdown.Item key={col} eventKey={col} as={Button}>
                   {col}
                 </Dropdown.Item>
@@ -55,4 +47,4 @@ const ListOfColumns: FC<{
   )
 }
 
-export default ListOfColumns
+export default DropdownWithFilter

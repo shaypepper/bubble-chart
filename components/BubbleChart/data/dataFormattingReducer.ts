@@ -1,17 +1,9 @@
-import {
-  csvParse,
-  csvParseRows,
-  dsv,
-  DSVParsedArray,
-  HierarchyNode,
-  stratify,
-  StratifyOperator,
-} from 'd3'
+import { DSVParsedArray, HierarchyNode, StratifyOperator } from 'd3'
 import { Reducer } from 'react'
 import {
   ChartOptions,
+  Column,
   ColumnMap,
-  Grouping,
   Groupings,
   ListFromCSV,
   Node,
@@ -23,6 +15,7 @@ import {
 import {
   createColumnMap,
   setStarOption,
+  setTextLine,
   stratifyData,
   uploadGroupings,
   uploadWorkers,
@@ -81,6 +74,7 @@ export enum FormatAction {
   GO_TO_STEP = 'goToStep',
   SET_STAR_OPTION = 'setStarOption',
   TOGGLE_STAR = 'toggleStarUse',
+  SET_TEXT_LINE = 'setTextLine',
 }
 
 export type Action =
@@ -123,6 +117,11 @@ export type Action =
       type: FormatAction.TOGGLE_STAR
       starIndex: number
     }
+  | {
+      type: FormatAction.SET_TEXT_LINE
+      column: Column
+      index: number
+    }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,
@@ -163,6 +162,9 @@ const dataFormattingReducer: Reducer<State, Action> = (
         action.starIndex
       )
       break
+
+    case FormatAction.SET_TEXT_LINE:
+      newState = setTextLine(state, action.column, action.index)
 
     case FormatAction.SET_COLORS:
       newState = {

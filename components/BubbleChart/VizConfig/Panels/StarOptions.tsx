@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo, useState } from 'react'
+import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import {
   Button,
   ButtonGroup,
@@ -21,8 +21,6 @@ let colorsList = ['orange', 'red', 'blue', 'green', 'purple', 'yellow']
 
 const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
-  console.log(chartOptions)
-  const [toggleActive, setToggleActive] = useState(true)
 
   const column = chartOptions.stars[starIndex]?.column
   const active = chartOptions.stars[starIndex]?.use
@@ -44,20 +42,18 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
 
   return (
     <div>
-      <h3 className={configTitleClass}>Star options</h3>
-      {starColor}
       <Form>
         <Form.Group>
           <Form.Check
             id={`use-star-${starIndex + 1}`}
             type="switch"
             label={`Use Star ${starIndex + 1}`}
+            checked={active}
             onChange={() => {
-              setToggleActive((state) => !state)
               dispatch({
                 type: FormatAction.SET_STAR_OPTION,
                 optionType: StarOptionsKeys.USE,
-                value: toggleActive,
+                value: !active,
                 starIndex,
               })
             }}
@@ -87,7 +83,7 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
         {column && (
           <Form.Group key={`${value}`}>
             <Form.Label htmlFor="star-options-column">
-              Add column value
+              Value
               <Dropdown
                 role="select"
                 onSelect={(eventKey) => {
@@ -99,12 +95,7 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
                   })
                 }}
               >
-                <Dropdown.Toggle
-                  variant="outline-primary"
-                  id="dropdown-basic"
-                  value={'Name'}
-                  disabled={!active}
-                >
+                <Dropdown.Toggle value={'Name'} disabled={!active}>
                   {value || '------'}
                 </Dropdown.Toggle>
                 <Dropdown.Menu role="select">
