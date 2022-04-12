@@ -42,7 +42,7 @@ const FileInput: React.FC = () => {
 
         {false && stratifiedData && <BubbleChart />}
       </Form>
-      <div>
+      {/* <div>
         <ButtonGroup defaultValue={Steps.UPLOAD_WORKERS}>
           <ToggleButton
             size={'sm'}
@@ -59,7 +59,7 @@ const FileInput: React.FC = () => {
             Upload Groupings
           </ToggleButton>
         </ButtonGroup>
-      </div>
+      </div> */}
     </>
   )
 }

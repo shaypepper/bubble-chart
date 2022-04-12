@@ -17,6 +17,7 @@ import {
 import { bungeeFont, latoFont } from '../shared/tokens/fonts'
 import { getStarPath } from './helpers'
 import Pencil from '../shared/icons/Pencil'
+import { ConfigPanel } from './VizConfig/VizConfig'
 
 type BubbleProps = {
   displayName: string
@@ -35,6 +36,7 @@ type BubbleProps = {
   textLines?: [string, string | void, string | void]
   mode?: 'display' | 'edit'
   width?: number | string
+  generateOnClick?: (s: ConfigPanel) => () => void
 }
 
 const textClass = css`
@@ -43,7 +45,7 @@ const textClass = css`
   font-weight: 300;
 `
 
-const BubbleSVG: FC<BubbleProps> = ({
+const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   mode = 'display',
   displayName = 'Angelique',
   fullName = 'Shay Culpepper',
@@ -57,6 +59,8 @@ const BubbleSVG: FC<BubbleProps> = ({
     'Assessment: 1. Doing Outreach',
     'G2K: Prefers text message',
   ],
+  generateOnClick = () => () => null,
+  configPanels = [],
 }) => {
   const R = 50
   const r = R * 0.875
@@ -161,54 +165,23 @@ const BubbleSVG: FC<BubbleProps> = ({
 
       {mode == 'edit' && (
         <>
-          <Pencil
-            value="Fill colors"
-            size={10}
-            transform="translate(5 -5)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Display name"
-            size={6}
-            transform="translate(80 -7)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Text line 1"
-            size={3}
-            transform="translate(80 8)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Text line 2"
-            size={3}
-            transform="translate(80 14)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Text line 3"
-            size={3}
-            transform="translate(80 20)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Star 1"
-            size={3}
-            transform="translate(31 -40)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Star 2"
-            size={3}
-            transform="translate(48 -42)"
-            fill={innerTextColor}
-          />
-          <Pencil
-            value="Star 3"
-            size={3}
-            transform="translate(64 -40)"
-            fill={innerTextColor}
-          />
+          {' '}
+          {configPanels.map((panel) => {
+            const {
+              name: panelName,
+              translate: { x, y },
+            } = panel
+            return (
+              <Pencil
+                key={panelName}
+                value={panelName}
+                size={4}
+                transform={`translate(${x} ${y})`}
+                fill={innerTextColor}
+                onClick={generateOnClick(panel)}
+              />
+            )
+          })}
         </>
       )}
     </svg>

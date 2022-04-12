@@ -1,7 +1,8 @@
 import {
   csvParse,
+  csvParseRows,
+  dsv,
   DSVParsedArray,
-  DSVRowArray,
   HierarchyNode,
   stratify,
   StratifyOperator,
@@ -13,16 +14,23 @@ import {
   Grouping,
   Groupings,
   ListFromCSV,
+  Node,
   Person,
   StarOptionsKeys,
+  Value,
   Workers,
 } from '../types'
+import {
+  createColumnMap,
+  setStarOption,
+  stratifyData,
+  uploadGroupings,
+  uploadWorkers,
+} from './reducerFunctions'
 
 export type ColorMap = {
   [key: string]: string
 }
-
-const toString = (v: any) => `${v}`
 
 export interface State {
   /**  Current step in the process */
@@ -36,13 +44,13 @@ export interface State {
   columns?: string[]
 
   /** Stratified Data */
-  stratifiedData?: HierarchyNode<Person>
+  stratifiedData?: HierarchyNode<Node>
 
   /** groupings that are neither the root nor have their own grouping listed */
   unmappedGroupings?: Set<string>
 
   /** Stratification function */
-  stratify?: StratifyOperator<DSVRowArray>
+  stratify?: StratifyOperator<DSVParsedArray<Person>>
 
   /** Which column should determine fill/text color? */
   colorColumn?: string
@@ -72,6 +80,7 @@ export enum FormatAction {
   SET_COLORS = 'setColors',
   GO_TO_STEP = 'goToStep',
   SET_STAR_OPTION = 'setStarOption',
+  TOGGLE_STAR = 'toggleStarUse',
 }
 
 export type Action =
@@ -107,7 +116,11 @@ export type Action =
   | {
       type: FormatAction.SET_STAR_OPTION
       optionType: StarOptionsKeys
-      value: Set<string> | string
+      value: Value
+      starIndex: number
+    }
+  | {
+      type: FormatAction.TOGGLE_STAR
       starIndex: number
     }
 
@@ -121,8 +134,10 @@ const dataFormattingReducer: Reducer<State, Action> = (
     case FormatAction.GO_TO_STEP:
       newState = { ...state, currentStep: action.step }
       break
+
     case FormatAction.UPLOAD_WORKERS_CSV:
       return uploadWorkers(state, action.parsedData)
+
     case FormatAction.SET_COLUMN_MAP:
       newState = createColumnMap(state, action.columnMap, action.listFromCsv)
       let { uniqueIdentifier, displayName, grouping } =
@@ -131,9 +146,11 @@ const dataFormattingReducer: Reducer<State, Action> = (
         return newState
       }
       break
+
     case FormatAction.UPLOAD_GROUPINGS_CSV:
       newState = uploadGroupings(state, action.parsedData)
       break
+
     case FormatAction.STRATIFY_DATA:
       newState = stratifyData(state)
       break
@@ -145,6 +162,7 @@ const dataFormattingReducer: Reducer<State, Action> = (
         action.value,
         action.starIndex
       )
+      break
 
     case FormatAction.SET_COLORS:
       newState = {
@@ -161,183 +179,3 @@ const dataFormattingReducer: Reducer<State, Action> = (
 }
 
 export default dataFormattingReducer
-
-function uploadWorkers(
-  state: State,
-  parsedData: DSVParsedArray<Person>
-): State {
-  if (!parsedData.length) {
-    return state
-  }
-
-  const workersData = new Workers(parsedData, state.chartOptions, {
-    uniqueIdentifier: '',
-    displayName: '',
-    grouping: '',
-  })
-
-  return {
-    ...state,
-    workersData,
-    columns: parsedData.columns.map(toString),
-  }
-}
-
-function uploadGroupings(
-  prevState: State,
-  parsedData: DSVParsedArray<Person>
-): State {
-  const groupings = new Groupings(
-    parsedData,
-    prevState.chartOptions,
-    prevState.groupingsData?.columnMap || {
-      uniqueIdentifier: '',
-      displayName: '',
-      grouping: '',
-    }
-  )
-
-  const unmappedGroupings = new Set(prevState.unmappedGroupings)
-
-  return {
-    ...prevState,
-    groupingsData: groupings,
-    unmappedGroupings,
-  }
-}
-
-function createColumnMap(
-  state: State,
-  columnMap: ColumnMap,
-  listFromCSV: ListFromCSV
-): State {
-  // This could be either a Workers object or a Groupings object
-  listFromCSV.columnMap = {
-    ...listFromCSV.columnMap,
-    ...columnMap,
-  }
-  return { ...state }
-}
-
-function stratifyData(state: State): State {
-  let { workersData, groupingsData } = state
-
-  if (!groupingsData) {
-    const fauxCsv = csvParse(
-      `${workersData?.columnMap.uniqueIdentifier},${workersData?.columnMap.displayName},${workersData?.columnMap.grouping}\n`
-    )
-    groupingsData = new Groupings(
-      fauxCsv,
-      state.chartOptions,
-      workersData?.columnMap || {
-        uniqueIdentifier: '',
-        displayName: '',
-        grouping: '',
-      }
-    )
-  }
-
-  const workerGroupings = workersData?.groupings || new Set()
-  const parentGroupings = groupingsData?.groupings || new Set()
-
-  const uniqueIdentifier = groupingsData?.columnMap.uniqueIdentifier
-  const displayName = groupingsData?.columnMap.displayName
-  const grouping = groupingsData?.columnMap.grouping
-
-  if (groupingsData.groupings.has('')) {
-    groupingsData.list.find((g) => {
-      if (!g.grouping) {
-        g.rawData[grouping] = 'allGroups'
-      }
-    })
-  }
-
-  if (workersData?.groupings.has('')) {
-    workersData.list.find((g) => {
-      if (!g.grouping) {
-        g.rawData[grouping] = 'allGroups'
-      }
-    })
-  }
-
-  if (groupingsData.ids.has(undefined)) {
-    groupingsData.list.find((g) => {
-      if (g.id === 'allGroups') {
-        g.rawData[uniqueIdentifier] = Math.ceil(Math.random() * 123)
-      }
-    })
-  }
-
-  if (!groupingsData.ids.has('allGroups')) {
-    groupingsData?.list.push(
-      new Grouping(
-        {
-          [grouping || '*']: '',
-          [uniqueIdentifier || '**']: 'allGroups',
-          [displayName || '***']: 'allGroups',
-        },
-        groupingsData
-      )
-    )
-  }
-
-  for (let groupingId of [...workerGroupings, ...parentGroupings]) {
-    if (
-      groupingsData?.ids.has(groupingId) ||
-      !groupingId ||
-      groupingId === 'allGroups'
-    )
-      continue
-    groupingsData?.list.push(
-      new Grouping(
-        {
-          [grouping || '*']: 'allGroups',
-          [uniqueIdentifier || '**']: groupingId,
-          [displayName || '***']: groupingId,
-        },
-        groupingsData
-      )
-    )
-  }
-
-  const strat = stratify<Person>()
-    .id((d) => `${d?.id}`)
-    .parentId((d) => `${d?.grouping}`)
-  if (!state.workersData) {
-    return state
-  }
-
-  const wtf = [...state.workersData.list, ...(groupingsData?.list || [])]
-  console.log(wtf.filter((d) => d.id === undefined))
-  let stratifiedData
-  try {
-    stratifiedData = strat(wtf)
-      // const stratifiedData = strat([...state.workersData])
-      .sum(() => 1)
-      .sort((a, b) => (b?.value || 0) - (a?.value || 0))
-  } catch (err) {
-    console.log('**** ERROR', err)
-  }
-  return { ...state, stratifiedData }
-}
-
-function setStarOption(
-  state: State,
-  optionType: StarOptionsKeys,
-  value: Set<string> | string,
-  starIndex: number
-) {
-  const newChartOptions = state.chartOptions.duplicate()
-
-  if (!newChartOptions.stars[starIndex]) {
-    newChartOptions.stars[starIndex] = {
-      color: '',
-      column: '',
-      values: new Set(),
-      label: '',
-    }
-  }
-  newChartOptions.stars[starIndex][optionType] = value
-
-  return { ...state, chartOptions: newChartOptions }
-}

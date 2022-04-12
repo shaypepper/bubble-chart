@@ -2,13 +2,13 @@ import { useContext, useState, useRef, useEffect, FC, RefObject } from 'react'
 import { width, height } from './tokens'
 import { pack } from 'd3'
 import { WorkerDataContext } from './data/WorkerDataProvider'
-import { Person } from './data/dataFormattingReducer'
 import { Layer, Stage, Rect, TextPath } from 'react-konva'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 import { styled } from 'pretty-lights'
+import { Person, Node } from './types'
 
 const ButtonBar = styled.div`
   position: absolute;
@@ -24,7 +24,7 @@ const BubbleChart: FC = () => {
   const stageRef: RefObject<StageType> = useRef(null)
   const [scale, setScale] = useState(1)
   const [bubbleData, setBubbleData] = useState<
-    d3.HierarchyCircularNode<Person>[]
+    d3.HierarchyCircularNode<Node>[]
   >([])
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
   console.log('Bubble chart re-render')
@@ -33,7 +33,7 @@ const BubbleChart: FC = () => {
     if (stratifiedData) {
       console.log('stratifiedData changed')
       setBubbleData(
-        pack<Person>()
+        pack<Node>()
           .padding((d) => (d.height == 1 ? 0.0 : d.depth == 1 ? 0.008 : 0.002))(
             stratifiedData
           )
@@ -84,7 +84,7 @@ const BubbleChart: FC = () => {
       <Stage width={width * 2} height={height * 2} ref={stageRef}>
         <Layer ref={layerRef} draggable={true}>
           <Rect height={height} width={width} fill={'white'} strokeWidth={0} />
-          {bubbleData?.map((d: d3.HierarchyCircularNode<Person>, idx) => {
+          {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
             const isWorker = !d.children
             const translation = {
               x: (idx ? d.x : 0.5) * width,
@@ -116,11 +116,7 @@ const BubbleChart: FC = () => {
                 translation={translation}
                 showStars={[true, true, true]}
                 onClick={refocus}
-                displayName={
-                  d.data?.displayName?.split(' ')[0] ||
-                  d.data?.name?.split(' ')[0] ||
-                  '*******'
-                }
+                displayName={d.data?.displayName?.split(' ')[0] || '*******'}
               />
             )
           })}

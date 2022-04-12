@@ -4,7 +4,7 @@ export type Person = {
   [key: Column]: Value
 }
 export type Column = string
-export type Value = number | string | Date
+export type Value = number | string | Date | null | boolean
 
 export type ColorMap = {
   [key: string]: string
@@ -51,15 +51,17 @@ export type ColumnMap = {
 export enum StarOptionsKeys {
   COLOR = 'color',
   COLUMN = 'column',
-  VALUES = 'values',
+  VALUE = 'value',
   LABEL = 'label',
+  USE = 'use',
 }
 
 type StarOptions = {
   [StarOptionsKeys.COLOR]: string
   [StarOptionsKeys.COLUMN]: Column
-  [StarOptionsKeys.VALUES]: Set<Value>
+  [StarOptionsKeys.VALUE]: Value
   [StarOptionsKeys.LABEL]: string
+  [StarOptionsKeys.USE]: boolean
 }
 
 export class ChartOptions {
@@ -78,14 +80,19 @@ export class ChartOptions {
 export class Node {
   rawData: Person
   parent: ListFromCSV
+  backupId: number
 
   constructor(rawData: any, parent: ListFromCSV) {
     this.rawData = rawData
     this.parent = parent
+    this.backupId = Math.round(Math.random() * 10000000)
   }
 
   get id(): string {
-    return `${this.rawData[this.parent.columnMap.uniqueIdentifier || '']}`
+    return `${
+      this.rawData[this.parent.columnMap.uniqueIdentifier || ''] ||
+      this.backupId
+    }`
   }
 
   get displayName(): string {
@@ -127,16 +134,16 @@ export class ListFromCSV {
     this.chartOptions = chartOptions
   }
 
-  get ids(): Set<string> {
+  get ids(): Set<Value | undefined> {
     return new Set(this.list.map((w) => w.id))
   }
 
-  get groupings(): Set<string> {
+  get groupings(): Set<Value | undefined> {
     return new Set(this.list.map((n) => n.grouping))
   }
 
-  listValues(columnName: string | number): Set<string> {
-    const valueSet = new Set<string>()
+  listValues(columnName: string | number): Set<Value> {
+    const valueSet = new Set<Value>()
     this.list.forEach((node: Node) => {
       valueSet.add(`${node.rawData[columnName]}`)
     })
@@ -150,8 +157,8 @@ export class Worker extends Node {
   }
   get starColor() {
     const { stars } = this.parent.chartOptions
-    return stars.map(({ values, column, color }) =>
-      values.has(this.rawData[column]) ? color : 'none'
+    return stars.map(({ value, column, color }) =>
+      value === this.rawData[column] ? color : 'none'
     )
   }
 
@@ -188,7 +195,7 @@ export class Grouping extends Node {
 export class Groupings extends ListFromCSV {
   list: Grouping[]
   constructor(
-    csvFile: DSVParsedArray<Person> | void = undefined,
+    csvFile: DSVParsedArray<Person>,
     options: ChartOptions,
     columnMap: ColumnMap
   ) {

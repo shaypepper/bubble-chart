@@ -16,12 +16,7 @@ const Pencil: FC<{
   value: string
 }> = ({ size, fill = 'white', transform, onClick, value }) => {
   return (
-    <g
-      transform={transform}
-      onClick={(e) => {
-        console.log(value, e.target)
-      }}
-    >
+    <g transform={transform} onClick={onClick}>
       <svg
         width={size}
         viewBox="-15 -15 70 70"
