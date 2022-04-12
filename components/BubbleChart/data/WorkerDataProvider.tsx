@@ -75,31 +75,3 @@ function generateConvertCsvFunction(dispatch: Dispatch<Action>) {
     })
   }
 }
-// const strat = stratify<Worker>()
-// .id((d) => d?.[state.nameColumn || ''])
-// .parentId((d) => d?.[state.groupingColumn || ''])
-
-// setWorkerData(parsedWorkerData)
-// console.log({ parsedWorkerData })
-
-// console.log(parsedWorkerData.columns)
-
-// const workerNameList = new Set()
-// parsedWorkerData.forEach((worker) => {
-//   workerNameList.add(worker.Name)
-// })
-
-// const unlistedgroupingList = new Set()
-
-// parsedWorkerData.forEach((worker) => {
-//   if (!workerNameList.has(worker.grouping)) {
-//     unlistedgroupingList.add(worker.grouping)
-//   }
-// })
-
-// console.log({ unlistedgroupingList })
-
-// const stratifiedThing = strat(thing)
-//   .sum(() => 1)
-//   .sort((a, b) => (b?.value || 0) - (a?.value || 0))
-// setWorkerHeirarchy(stratifiedThing)

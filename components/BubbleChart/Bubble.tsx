@@ -1,7 +1,14 @@
 import { KonvaEventObject } from 'konva/types/Node'
 import { TextPath as TextPathType } from 'konva/types/shapes/TextPath'
 import { css } from 'pretty-lights'
-import { FC, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  FC,
+  ReactEventHandler,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Group, Circle, TextPath, Text, Path } from 'react-konva'
 import { height } from './tokens'
 import {
@@ -14,7 +21,7 @@ import {
   white,
   yellow,
 } from '../shared/tokens/colors'
-import { bungeeFont, latoFont } from '../shared/tokens/fonts'
+import { bangersFont, bungeeFont, latoFont } from '../shared/tokens/fonts'
 import { getStarPath } from './helpers'
 import Pencil from '../shared/icons/Pencil'
 import { ConfigPanel } from './VizConfig/VizConfig'
@@ -27,13 +34,13 @@ type BubbleProps = {
   showBubbleBorder?: boolean
   bubbleFillColor?: string
   innerTextColor?: string
-  showStars?: [boolean, boolean, boolean]
-  starColors?: [string, string, string]
+  showStars?: boolean[]
+  starColors?: string[]
   translation?: {
     x: number
     y: number
   }
-  textLines?: [string, string | void, string | void]
+  textLines?: string[]
   mode?: 'display' | 'edit'
   width?: number | string
   generateOnClick?: (s: ConfigPanel) => () => void
@@ -44,6 +51,40 @@ const textClass = css`
   font-size: 4px;
   font-weight: 300;
 `
+
+export const MiniBubbleSVG: FC<{
+  fillColor?: string
+  textColor?: string
+  onClick?: ReactEventHandler
+  height?: number
+  className?: string
+}> = ({
+  fillColor = deepGrey,
+  textColor = white,
+  onClick = () => {},
+  height = 20,
+  className = '',
+}) => {
+  return (
+    <svg
+      viewBox="0 0 10 10"
+      height={height}
+      role="button"
+      className={className}
+      onClick={onClick}
+    >
+      <circle fill={fillColor} r="5" transform="translate(5 5)" />
+      <text
+        fontFamily={bangersFont}
+        fill={textColor}
+        fontSize={3}
+        transform="translate(2.8 6.2)"
+      >
+        text
+      </text>
+    </svg>
+  )
+}
 
 const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   mode = 'display',
@@ -270,7 +311,7 @@ export const BubbleKonva: FC<
     <Group className={'leaf'} x={translation.x} y={translation.y}>
       <Circle
         radius={R}
-        fill={deepGrey}
+        fill={bubbleFillColor}
         strokeLinecap="round"
         strokeDashArray={[10, 10]}
         mask="url(#circleMask)"

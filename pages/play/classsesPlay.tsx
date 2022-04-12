@@ -14,17 +14,7 @@ class RandomColorGenerator {
 }
 
 const ClassesPlayButton = ({ color, onClick }) => {
-  return (
-    <button
-      onClick={() => {
-        console.log('color', color)
-        onClick()
-      }}
-    >
-      {' '}
-      New Color!{' '}
-    </button>
-  )
+  return <button onClick={onClick}> New Color! </button>
 }
 
 const ClassesPlay = () => {

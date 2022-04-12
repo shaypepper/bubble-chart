@@ -19,7 +19,6 @@ export function uploadWorkers(
   return {
     ...state,
     workersData,
-    columns: parsedData.columns.map(toString),
   }
 }
 

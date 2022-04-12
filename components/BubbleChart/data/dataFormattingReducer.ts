@@ -2,6 +2,8 @@ import { DSVParsedArray, HierarchyNode, StratifyOperator } from 'd3'
 import { Reducer } from 'react'
 import {
   ChartOptions,
+  ColorMap,
+  ColorMapByColumn,
   Column,
   ColumnMap,
   Groupings,
@@ -20,10 +22,7 @@ import {
   uploadGroupings,
   uploadWorkers,
 } from './reducerFunctions'
-
-export type ColorMap = {
-  [key: string]: string
-}
+import { setColorColumn, setColorMap } from './reducerFunctions/setColors'
 
 export interface State {
   /**  Current step in the process */
@@ -75,6 +74,8 @@ export enum FormatAction {
   SET_STAR_OPTION = 'setStarOption',
   TOGGLE_STAR = 'toggleStarUse',
   SET_TEXT_LINE = 'setTextLine',
+  SET_COLOR_COLUMN = 'setColorColumn',
+  SET_COLOR_MAP = 'setColorMap',
 }
 
 export type Action =
@@ -122,6 +123,8 @@ export type Action =
       column: Column
       index: number
     }
+  | { type: FormatAction.SET_COLOR_COLUMN; column: Column }
+  | { type: FormatAction.SET_COLOR_MAP; colorMap: ColorMap }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,
@@ -166,13 +169,14 @@ const dataFormattingReducer: Reducer<State, Action> = (
     case FormatAction.SET_TEXT_LINE:
       newState = setTextLine(state, action.column, action.index)
 
-    case FormatAction.SET_COLORS:
-      newState = {
-        ...state,
-        colorMap: action.colorMap,
-        currentStep: Steps.DRAW,
-      }
+    case FormatAction.SET_COLOR_COLUMN:
+      newState = setColorColumn(state, action.column)
       break
+
+    case FormatAction.SET_COLOR_MAP:
+      newState = setColorMap(state, action.colorMap)
+      break
+
     default:
       newState = state
   }

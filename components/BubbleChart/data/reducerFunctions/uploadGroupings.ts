@@ -8,7 +8,6 @@ export function uploadGroupings(
 ): State {
   const groupings = new Groupings(
     parsedData,
-    prevState.chartOptions,
     prevState.groupingsData?.columnMap || {
       uniqueIdentifier: '',
       displayName: '',

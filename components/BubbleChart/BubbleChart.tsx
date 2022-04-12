@@ -8,7 +8,7 @@ import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 import { styled } from 'pretty-lights'
-import { Person, Node } from './types'
+import { Person, Node, isWorker } from './types'
 
 const ButtonBar = styled.div`
   position: absolute;
@@ -27,11 +27,9 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Node>[]
   >([])
   const { stratifiedData, colorMap } = useContext(WorkerDataContext)
-  console.log('Bubble chart re-render')
 
   useEffect(() => {
     if (stratifiedData) {
-      console.log('stratifiedData changed')
       setBubbleData(
         pack<Node>()
           .padding((d) => (d.height == 1 ? 0.0 : d.depth == 1 ? 0.008 : 0.002))(
@@ -71,7 +69,6 @@ const BubbleChart: FC = () => {
           onClick={(e) => {
             e.preventDefault()
             if (!stageRef.current) return
-            console.log('printing')
             const dataUrl = stageRef.current.toDataURL({
               pixelRatio: 20, // or other value you need
             })
@@ -85,7 +82,7 @@ const BubbleChart: FC = () => {
         <Layer ref={layerRef} draggable={true}>
           <Rect height={height} width={width} fill={'white'} strokeWidth={0} />
           {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
-            const isWorker = !d.children
+            const colors = isWorker(d.data) ? d.data.bubbleColors : null
             const translation = {
               x: (idx ? d.x : 0.5) * width,
               y: (idx ? d.y : 0.5) * height,
@@ -99,9 +96,9 @@ const BubbleChart: FC = () => {
               })
               setScale(newScale)
             }
-            const r = d.r * height * (isWorker ? 0.8 : 1.05)
+            const r = d.r * height * (isWorker(d.data) ? 0.8 : 1.05)
             const circleR = d.r * height
-            return !isWorker ? (
+            return !isWorker(d.data) ? (
               <GroupingBubble
                 key={d.id}
                 radius={d.r}
@@ -113,6 +110,7 @@ const BubbleChart: FC = () => {
               <BubbleKonva
                 key={d.id}
                 radius={d.r}
+                bubbleFillColor={colors?.fillColor || 'yellow'}
                 translation={translation}
                 showStars={[true, true, true]}
                 onClick={refocus}

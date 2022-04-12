@@ -64,14 +64,13 @@ const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       <div className={containerClass}>
         <div>
           <BubbleSVG
-            displayName={workersData?.list[3].displayName}
+            displayName={workersData?.list[3].displayName || ''}
             mode={'edit'}
             textLines={textLines}
             width={'50vmin'}
-            showStars={chartOptions.stars.map((s) => s.use)}
-            starColors={chartOptions.stars.map((s) => s.color)}
+            showStars={[true, true, true]}
+            starColors={chartOptions.stars.map((s) => s.color || '#404040')}
             generateOnClick={(panel: ConfigPanel) => () => {
-              console.log('click!')
               setCurrentConfigPanel(panel)
             }}
             configPanels={configPanels}

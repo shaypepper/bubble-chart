@@ -20,6 +20,7 @@
     "bootstrap-icons": "^1.7.0",
     "d3": "6.7",
     "d3-array": "^3.1.1",
+    "deep-merge": "^1.0.0",
     "konva": "7",
     "next": "12",
     "next-transpile-modules": "^9.0.0",

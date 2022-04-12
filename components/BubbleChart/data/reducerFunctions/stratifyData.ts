@@ -1,5 +1,5 @@
-import { csvParse, stratify } from 'd3'
-import { Grouping, Groupings } from '../../types'
+import { csvParse, DSVParsedArray, stratify } from 'd3'
+import { Grouping, Groupings, Node, Person } from '../../types'
 import { State } from '../dataFormattingReducer'
 
 export function stratifyData(state: State): State {
@@ -8,12 +8,11 @@ export function stratifyData(state: State): State {
   let groupingsData = rawGroupingsData
 
   if (!groupingsData) {
-    const fauxCsv = csvParse(
-      `${workersData?.columnMap.uniqueIdentifier},${workersData?.columnMap.displayName},${workersData?.columnMap.grouping}\n`
+    const fauxCsv: DSVParsedArray<Person> = csvParse(
+      `${workersData?.columnMap.uniqueIdentifier},${workersData?.columnMap.displayName},${workersData?.columnMap.grouping}\n,,\n`
     )
     groupingsData = new Groupings(
       fauxCsv,
-      state.chartOptions,
       workersData?.columnMap || {
         uniqueIdentifier: 'uniqueIdentifier',
         displayName: 'displayName',
@@ -65,7 +64,6 @@ export function stratifyData(state: State): State {
   }
 
   if (!groupingsData.ids.has('allGroups')) {
-    console.log('there was no allGroups')
     groupingsData?.list.push(
       new Grouping(
         {
@@ -86,7 +84,6 @@ export function stratifyData(state: State): State {
   }
 
   const wtf = [...state.workersData.list, ...(groupingsData?.list || [])]
-  console.log(wtf.filter((d) => d.id === undefined))
   let stratifiedData
   try {
     stratifiedData = strat(wtf)
@@ -97,11 +94,6 @@ export function stratifyData(state: State): State {
     if (typeof err !== 'object') {
       return { ...state }
     }
-
-    console.log({
-      groupingsData: groupingsData.list.filter((g) => g.id === 'allGroups'),
-      workersData: workersData?.list.filter((g) => g.id === 'Company'),
-    })
   }
   return { ...state, stratifiedData }
 }

@@ -1,13 +1,26 @@
 import { csvParse, DSVParsedArray } from 'd3'
+import { deepGrey, white } from '../shared/tokens/colors'
 
 export type Person = {
   [key: Column]: Value
 }
 export type Column = string
 export type Value = number | string | Date | null | boolean
+// export type Value = number | string | Date | boolean
 
 export type ColorMap = {
-  [key: string]: string
+  [columnValue: string]: {
+    textColor: string
+    fillColor: string
+  }
+}
+export type ColorMapByColumn = {
+  [columnName: Column]: ColorMap
+}
+
+export type ColorOptions = {
+  currentColumn: Column
+  colorMap: ColorMapByColumn
 }
 
 const s = (v: any) => `${v}`
@@ -17,36 +30,6 @@ export type ColumnMap = {
   displayName?: string
   grouping?: string
 }
-
-// export type BubbleOptions = {
-//   textColor: string
-//   fillColor: string
-// }
-
-// export type BubbleTheme2 = {
-//   default: BubbleOptions
-//   categorical?: {
-//     [s: string]: BubbleOptions
-//   }
-//   numeric: {
-//     min: BubbleOptions
-//     max: BubbleOptions
-//   }
-// }
-
-// export class BubbleTheme {
-//   default: BubbleOptions
-//   categorical?: BubbleOptions[]
-//   numeric: {
-//     min: BubbleOptions
-//     max: BubbleOptions
-//   }
-//   constructor() {
-//     this.default = {}
-//     this.categorical = []
-//     this.numeric = {}
-//   }
-// }
 
 export enum StarOptionsKeys {
   COLOR = 'color',
@@ -67,20 +50,35 @@ type StarOptions = {
 export class ChartOptions {
   stars: StarOptions[]
   textLineColumns: Column[]
+  colors: ColorOptions
 
-  constructor(stars: StarOptions[] = [], textLineColumns: Column[] = []) {
+  constructor(
+    stars: StarOptions[] = [],
+    textLineColumns: Column[] = [],
+    colors: ColorOptions = {
+      currentColumn: '',
+      colorMap: {},
+    }
+  ) {
     this.stars = stars
     this.textLineColumns = textLineColumns
+    this.colors = colors
   }
 
   duplicate() {
-    return new ChartOptions(this.stars, this.textLineColumns)
+    const newOptions = new ChartOptions(
+      this.stars,
+      this.textLineColumns,
+      this.colors
+    )
+    return newOptions
   }
 }
 export class Node {
   rawData: Person
   parent: ListFromCSV
   backupId: number
+  nodeType = 'node'
 
   constructor(rawData: any, parent: ListFromCSV) {
     this.rawData = rawData
@@ -104,6 +102,10 @@ export class Node {
   }
 }
 
+export function isWorker(node: Node): node is Worker {
+  return node.nodeType === 'worker'
+}
+
 export class ListFromCSV {
   /** Uploaded csv file */
   csvFile: DSVParsedArray<Person>
@@ -113,13 +115,12 @@ export class ListFromCSV {
   columns?: Column[]
 
   list: Node[]
-
-  chartOptions: ChartOptions
+  chartOptions?: ChartOptions
 
   constructor(
     csvFile: DSVParsedArray<Person>,
     columnMap: ColumnMap | void = undefined,
-    chartOptions: ChartOptions
+    chartOptions?: ChartOptions
   ) {
     this.columnMap = columnMap || {
       uniqueIdentifier: '',
@@ -131,7 +132,10 @@ export class ListFromCSV {
     this.columns = this.csvFile.columns?.map((s) => `${s}`).filter((s) => s)
 
     this.list = []
-    this.chartOptions = chartOptions
+
+    if (chartOptions) {
+      this.chartOptions = chartOptions
+    }
   }
 
   get ids(): Set<Value | undefined> {
@@ -152,34 +156,46 @@ export class ListFromCSV {
 }
 
 export class Worker extends Node {
-  constructor(rawData: any, parent: ListFromCSV) {
+  constructor(rawData: any, parent: Workers) {
     super(rawData, parent)
+    this.nodeType = 'worker'
   }
   get starColor() {
-    const { stars } = this.parent.chartOptions
+    const stars = this.parent.chartOptions?.stars || []
     return stars.map(({ value, column, color }) =>
       value === this.rawData[column] ? color : 'none'
     )
   }
 
   get textLines() {
-    return this.parent.chartOptions.textLineColumns.map((col) => {
+    return this.parent.chartOptions?.textLineColumns.map((col) => {
       return `${col}: ${this.rawData[col]}`
     })
   }
 
   get bubbleColors() {
-    return {}
+    if (!this.parent.chartOptions) return
+
+    const {
+      colors: { colorMap, currentColumn },
+    } = this.parent.chartOptions
+
+    const currentColorMap =
+      colorMap[currentColumn]?.[`${this.rawData[currentColumn]}`]
+    const fillColor = currentColorMap?.fillColor || deepGrey
+    const textColor = currentColorMap?.textColor || white
+    return { fillColor, textColor }
   }
 }
 export class Workers extends ListFromCSV {
   list: Worker[]
+
   constructor(
     csvFile: DSVParsedArray<Person>,
-    options: ChartOptions,
+    chartOptions: ChartOptions,
     columnMap: ColumnMap
   ) {
-    super(csvFile, columnMap, options)
+    super(csvFile, columnMap, chartOptions)
     this.list = this.csvFile.map((row) => {
       return new Worker(row, this)
     })
@@ -189,17 +205,14 @@ export class Workers extends ListFromCSV {
 export class Grouping extends Node {
   constructor(rawData: any, parent: ListFromCSV) {
     super(rawData, parent)
+    this.nodeType = 'grouping'
   }
 }
 
 export class Groupings extends ListFromCSV {
   list: Grouping[]
-  constructor(
-    csvFile: DSVParsedArray<Person>,
-    options: ChartOptions,
-    columnMap: ColumnMap
-  ) {
-    super(csvFile, columnMap, options)
+  constructor(csvFile: DSVParsedArray<Person>, columnMap: ColumnMap) {
+    super(csvFile, columnMap)
     this.list = this.csvFile.map((row) => {
       return new Grouping(row, this)
     })

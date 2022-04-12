@@ -10,11 +10,14 @@ import VizConfig from '../../components/BubbleChart/VizConfig'
 
 const BubbleChartPage: NextPage = () => {
   const [showModal, setShowModal] = useState(true)
+  const [showColorConfig, setShowColorConfig] = useState(true)
   return (
     <Layout currentPage={DataForPowerPages.BUBBLE_CHART}>
       <WorkerDataProvider>
         <BubbleChart />
-        <VizConfig onDismiss={() => setShowModal(false)} />
+        {showColorConfig && (
+          <VizConfig onDismiss={() => setShowColorConfig(false)} />
+        )}
         {showModal && (
           <SignModal onDismiss={() => setShowModal(false)}>
             <FileInput />

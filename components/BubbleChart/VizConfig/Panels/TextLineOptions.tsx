@@ -14,7 +14,6 @@ const TextLineOptions: FC<{ index: number }> = ({ index }) => {
       <ListOfColumns
         columnList={workersData?.columns || []}
         onSelect={(eventKey) => {
-          console.log('dispatching!')
           dispatch({
             type: FormatAction.SET_TEXT_LINE,
             column: eventKey,
