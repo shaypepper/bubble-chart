@@ -1,4 +1,4 @@
-import { DSVParsedArray, HierarchyNode, StratifyOperator } from 'd3'
+import { DSVRowArray, HierarchyNode, StratifyOperator } from 'd3'
 import { Reducer } from 'react'
 import {
   ChartOptions,
@@ -9,7 +9,6 @@ import {
   Groupings,
   ListFromCSV,
   Node,
-  Person,
   StarOptionsKeys,
   Value,
   Workers,
@@ -42,7 +41,7 @@ export interface State {
   unmappedGroupings?: Set<string>
 
   /** Stratification function */
-  stratify?: StratifyOperator<DSVParsedArray<Person>>
+  stratify?: StratifyOperator<DSVRowArray<string>>
 
   /** Which column should determine fill/text color? */
   colorColumn?: string
@@ -81,11 +80,11 @@ export enum FormatAction {
 export type Action =
   | {
       type: FormatAction.UPLOAD_WORKERS_CSV
-      parsedData: DSVParsedArray<Person>
+      parsedData: DSVRowArray<string>
     }
   | {
       type: FormatAction.UPLOAD_GROUPINGS_CSV
-      parsedData: DSVParsedArray<Person>
+      parsedData: DSVRowArray<string>
     }
   | {
       type: FormatAction.SET_COLUMN_MAP

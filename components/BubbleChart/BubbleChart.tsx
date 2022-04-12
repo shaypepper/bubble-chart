@@ -8,7 +8,7 @@ import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 import { styled } from 'pretty-lights'
-import { Person, Node, isWorker } from './types'
+import { Node, isWorker } from './types'
 
 const ButtonBar = styled.div`
   position: absolute;

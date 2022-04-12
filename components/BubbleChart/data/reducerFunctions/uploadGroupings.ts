@@ -1,10 +1,10 @@
-import { DSVParsedArray } from 'd3'
-import { Groupings, Person } from '../../types'
+import { DSVRowArray } from 'd3'
+import { Groupings } from '../../types'
 import { State } from '../dataFormattingReducer'
 
 export function uploadGroupings(
   prevState: State,
-  parsedData: DSVParsedArray<Person>
+  parsedData: DSVRowArray<string>
 ): State {
   const groupings = new Groupings(
     parsedData,

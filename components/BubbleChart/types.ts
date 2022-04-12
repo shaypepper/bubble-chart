@@ -1,4 +1,4 @@
-import { csvParse, DSVParsedArray } from 'd3'
+import { DSVRowArray } from 'd3'
 import { deepGrey, white } from '../shared/tokens/colors'
 
 export type Person = {
@@ -108,7 +108,7 @@ export function isWorker(node: Node): node is Worker {
 
 export class ListFromCSV {
   /** Uploaded csv file */
-  csvFile: DSVParsedArray<Person>
+  csvFile: DSVRowArray<string>
   /** Map of standardized labels to csv columns */
   columnMap: ColumnMap
   /** List of available columns from CSV */
@@ -118,7 +118,7 @@ export class ListFromCSV {
   chartOptions?: ChartOptions
 
   constructor(
-    csvFile: DSVParsedArray<Person>,
+    csvFile: DSVRowArray<string>,
     columnMap: ColumnMap | void = undefined,
     chartOptions?: ChartOptions
   ) {
@@ -191,7 +191,7 @@ export class Workers extends ListFromCSV {
   list: Worker[]
 
   constructor(
-    csvFile: DSVParsedArray<Person>,
+    csvFile: DSVRowArray<string>,
     chartOptions: ChartOptions,
     columnMap: ColumnMap
   ) {
@@ -211,7 +211,7 @@ export class Grouping extends Node {
 
 export class Groupings extends ListFromCSV {
   list: Grouping[]
-  constructor(csvFile: DSVParsedArray<Person>, columnMap: ColumnMap) {
+  constructor(csvFile: DSVRowArray<string>, columnMap: ColumnMap) {
     super(csvFile, columnMap)
     this.list = this.csvFile.map((row) => {
       return new Grouping(row, this)

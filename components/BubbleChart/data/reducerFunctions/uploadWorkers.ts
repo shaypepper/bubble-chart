@@ -1,10 +1,10 @@
-import { DSVParsedArray } from 'd3'
-import { Person, Workers } from '../../types'
+import { DSVRowArray } from 'd3'
+import { Workers } from '../../types'
 import { State } from '../dataFormattingReducer'
 
 export function uploadWorkers(
   state: State,
-  parsedData: DSVParsedArray<Person>
+  parsedData: DSVRowArray<string>
 ): State {
   if (!parsedData.length) {
     return state

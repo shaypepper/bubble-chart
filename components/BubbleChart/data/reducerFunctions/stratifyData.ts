@@ -1,5 +1,5 @@
-import { csvParse, DSVParsedArray, stratify } from 'd3'
-import { Grouping, Groupings, Node, Person } from '../../types'
+import { csvParse, DSVRowArray, stratify } from 'd3'
+import { Grouping, Groupings, Node } from '../../types'
 import { State } from '../dataFormattingReducer'
 
 export function stratifyData(state: State): State {
@@ -8,7 +8,7 @@ export function stratifyData(state: State): State {
   let groupingsData = rawGroupingsData
 
   if (!groupingsData) {
-    const fauxCsv: DSVParsedArray<Person> = csvParse(
+    const fauxCsv: DSVRowArray<string> = csvParse(
       `${workersData?.columnMap.uniqueIdentifier},${workersData?.columnMap.displayName},${workersData?.columnMap.grouping}\n,,\n`
     )
     groupingsData = new Groupings(
