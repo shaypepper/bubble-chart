@@ -3,7 +3,7 @@ import { css } from 'pretty-lights'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'
 import Scabby from '../icons/Scabby'
-import { molleFont, latoFont } from '../tokens/fonts'
+import { molleFont, latoFont, bangersFont } from '../tokens/fonts'
 import Link from 'next/link'
 
 export enum DataForPowerPages {
@@ -22,7 +22,7 @@ const headerClass = css`
 
 const titleClass = css`
   color: ${white};
-  font-family: ${molleFont};
+  font-family: ${bangersFont};
   flex-grow: 1;
   margin: ${pxToRem(10)} 0 0;
   line-height: 1;

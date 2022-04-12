@@ -7,14 +7,34 @@ import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
-import { styled } from 'pretty-lights'
+import { css, styled } from 'pretty-lights'
 import { Node, isWorker } from './types'
+import { deepGrey } from '../shared/tokens/colors'
 
 const ButtonBar = styled.div`
-  position: absolute;
+  position: fixed;
   left: 0;
-  top: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: white;
 `
+
+const stageClass = css`
+  width: 100vmin;
+  height: 100vmin;
+  display: flex;
+  // justify-content: center;
+  // margin: 0 auto;
+
+  canvas {
+    width: 100%;
+  }
+`
+
+const useScaleAndPosition = () => {
+  return { position: { x: 0, y: 0 }, scale: 1 }
+}
+
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
     x: 0,
@@ -26,7 +46,7 @@ const BubbleChart: FC = () => {
   const [bubbleData, setBubbleData] = useState<
     d3.HierarchyCircularNode<Node>[]
   >([])
-  const { stratifiedData, colorMap } = useContext(WorkerDataContext)
+  const { stratifiedData } = useContext(WorkerDataContext)
 
   useEffect(() => {
     if (stratifiedData) {
@@ -50,14 +70,21 @@ const BubbleChart: FC = () => {
   }, [position, scale])
 
   return (
-    <div>
+    <div
+      style={{
+        position: 'fixed',
+        overflow: 'hidden',
+        width: '100vw',
+        backgroundColor: '#505050',
+      }}
+    >
       <ButtonBar>
         <button
           onClick={(e) => {
             e.preventDefault()
             const newPosition = {
-              x: 0,
-              y: 0,
+              x: width / 20,
+              y: width / 20,
             }
             setPosition(newPosition)
             setScale(1)
@@ -77,10 +104,18 @@ const BubbleChart: FC = () => {
         >
           Save image
         </button>
+        <p>
+          position: {position.x}, {position.y} <br />
+          scale: {scale}
+        </p>
       </ButtonBar>
-      <Stage width={width * 2} height={height * 2} ref={stageRef}>
+      <Stage
+        width={width * 2}
+        height={height * 2}
+        ref={stageRef}
+        className={stageClass}
+      >
         <Layer ref={layerRef} draggable={true}>
-          <Rect height={height} width={width} fill={'white'} strokeWidth={0} />
           {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
             const colors = isWorker(d.data) ? d.data.bubbleColors : null
             const translation = {
@@ -89,15 +124,18 @@ const BubbleChart: FC = () => {
             }
 
             function refocus() {
-              const newScale = width / circleR
+              const newScale = width / (circleR * 2)
               setPosition({
-                x: (circleR - translation.x) * newScale,
-                y: (circleR - translation.y) * newScale,
+                x: (circleR - translation.x) * newScale + width / 20,
+                y: (circleR - translation.y) * newScale + width / 20,
               })
               setScale(newScale)
             }
             const r = d.r * height * (isWorker(d.data) ? 0.8 : 1.05)
             const circleR = d.r * height
+
+            isWorker(d.data) && console.log(d.data.textLines)
+
             return !isWorker(d.data) ? (
               <GroupingBubble
                 key={d.id}
@@ -111,8 +149,9 @@ const BubbleChart: FC = () => {
                 key={d.id}
                 radius={d.r}
                 bubbleFillColor={colors?.fillColor || 'yellow'}
+                textLines={d.data.textLines}
                 translation={translation}
-                showStars={[true, true, true]}
+                stars={d.data.stars}
                 onClick={refocus}
                 displayName={d.data?.displayName?.split(' ')[0] || '*******'}
               />

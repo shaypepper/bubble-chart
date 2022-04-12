@@ -19,7 +19,7 @@ const WorkersInput: React.FC = () => {
           onChange={() => {
             if (!outreachDataInputRef.current) return
             const files = outreachDataInputRef.current.files
-            if (files) {
+            if (files && convertWorkerCsv) {
               convertWorkerCsv(files)
             }
           }}

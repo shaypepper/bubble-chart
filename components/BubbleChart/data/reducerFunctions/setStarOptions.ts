@@ -9,15 +9,15 @@ export function setStarOption(
 ) {
   const newChartOptions = state.chartOptions.duplicate()
 
-  if (!newChartOptions.stars[starIndex]) {
-    newChartOptions.stars[starIndex] = {
-      [StarOptionsKeys.COLOR]: '',
-      [StarOptionsKeys.COLUMN]: '',
-      [StarOptionsKeys.VALUE]: '',
-      [StarOptionsKeys.LABEL]: '',
-      [StarOptionsKeys.USE]: false,
-    }
-  }
+  // if (!newChartOptions.stars[starIndex]) {
+  //   newChartOptions.stars[starIndex] = {
+  //     [StarOptionsKeys.COLOR]: '',
+  //     [StarOptionsKeys.COLUMN]: '',
+  //     [StarOptionsKeys.VALUE]: '',
+  //     [StarOptionsKeys.LABEL]: '',
+  //     [StarOptionsKeys.USE]: false,
+  //   }
+  // }
 
   switch (optionType) {
     case StarOptionsKeys.USE:
@@ -27,12 +27,16 @@ export function setStarOption(
       break
 
     case StarOptionsKeys.VALUE:
-    case StarOptionsKeys.VALUE:
-    case StarOptionsKeys.VALUE:
-    case StarOptionsKeys.VALUE:
-      if (typeof value === 'string')
+    case StarOptionsKeys.COLOR:
+    case StarOptionsKeys.COLUMN:
+    case StarOptionsKeys.LABEL:
+      if (typeof value === 'string') {
+        console.log('we got here', newChartOptions.stars[starIndex])
         newChartOptions.stars[starIndex][optionType] = value
+      }
   }
+
+  for (let star of newChartOptions.stars) console.log(star)
 
   return { ...state, chartOptions: newChartOptions }
 }

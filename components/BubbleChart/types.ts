@@ -39,12 +39,20 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
-type StarOptions = {
-  [StarOptionsKeys.COLOR]: string
-  [StarOptionsKeys.COLUMN]: Column
-  [StarOptionsKeys.VALUE]: Value
-  [StarOptionsKeys.LABEL]: string
+export class StarOptions {
+  [StarOptionsKeys.COLOR]: string;
+  [StarOptionsKeys.COLUMN]: Column;
+  [StarOptionsKeys.VALUE]: Value;
+  [StarOptionsKeys.LABEL]: string;
   [StarOptionsKeys.USE]: boolean
+
+  constructor() {
+    this.column = ''
+    this.color = 'transparent'
+    this.value = ''
+    this.label = ''
+    this.use = false
+  }
 }
 
 export class ChartOptions {
@@ -60,7 +68,9 @@ export class ChartOptions {
       colorMap: {},
     }
   ) {
-    this.stars = stars
+    this.stars = stars.length
+      ? stars
+      : [new StarOptions(), new StarOptions(), new StarOptions()]
     this.textLineColumns = textLineColumns
     this.colors = colors
   }
@@ -160,11 +170,12 @@ export class Worker extends Node {
     super(rawData, parent)
     this.nodeType = 'worker'
   }
-  get starColor() {
+  get stars() {
     const stars = this.parent.chartOptions?.stars || []
-    return stars.map(({ value, column, color }) =>
-      value === this.rawData[column] ? color : 'none'
-    )
+    return stars.map(({ value, column, color, use }) => ({
+      fillColor: color,
+      show: value === this.rawData[column] && use,
+    }))
   }
 
   get textLines() {

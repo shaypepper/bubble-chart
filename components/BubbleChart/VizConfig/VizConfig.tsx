@@ -47,7 +47,7 @@ export const configPanels: ConfigPanel[] = [
   { name: 'Star 3', index: 2, type: 'star', translate: { x: 64, y: -40 } },
 ]
 
-const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
+const VizConfig: React.FC = () => {
   const { workersData, chartOptions, groupingsData } =
     useContext(WorkerDataContext)
   const [currentConfigPanel, setCurrentConfigPanel] =
@@ -60,44 +60,44 @@ const VizConfig: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   )
 
   return (
-    <SignModal onDismiss={onDismiss}>
-      <div className={containerClass}>
-        <div>
-          <BubbleSVG
-            displayName={workersData?.list[3].displayName || ''}
-            mode={'edit'}
-            textLines={textLines}
-            width={'50vmin'}
-            showStars={[true, true, true]}
-            starColors={chartOptions.stars.map((s) => s.color || '#404040')}
-            generateOnClick={(panel: ConfigPanel) => () => {
-              setCurrentConfigPanel(panel)
-            }}
-            configPanels={configPanels}
-          />
-        </div>
-        <div>
-          <h3 className={configTitleClass}>
-            {currentConfigPanel?.name} options
-          </h3>
-          {currentConfigPanel?.type === 'star' && (
-            <StarOptions
-              starIndex={currentConfigPanel.index}
-              key={`star${currentConfigPanel.index}`}
-            />
-          )}
-
-          {currentConfigPanel?.type === 'textLine' && (
-            <TextLineOptions
-              index={currentConfigPanel.index}
-              key={`textLine${currentConfigPanel.index}`}
-            />
-          )}
-
-          {currentConfigPanel?.type === 'fill' && <FillColorOptions />}
-        </div>
+    <div className={containerClass}>
+      <div>
+        <BubbleSVG
+          displayName={workersData?.list[3].displayName || ''}
+          editMode
+          textLines={textLines}
+          width={'50vmin'}
+          showStars={[true, true, true]}
+          starColors={chartOptions.stars.map((s) => s.color || '#404040')}
+          generateOnClick={(panel: ConfigPanel) => () => {
+            setCurrentConfigPanel(panel)
+          }}
+          configPanels={configPanels}
+        />
       </div>
-    </SignModal>
+      <div>
+        <h3 className={configTitleClass}>
+          {currentConfigPanel?.name
+            ? `${currentConfigPanel?.name} options`
+            : ''}{' '}
+        </h3>
+        {currentConfigPanel?.type === 'star' && (
+          <StarOptions
+            starIndex={currentConfigPanel.index}
+            key={`star${currentConfigPanel.index}`}
+          />
+        )}
+
+        {currentConfigPanel?.type === 'textLine' && (
+          <TextLineOptions
+            index={currentConfigPanel.index}
+            key={`textLine${currentConfigPanel.index}`}
+          />
+        )}
+
+        {currentConfigPanel?.type === 'fill' && <FillColorOptions />}
+      </div>
+    </div>
   )
 }
 

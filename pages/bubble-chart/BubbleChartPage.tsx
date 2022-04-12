@@ -7,22 +7,61 @@ import FileInput from '../../components/BubbleChart/FileInput'
 import BubbleChart from '../../components/BubbleChart'
 import { useState } from 'react'
 import VizConfig from '../../components/BubbleChart/VizConfig'
+import SignMenu from '../../components/shared/components/SignMenu'
+import { SignMenuItem } from '../../components/shared/components/SignMenu/SignMenu'
 
 const BubbleChartPage: NextPage = () => {
-  const [showModal, setShowModal] = useState(true)
-  const [showColorConfig, setShowColorConfig] = useState(true)
+  const [showModal, setShowModal] = useState(false)
+  const [showColorConfig, setShowColorConfig] = useState(false)
+
   return (
     <Layout currentPage={DataForPowerPages.BUBBLE_CHART}>
       <WorkerDataProvider>
         <BubbleChart />
         {showColorConfig && (
-          <VizConfig onDismiss={() => setShowColorConfig(false)} />
+          <SignModal onDismiss={() => setShowColorConfig(false)}>
+            <VizConfig />
+          </SignModal>
         )}
         {showModal && (
           <SignModal onDismiss={() => setShowModal(false)}>
             <FileInput />
           </SignModal>
         )}
+
+        <SignMenu>
+          <SignMenuItem
+            onClick={() => {
+              if (!showModal && !showColorConfig) {
+                setShowModal(true)
+              } else if (showModal) {
+                setShowModal(false)
+              } else if (!showModal && showColorConfig) {
+                setShowColorConfig(false)
+                setShowModal(true)
+              }
+            }}
+          >
+            upload data
+          </SignMenuItem>
+          <SignMenuItem
+            onClick={() => {
+              if (!showModal && !showColorConfig) {
+                setShowColorConfig(true)
+              } else if (showColorConfig) {
+                setShowColorConfig(false)
+              } else if (showModal && !showColorConfig) {
+                setShowColorConfig(true)
+                setShowModal(false)
+              }
+            }}
+          >
+            customize chart
+          </SignMenuItem>
+
+          <SignMenuItem>Reset Frame</SignMenuItem>
+          <SignMenuItem>Save Image</SignMenuItem>
+        </SignMenu>
       </WorkerDataProvider>
     </Layout>
   )

@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { Group, Circle, TextPath, Text, Path } from 'react-konva'
+import { Group, Circle, TextPath, Text, Path, Rect } from 'react-konva'
 import { height } from './tokens'
 import {
   blue,
@@ -25,6 +25,8 @@ import { bangersFont, bungeeFont, latoFont } from '../shared/tokens/fonts'
 import { getStarPath } from './helpers'
 import Pencil from '../shared/icons/Pencil'
 import { ConfigPanel } from './VizConfig/VizConfig'
+import { string } from 'prop-types'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 type BubbleProps = {
   displayName: string
@@ -41,7 +43,7 @@ type BubbleProps = {
     y: number
   }
   textLines?: string[]
-  mode?: 'display' | 'edit'
+  editMode?: boolean
   width?: number | string
   generateOnClick?: (s: ConfigPanel) => () => void
 }
@@ -87,7 +89,7 @@ export const MiniBubbleSVG: FC<{
 }
 
 const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
-  mode = 'display',
+  editMode = false,
   displayName = 'Angelique',
   fullName = 'Shay Culpepper',
   width = 200,
@@ -204,7 +206,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
         <path d={getStarPath({ whichStar: 3 })} fill={starColors[2]} />
       )}
 
-      {mode == 'edit' && (
+      {editMode && (
         <>
           {' '}
           {configPanels.map((panel) => {
@@ -215,7 +217,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
             return (
               <Pencil
                 key={panelName}
-                value={panelName}
+                label={panelName}
                 size={4}
                 transform={`translate(${x} ${y})`}
                 fill={innerTextColor}
@@ -277,7 +279,10 @@ export const GroupingBubbleSVG: FC<BubbleProps> = ({
 }
 
 export const BubbleKonva: FC<
-  BubbleProps & { onClick: (evt: KonvaEventObject<MouseEvent>) => void }
+  BubbleProps & {
+    onClick: (evt: KonvaEventObject<MouseEvent>) => void
+    stars: { fillColor: string; show: boolean }[]
+  }
 > = ({
   displayName = 'Angelique',
   fullName = 'Shay Culpepper',
@@ -288,7 +293,7 @@ export const BubbleKonva: FC<
   bubbleFillColor = deepGrey,
   innerTextColor = white,
   // showStars = [Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5],
-  showStars = [true, true, true],
+  stars,
   starColors = [orange, red, yellow],
   textLines = [
     'Steward: Sarah Duncan',
@@ -322,28 +327,51 @@ export const BubbleKonva: FC<
         text={displayName}
         x={-R}
         y={-R / 4.6}
-        fontFamily={bungeeFont}
+        fontFamily={bangersFont}
         fontSize={
           displayName.length > 13
-            ? R / 9
+            ? R / 7
             : displayName.length > 8
-            ? R / 4
-            : R / 3
+            ? R / 3
+            : R / 2
         }
-        fill={white}
+        fill={innerTextColor}
         align={'center'}
         width={R * 2}
       />
 
-      {showStarsRandom[0] && (
+      {stars?.[0]?.show && (
         <Star size={R * 3} color={starColors[0]} whichStar={1} />
       )}
-      {showStarsRandom[1] && (
+      {stars?.[1]?.show && (
         <Star size={R * 3} color={starColors[1]} whichStar={2} />
       )}
-      {showStarsRandom[2] && (
+      {stars?.[2]?.show && (
         <Star size={R * 3} color={starColors[2]} whichStar={3} />
       )}
+
+      {textLines?.map((t, i) => (
+        <>
+          <Rect
+            x={(-R * (1.7 - i * 0.15)) / 2}
+            width={R * (1.7 - i * 0.15)}
+            y={R * 0.25 + i}
+            height={R * 0.11}
+            fill={bubbleFillColor}
+          />
+          <Text
+            key={t}
+            x={-R}
+            y={R * 0.25 + i}
+            align={'center'}
+            width={R * 2}
+            fontFamily={latoFont}
+            fontSize={R * 0.11}
+            text={t}
+            fill={innerTextColor}
+          />
+        </>
+      ))}
     </Group>
   )
 }
@@ -395,7 +423,7 @@ export const GroupingBubble = ({
         fontSize={R / 10}
         fontFamily={latoFont}
         rotation={offset}
-        text={displayName}
+        text={displayName === 'allGroups' ? '' : displayName}
         textBaseline={'alphabetic'}
         kerningFunc={() => 0.01}
       />

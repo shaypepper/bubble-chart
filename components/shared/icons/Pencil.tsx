@@ -1,5 +1,7 @@
 import { css } from 'pretty-lights'
 import { FC } from 'react'
+import { OverlayTrigger } from 'react-bootstrap'
+import { white } from '../tokens/colors'
 
 const circleClass = css`
   transition: opacity 100ms ease;
@@ -13,13 +15,13 @@ const Pencil: FC<{
   fill: string
   transform: string
   onClick: () => void
-  value: string
-}> = ({ size, fill = 'white', transform, onClick, value }) => {
+  label: string
+}> = ({ size, fill = 'white', transform, onClick, label }) => {
   return (
     <g transform={transform} onClick={onClick}>
       <svg
         width={size}
-        viewBox="-15 -15 70 70"
+        viewBox="-30 -30 90 90"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >

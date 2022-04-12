@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
-import { blue, green, white } from '../../tokens/colors'
+import { blue, deepGrey, green, white } from '../../tokens/colors'
 import { bangersFont, latoFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
@@ -44,7 +44,7 @@ const SignHolder = styled.div`
   align-items: end;
   transition: transform 400ms ease;
   transform: ${(props) =>
-    props.collapsed ? 'translate(calc(50vw - 50px), 0)' : 'translate(0,0)'};
+    props.collapsed ? 'translate(calc(50% - 50px), 0)' : 'translate(0,0)'};
   margin-bottom: ${pxToRem(20)};
   width: 100%;
 `
@@ -60,9 +60,9 @@ const signTitle = css`
   letter-spacing: 1px;
 `
 const armClass = css`
-  background-color: ${green};
+  background-color: ${deepGrey};
   height: 24px;
-  margin-bottom: 12px;
+  margin-bottom: 30px;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -75,16 +75,27 @@ const armClass = css`
 
 const containerClass = css`
   position: fixed;
-  top: 0;
   bottom: 0;
-  left: 0;
   right: 0;
-  background-color: #30303090;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`
+
+const fullWidthContainerClass = css`
+  ${containerClass};
+  top: 0;
+  left: 0;
   backdrop-filter: blur(2px);
+`
+
+const backdropFilterClass = css`
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(2px);
+  background-color: #30303090;
+  position: absolute;
 `
 
 const SignModal: React.FC<{ onDismiss: () => void }> = ({
@@ -92,9 +103,11 @@ const SignModal: React.FC<{ onDismiss: () => void }> = ({
   onDismiss,
 }) => {
   const [collapsed, setCollapsed] = React.useState<boolean>(false)
+  const fullWidth = true
 
   return (
-    <div className={containerClass}>
+    <div className={fullWidth ? fullWidthContainerClass : containerClass}>
+      {/* <div className={backdropFilterClass}></div> */}
       <div className={signClass}>
         <div className={pageTitleClass}>
           <p className={stepClass}>Step 1</p>

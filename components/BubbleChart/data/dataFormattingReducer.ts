@@ -37,19 +37,6 @@ export interface State {
   /** Stratified Data */
   stratifiedData?: HierarchyNode<Node>
 
-  /** groupings that are neither the root nor have their own grouping listed */
-  unmappedGroupings?: Set<string>
-
-  /** Stratification function */
-  stratify?: StratifyOperator<DSVRowArray<string>>
-
-  /** Which column should determine fill/text color? */
-  colorColumn?: string
-  //** Which values should map to which colors? */
-  colorMap?: {
-    [v: string]: string
-  }
-
   chartOptions: ChartOptions
 }
 
@@ -75,6 +62,7 @@ export enum FormatAction {
   SET_TEXT_LINE = 'setTextLine',
   SET_COLOR_COLUMN = 'setColorColumn',
   SET_COLOR_MAP = 'setColorMap',
+  RESET_CHART_FRAME = 'resetChartFrame',
 }
 
 export type Action =
@@ -124,6 +112,12 @@ export type Action =
     }
   | { type: FormatAction.SET_COLOR_COLUMN; column: Column }
   | { type: FormatAction.SET_COLOR_MAP; colorMap: ColorMap }
+  | {
+      type: FormatAction.RESET_CHART_FRAME
+      x: number
+      y: number
+      scale: number
+    }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,

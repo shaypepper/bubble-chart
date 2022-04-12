@@ -18,6 +18,10 @@ const gridContainerClass = css`
   grid-gap: ${pxToRem(2)};
 `
 
+const disabledState = css`
+  opacity: 0.4;
+`
+
 const colorGridOptions = [
   Object.values(colors)
     .map((d) => d.default)
@@ -27,7 +31,9 @@ const colorGridOptions = [
 
 const ColorGrid: FC<{
   generateOnClick: (s: string, t: string) => ReactEventHandler
-}> = ({ generateOnClick }) => {
+  noText: boolean
+  disabled: boolean
+}> = ({ generateOnClick, noText = false, disabled }) => {
   return (
     <div className={gridContainerClass}>
       {colorGridOptions.map((colorList) => {
@@ -38,8 +44,9 @@ const ColorGrid: FC<{
               key={color}
               fillColor={color}
               height={38}
-              textColor={textColor}
-              onClick={generateOnClick(color, textColor)}
+              textColor={noText ? 'transparent' : textColor}
+              onClick={disabled ? () => {} : generateOnClick(color, textColor)}
+              className={disabled ? disabledState : ''}
             />
           )
         })

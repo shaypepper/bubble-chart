@@ -3,6 +3,7 @@ import { useContext, useRef, useState } from 'react'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Button, Dropdown, Form } from 'react-bootstrap'
 import { FormatAction } from '../data/dataFormattingReducer'
+import DropdownWithFilter from '../../shared/components/DropdownWithFilter'
 
 const UploadCSV: React.FC<{
   label: string
@@ -40,12 +41,13 @@ const UploadCSV: React.FC<{
         </Form.Label>
       </Form.Group>
       {convertedCsv &&
-        Object.entries(convertedCsv.columnMap).map(([key, columnLabel]) => (
-          <Form.Group key={key}>
-            <Form.Label>
-              Which column should be used for the {csvType}s&apos; {key}?
-              <Dropdown
-                role="select"
+        Object.entries(convertedCsv.columnMap).map(
+          ([key, columnLabel]) =>
+            (
+              <DropdownWithFilter
+                list={convertedCsv.columns || []}
+                label={key}
+                toggleText={convertedCsv.columnMap[key] || 'Select column...'}
                 onSelect={(eventKey) => {
                   dispatch({
                     type: FormatAction.SET_COLUMN_MAP,
@@ -55,22 +57,39 @@ const UploadCSV: React.FC<{
                     listFromCsv: convertedCsv,
                   })
                 }}
-              >
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  {columnLabel}
-                </Dropdown.Toggle>
+              />
+            ) || (
+              <Form.Group key={key}>
+                <Form.Label>
+                  Which column should be used for the {csvType}s&apos; {key}?
+                  <Dropdown
+                    role="select"
+                    onSelect={(eventKey) => {
+                      dispatch({
+                        type: FormatAction.SET_COLUMN_MAP,
+                        columnMap: {
+                          [key]: eventKey,
+                        },
+                        listFromCsv: convertedCsv,
+                      })
+                    }}
+                  >
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      {columnLabel}
+                    </Dropdown.Toggle>
 
-                <Dropdown.Menu role="select">
-                  {(convertedCsv.columns || []).map((col) => (
-                    <Dropdown.Item key={col} eventKey={col} as={Button}>
-                      {col}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form.Label>
-          </Form.Group>
-        ))}
+                    <Dropdown.Menu role="select">
+                      {(convertedCsv.columns || []).map((col) => (
+                        <Dropdown.Item key={col} eventKey={col} as={Button}>
+                          {col}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Form.Label>
+              </Form.Group>
+            )
+        )}
     </>
   )
 }

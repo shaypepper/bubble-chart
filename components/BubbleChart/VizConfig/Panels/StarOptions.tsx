@@ -10,12 +10,14 @@ import {
   ToggleButton,
 } from 'react-bootstrap'
 import * as DropdownMenu from 'react-bootstrap/lib/DropdownMenu'
+import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
 import ListOfColumns from '../../../shared/components/ListOfColumns'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 import { StarOptionsKeys, Value } from '../../types'
 import { configTitleClass } from '../styles'
+import ColorGrid from './ColorGrid'
 
 let colorsList = ['orange', 'red', 'blue', 'green', 'purple', 'yellow']
 
@@ -81,6 +83,21 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
         />
 
         {column && (
+          <DropdownWithFilter
+            list={[...possibleValues]}
+            onSelect={(eventKey) => {
+              dispatch({
+                type: FormatAction.SET_STAR_OPTION,
+                optionType: StarOptionsKeys.VALUE,
+                value: eventKey,
+                starIndex,
+              })
+            }}
+            label={'Value'}
+          />
+        )}
+
+        {column && (
           <Form.Group key={`${value}`}>
             <Form.Label htmlFor="star-options-column">
               Value
@@ -101,7 +118,7 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
                 <Dropdown.Menu role="select">
                   {[...possibleValues].map((v) => (
                     <Dropdown.Item key={`${v}`} eventKey={`${v}`}>
-                      {v}
+                      {v || '(No value)'}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
@@ -109,37 +126,22 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
             </Form.Label>
           </Form.Group>
         )}
-
         <Form.Group>
-          <Form.Label>Color</Form.Label>
-          <ButtonGroup>
-            {colorsList.map((color) => {
-              return (
-                <ToggleButton
-                  key={color}
-                  disabled={!active}
-                  size={'sm'}
-                  style={{
-                    backgroundColor: color,
-                    border: 'none',
-                    marginRight: pxToRem(4),
-                  }}
-                  checked={color === starColor}
-                  value={color}
-                  onClick={() => {
-                    dispatch({
-                      type: FormatAction.SET_STAR_OPTION,
-                      optionType: StarOptionsKeys.COLOR,
-                      value: color,
-                      starIndex,
-                    })
-                  }}
-                >
-                  {color}
-                </ToggleButton>
-              )
-            })}
-          </ButtonGroup>
+          <Form.Label>
+            Color
+            <ColorGrid
+              generateOnClick={(color) => () => {
+                dispatch({
+                  type: FormatAction.SET_STAR_OPTION,
+                  optionType: StarOptionsKeys.COLOR,
+                  value: color,
+                  starIndex,
+                })
+              }}
+              noText
+              disabled={!active}
+            />
+          </Form.Label>
         </Form.Group>
       </Form>
     </div>
