@@ -8,7 +8,6 @@ export function setTextLine(
 ): State {
   const newChartOptions = state.chartOptions.duplicate()
   newChartOptions.textLineColumns[index] = column
-  console.log(newChartOptions)
 
   return {
     ...state,

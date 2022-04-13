@@ -1,7 +1,7 @@
 import { DSVRowArray } from 'd3'
 import { deepGrey, white } from '../shared/tokens/colors'
 
-export type Person = {
+type Person = {
   [key: Column]: Value
 }
 export type Column = string
@@ -18,7 +18,7 @@ export type ColorMapByColumn = {
   [columnName: Column]: ColorMap
 }
 
-export type ColorOptions = {
+type ColorOptions = {
   currentColumn: Column
   colorMap: ColorMapByColumn
 }
@@ -39,7 +39,7 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
-export class StarOptions {
+class StarOptions {
   [StarOptionsKeys.COLOR]: string;
   [StarOptionsKeys.COLUMN]: Column;
   [StarOptionsKeys.VALUE]: Value;
@@ -48,7 +48,7 @@ export class StarOptions {
 
   constructor() {
     this.column = ''
-    this.color = 'transparent'
+    this.color = ''
     this.value = ''
     this.label = ''
     this.use = false
@@ -165,7 +165,7 @@ export class ListFromCSV {
   }
 }
 
-export class Worker extends Node {
+class Worker extends Node {
   constructor(rawData: any, parent: Workers) {
     super(rawData, parent)
     this.nodeType = 'worker'

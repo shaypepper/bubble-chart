@@ -96,7 +96,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   width = 200,
   bubbleFillColor = deepGrey,
   innerTextColor = white,
-  showStars = [true, true, true],
+  showStars = [false, false, false],
   starColors = [blue, red, yellow],
   textLines = [
     'Steward: Sarah Duncan',
@@ -197,12 +197,15 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
         </>
       )}
 
+      {editMode && <path d={getStarPath({ whichStar: 1 })} fill={'#202020'} />}
       {showStars[0] && (
         <path d={getStarPath({ whichStar: 1 })} fill={starColors[0]} />
       )}
+      {editMode && <path d={getStarPath({ whichStar: 2 })} fill={'#202020'} />}
       {showStars[1] && (
         <path d={getStarPath({ whichStar: 2 })} fill={starColors[1]} />
       )}
+      {editMode && <path d={getStarPath({ whichStar: 3 })} fill={'#202020'} />}
       {showStars[2] && (
         <path d={getStarPath({ whichStar: 3 })} fill={starColors[2]} />
       )}

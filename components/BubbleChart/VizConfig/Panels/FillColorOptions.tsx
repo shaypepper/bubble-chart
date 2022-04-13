@@ -49,12 +49,12 @@ const FillColorOptions: FC<{}> = ({}) => {
   valueList && valueList.sort()
   return (
     <div>
-      <Form.Group>
+      {/* <Form.Group>
         <Form.Label htmlFor="star-options-label">
           Label for legend
-          <Form.Control name="star-options-label" />
+          <Form.Control name="star-options-label" size="sm" />
         </Form.Label>
-      </Form.Group>
+      </Form.Group> */}
       <DropdownWithFilter
         toggleText={colorColumn || 'Choose column here...'}
         label="Column"
@@ -76,6 +76,7 @@ const FillColorOptions: FC<{}> = ({}) => {
                 placeholder="Type to filter..."
                 onChange={(e) => setValueListFilter(e.target.value)}
                 value={valueListFilter}
+                size="sm"
               />
             </ListGroup.Item>
             {valueList.map((val) => {
@@ -96,7 +97,7 @@ const FillColorOptions: FC<{}> = ({}) => {
                     overlay={
                       <Popover>
                         <Popover.Header as="h3">{`Fill color for ${v}`}</Popover.Header>
-                        <Popover.Body>
+                        <Popover.Body style={{ minWidth: '200px' }}>
                           <ColorGrid
                             generateOnClick={(color, textColor) => () => {
                               dispatch({

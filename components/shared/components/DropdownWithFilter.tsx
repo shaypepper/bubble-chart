@@ -15,8 +15,8 @@ const DropdownWithFilter: FC<{
         {label}
         <Dropdown role="select" onSelect={onSelect}>
           <Dropdown.Toggle
-            variant="success"
-            id="dropdown-basic"
+            size="sm"
+            id={`dropdownBasic{label.replace(' ', '')}`}
             disabled={disabled}
           >
             {toggleText}
@@ -24,6 +24,7 @@ const DropdownWithFilter: FC<{
 
           <Dropdown.Menu role="select">
             <FormControl
+              size="sm"
               autoFocus
               className="mx-3 my-2 w-auto"
               placeholder="Type to filter..."

@@ -62,12 +62,16 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
           />
         </Form.Group>
 
-        <Form.Group>
+        {/* <Form.Group>
           <Form.Label htmlFor="star-options-label">
             Label for legend
-            <Form.Control name="star-options-label" disabled={!active} />
+            <Form.Control
+              name="star-options-label"
+              disabled={!active}
+              size="sm"
+            />
           </Form.Label>
-        </Form.Group>
+        </Form.Group> */}
         <ListOfColumns
           onSelect={(eventKey) => {
             dispatch({
@@ -98,37 +102,8 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
           />
         )}
 
-        {column && (
-          <Form.Group key={`${value}`}>
-            <Form.Label htmlFor="star-options-column">
-              Value
-              <Dropdown
-                role="select"
-                onSelect={(eventKey) => {
-                  dispatch({
-                    type: FormatAction.SET_STAR_OPTION,
-                    optionType: StarOptionsKeys.VALUE,
-                    value: eventKey,
-                    starIndex,
-                  })
-                }}
-              >
-                <Dropdown.Toggle value={'Name'} disabled={!active}>
-                  {value || '------'}
-                </Dropdown.Toggle>
-                <Dropdown.Menu role="select">
-                  {[...possibleValues].map((v) => (
-                    <Dropdown.Item key={`${v}`} eventKey={`${v}`}>
-                      {v || '(No value)'}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form.Label>
-          </Form.Group>
-        )}
         <Form.Group>
-          <Form.Label>
+          <Form.Label style={{ width: '80%' }}>
             Color
             <ColorGrid
               generateOnClick={(color) => () => {

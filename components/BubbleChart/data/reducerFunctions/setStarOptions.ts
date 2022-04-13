@@ -31,12 +31,9 @@ export function setStarOption(
     case StarOptionsKeys.COLUMN:
     case StarOptionsKeys.LABEL:
       if (typeof value === 'string') {
-        console.log('we got here', newChartOptions.stars[starIndex])
         newChartOptions.stars[starIndex][optionType] = value
       }
   }
-
-  for (let star of newChartOptions.stars) console.log(star)
 
   return { ...state, chartOptions: newChartOptions }
 }

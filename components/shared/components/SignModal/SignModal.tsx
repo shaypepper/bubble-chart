@@ -1,5 +1,6 @@
 import { css, styled } from 'pretty-lights'
 import * as React from 'react'
+import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
 import { blue, deepGrey, white } from '../../tokens/colors'
@@ -94,10 +95,11 @@ const backdropFilterClass = css`
   position: absolute;
 `
 
-const SignModal: React.FC<{ onDismiss: () => void }> = ({
-  children,
-  onDismiss,
-}) => {
+const SignModal: React.FC<{
+  onDismiss?: () => void
+  stepNumber?: number
+  title?: string
+}> = ({ children, onDismiss = () => {}, stepNumber, title }) => {
   const [collapsed, setCollapsed] = React.useState<boolean>(false)
   const fullWidth = true
 
@@ -106,10 +108,10 @@ const SignModal: React.FC<{ onDismiss: () => void }> = ({
       {/* <div className={backdropFilterClass}></div> */}
       <div className={signClass}>
         <div className={pageTitleClass}>
-          <p className={stepClass}>Step 1</p>
-          <h2 className={signTitle}>Upload your worker list</h2>
+          {stepNumber && <p className={stepClass}>Step {stepNumber} </p>}
+          <h2 className={signTitle}>{title}</h2>
 
-          {/* <Button
+          <Button
             size="sm"
             variant=""
             style={{ position: 'absolute', top: 0, right: 0 }}
@@ -122,7 +124,7 @@ const SignModal: React.FC<{ onDismiss: () => void }> = ({
                 stroke={white}
               />
             </svg>
-          </Button> */}
+          </Button>
         </div>
         <div className={mainContentClass}>{children}</div>
       </div>

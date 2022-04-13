@@ -21,42 +21,10 @@ const FileInput: React.FC = () => {
           <UploadCSV label={'Upload workers data'} csvType={'worker'} />
         )}
 
-        {currentStep === Steps.CHOOSE_COLUMNS && <></>}
-
         {currentStep === Steps.UPLOAD_GROUPINGS && (
           <UploadCSV label={'Upload groupings data'} csvType={'grouping'} />
         )}
-
-        {currentStep === Steps.DRAW && (
-          <Button
-            onClick={() => {
-              dispatch({ type: FormatAction.STRATIFY_DATA })
-            }}
-          >
-            Draw!
-          </Button>
-        )}
-
-        {false && stratifiedData && <BubbleChart />}
       </Form>
-      {/* <div>
-        <ButtonGroup defaultValue={Steps.UPLOAD_WORKERS}>
-          <ToggleButton
-            size={'sm'}
-            onClick={goToStep(Steps.UPLOAD_WORKERS)}
-            value={Steps.UPLOAD_WORKERS}
-          >
-            Upload Workers
-          </ToggleButton>
-          <ToggleButton
-            size={'sm'}
-            onClick={goToStep(Steps.UPLOAD_GROUPINGS)}
-            value={Steps.UPLOAD_GROUPINGS}
-          >
-            Upload Groupings
-          </ToggleButton>
-        </ButtonGroup>
-      </div> */}
     </>
   )
 }

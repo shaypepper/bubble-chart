@@ -18,21 +18,18 @@ const ListOfColumns: FC<{
 }) => {
   const [value, setValue] = useState<string>()
   return (
-    <Form.Group>
+    <Form.Group key={label.replace(' ', '')}>
       <Form.Label>
         {label}
         <Dropdown role="select" onSelect={onSelect}>
-          <Dropdown.Toggle
-            variant="success"
-            id="dropdown-basic"
-            disabled={disabled}
-          >
+          <Dropdown.Toggle id="dropdown-basic" disabled={disabled} size="sm">
             {toggleText}
           </Dropdown.Toggle>
 
           <Dropdown.Menu role="select">
             <FormControl
               autoFocus
+              size="sm"
               className="mx-3 my-2 w-auto"
               placeholder="Type to filter..."
               onChange={(e) => setValue(e.target.value)}

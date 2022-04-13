@@ -50,7 +50,14 @@ export const SignMenuItem: React.FC<{
   stickLength?: number
   onClick?: React.ReactEventHandler
   index?: number
-}> = ({ children, stickLength = 40, onClick = () => {}, index = 0 }) => {
+  center?: boolean
+}> = ({
+  children,
+  stickLength = 40,
+  onClick = () => {},
+  index = 0,
+  center = false,
+}) => {
   return (
     <SignMenuItemStyled rotation={rotations[index]}>
       <button className={signButtonClass} onClick={onClick}>
@@ -69,7 +76,7 @@ export const SignMenuItem: React.FC<{
 
 export const SignMenu = styled.div`
   position: fixed;
-  bottom: -20px;
+  bottom: ${({ center }: { center: boolean }) => (center ? '50vh' : '-20px')};
   right: 0;
   display: flex;
   align-items: center;

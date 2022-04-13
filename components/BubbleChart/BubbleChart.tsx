@@ -10,13 +10,14 @@ import { BubbleKonva, GroupingBubble } from './Bubble'
 import { css, styled } from 'pretty-lights'
 import { Node, isWorker } from './types'
 import { deepGrey } from '../shared/tokens/colors'
+import { Button } from 'react-bootstrap'
+import Legend from './Legend'
 
 const ButtonBar = styled.div`
-  position: fixed;
+  position: absolute;
   left: 0;
-  bottom: 0;
+  top: 0;
   z-index: 1;
-  background-color: white;
 `
 
 const stageClass = css`
@@ -78,7 +79,10 @@ const BubbleChart: FC = () => {
       }}
     >
       <ButtonBar>
-        <button
+        <Legend />
+        <Button
+          size="sm"
+          variant="outline-secondary"
           onClick={(e) => {
             e.preventDefault()
             const newPosition = {
@@ -90,8 +94,8 @@ const BubbleChart: FC = () => {
           }}
         >
           Reset frame
-        </button>
-        <button
+        </Button>
+        {/* <button
           onClick={(e) => {
             e.preventDefault()
             if (!stageRef.current) return
@@ -102,7 +106,7 @@ const BubbleChart: FC = () => {
           }}
         >
           Save image
-        </button>
+        </button> */}
         <p>
           position: {position.x}, {position.y} <br />
           scale: {scale}
@@ -132,8 +136,6 @@ const BubbleChart: FC = () => {
             }
             const r = d.r * height * (isWorker(d.data) ? 0.8 : 1.05)
             const circleR = d.r * height
-
-            isWorker(d.data) && console.log(d.data.textLines)
 
             return !isWorker(d.data) ? (
               <GroupingBubble

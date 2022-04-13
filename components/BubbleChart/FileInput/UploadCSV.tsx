@@ -5,6 +5,12 @@ import { Button, Dropdown, Form } from 'react-bootstrap'
 import { FormatAction } from '../data/dataFormattingReducer'
 import DropdownWithFilter from '../../shared/components/DropdownWithFilter'
 
+const columnMapLabels: { [s: string]: string } = {
+  uniqueIdentifier: 'Unique identifier',
+  displayName: 'Display name',
+  grouping: 'Grouping',
+}
+
 const UploadCSV: React.FC<{
   label: string
   csvType: 'worker' | 'grouping'
@@ -25,6 +31,7 @@ const UploadCSV: React.FC<{
         <Form.Label htmlFor={`${csvType}-data"`}>
           {label}
           <Form.Control
+            size="sm"
             className={'form-control'}
             ref={inputRef}
             type="file"
@@ -41,55 +48,23 @@ const UploadCSV: React.FC<{
         </Form.Label>
       </Form.Group>
       {convertedCsv &&
-        Object.entries(convertedCsv.columnMap).map(
-          ([key, columnLabel]) =>
-            (
-              <DropdownWithFilter
-                list={convertedCsv.columns || []}
-                label={key}
-                toggleText={columnLabel || 'Select column...'}
-                onSelect={(eventKey) => {
-                  dispatch({
-                    type: FormatAction.SET_COLUMN_MAP,
-                    columnMap: {
-                      [key]: eventKey,
-                    },
-                    listFromCsv: convertedCsv,
-                  })
-                }}
-              />
-            ) || (
-              <Form.Group key={key}>
-                <Form.Label>
-                  Which column should be used for the {csvType}s&apos; {key}?
-                  <Dropdown
-                    role="select"
-                    onSelect={(eventKey) => {
-                      dispatch({
-                        type: FormatAction.SET_COLUMN_MAP,
-                        columnMap: {
-                          [key]: eventKey,
-                        },
-                        listFromCsv: convertedCsv,
-                      })
-                    }}
-                  >
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      {columnLabel}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu role="select">
-                      {(convertedCsv.columns || []).map((col) => (
-                        <Dropdown.Item key={col} eventKey={col} as={Button}>
-                          {col}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Form.Label>
-              </Form.Group>
-            )
-        )}
+        Object.entries(convertedCsv.columnMap).map(([key, columnLabel]) => (
+          <DropdownWithFilter
+            list={convertedCsv.columns || []}
+            label={columnMapLabels[`${key}`]}
+            key={key}
+            toggleText={columnLabel || 'Select column...'}
+            onSelect={(eventKey) => {
+              dispatch({
+                type: FormatAction.SET_COLUMN_MAP,
+                columnMap: {
+                  [key]: eventKey,
+                },
+                listFromCsv: convertedCsv,
+              })
+            }}
+          />
+        ))}
     </>
   )
 }

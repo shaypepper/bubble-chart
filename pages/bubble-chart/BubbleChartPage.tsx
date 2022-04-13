@@ -11,7 +11,7 @@ import SignMenu from '../../components/shared/components/SignMenu'
 import { SignMenuItem } from '../../components/shared/components/SignMenu/SignMenu'
 
 const BubbleChartPage: NextPage = () => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(true)
   const [showColorConfig, setShowColorConfig] = useState(false)
 
   return (
@@ -19,12 +19,18 @@ const BubbleChartPage: NextPage = () => {
       <WorkerDataProvider>
         <BubbleChart />
         {showColorConfig && (
-          <SignModal onDismiss={() => setShowColorConfig(false)}>
+          <SignModal
+            title={'Customize chart'}
+            onDismiss={() => setShowColorConfig(false)}
+          >
             <VizConfig />
           </SignModal>
         )}
         {showModal && (
-          <SignModal onDismiss={() => setShowModal(false)}>
+          <SignModal
+            title={'Upload data'}
+            onDismiss={() => setShowModal(false)}
+          >
             <FileInput />
           </SignModal>
         )}
@@ -61,8 +67,8 @@ const BubbleChartPage: NextPage = () => {
             customize chart
           </SignMenuItem>
 
-          <SignMenuItem index={2}>Reset Frame</SignMenuItem>
-          <SignMenuItem index={3}>Save Image</SignMenuItem>
+          {/* <SignMenuItem index={2}>Reset Frame</SignMenuItem>
+          <SignMenuItem index={3}>Save Image</SignMenuItem> */}
         </SignMenu>
       </WorkerDataProvider>
     </Layout>

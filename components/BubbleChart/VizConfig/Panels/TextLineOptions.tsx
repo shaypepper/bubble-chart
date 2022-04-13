@@ -21,7 +21,7 @@ const TextLineOptions: FC<{ index: number }> = ({ index }) => {
           })
         }}
         toggleText={chartOptions.textLineColumns[index]}
-        label={'   '}
+        label={'Column'}
       />
     </div>
   )
