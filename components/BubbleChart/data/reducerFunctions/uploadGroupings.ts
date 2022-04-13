@@ -14,13 +14,9 @@ export function uploadGroupings(
       grouping: '',
     }
   )
-
-  const unmappedGroupings = new Set(prevState.unmappedGroupings)
-
   return {
     ...prevState,
     groupingsData: groupings,
-    unmappedGroupings,
   }
 }
 

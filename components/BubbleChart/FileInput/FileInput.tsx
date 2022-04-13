@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { useContext } from 'react'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
-import { Button, ButtonGroup, Form, ToggleButton } from 'react-bootstrap'
+import { Button, Form, ToggleButton } from 'react-bootstrap'
 import { FormatAction, Steps } from '../data/dataFormattingReducer'
-import WorkersInput from './WorkersInput'
-import GroupingsInput from './GroupingsInput'
 import BubbleChart from '..'
 import UploadCSV from './UploadCSV'
 
@@ -19,7 +17,6 @@ const FileInput: React.FC = () => {
   return (
     <>
       <Form>
-        {/* {currentStep === Steps.UPLOAD_WORKERS && <WorkersInput />} */}
         {currentStep === Steps.UPLOAD_WORKERS && (
           <UploadCSV label={'Upload workers data'} csvType={'worker'} />
         )}

@@ -1,4 +1,4 @@
-import { ColorMap } from './data/dataFormattingReducer'
+import { ColorMap } from './types'
 
 export const getBubbleFillColor = (
   isWorker: boolean,

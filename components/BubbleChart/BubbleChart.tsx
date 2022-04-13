@@ -75,7 +75,6 @@ const BubbleChart: FC = () => {
         position: 'fixed',
         overflow: 'hidden',
         width: '100vw',
-        backgroundColor: '#505050',
       }}
     >
       <ButtonBar>

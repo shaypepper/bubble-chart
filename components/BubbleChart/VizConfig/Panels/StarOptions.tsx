@@ -84,7 +84,7 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
 
         {column && (
           <DropdownWithFilter
-            list={[...possibleValues]}
+            list={[...possibleValues].map((v) => `${v}`)}
             onSelect={(eventKey) => {
               dispatch({
                 type: FormatAction.SET_STAR_OPTION,
@@ -94,6 +94,7 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
               })
             }}
             label={'Value'}
+            toggleText={`${chartOptions.stars[starIndex].value}` || ''}
           />
         )}
 

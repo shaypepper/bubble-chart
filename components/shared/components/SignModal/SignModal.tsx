@@ -1,9 +1,8 @@
 import { css, styled } from 'pretty-lights'
 import * as React from 'react'
-import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
-import { blue, deepGrey, green, white } from '../../tokens/colors'
+import { blue, deepGrey, white } from '../../tokens/colors'
 import { bangersFont, latoFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
@@ -42,9 +41,6 @@ const SignHolder = styled.div`
   display: flex;
   justify-content: end;
   align-items: end;
-  transition: transform 400ms ease;
-  transform: ${(props) =>
-    props.collapsed ? 'translate(calc(50% - 50px), 0)' : 'translate(0,0)'};
   margin-bottom: ${pxToRem(20)};
   width: 100%;
 `
@@ -113,7 +109,7 @@ const SignModal: React.FC<{ onDismiss: () => void }> = ({
           <p className={stepClass}>Step 1</p>
           <h2 className={signTitle}>Upload your worker list</h2>
 
-          <Button
+          {/* <Button
             size="sm"
             variant=""
             style={{ position: 'absolute', top: 0, right: 0 }}
@@ -126,7 +122,7 @@ const SignModal: React.FC<{ onDismiss: () => void }> = ({
                 stroke={white}
               />
             </svg>
-          </Button>
+          </Button> */}
         </div>
         <div className={mainContentClass}>{children}</div>
       </div>

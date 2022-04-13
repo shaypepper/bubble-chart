@@ -47,7 +47,7 @@ const UploadCSV: React.FC<{
               <DropdownWithFilter
                 list={convertedCsv.columns || []}
                 label={key}
-                toggleText={convertedCsv.columnMap[key] || 'Select column...'}
+                toggleText={columnLabel || 'Select column...'}
                 onSelect={(eventKey) => {
                   dispatch({
                     type: FormatAction.SET_COLUMN_MAP,

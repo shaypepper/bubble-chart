@@ -30,10 +30,10 @@ const colorGridOptions = [
 ]
 
 const ColorGrid: FC<{
-  generateOnClick: (s: string, t: string) => ReactEventHandler
-  noText: boolean
-  disabled: boolean
-}> = ({ generateOnClick, noText = false, disabled }) => {
+  generateOnClick: (color: string, textColor: string) => () => void
+  noText?: boolean
+  disabled?: boolean
+}> = ({ generateOnClick, noText = false, disabled = false }) => {
   return (
     <div className={gridContainerClass}>
       {colorGridOptions.map((colorList) => {

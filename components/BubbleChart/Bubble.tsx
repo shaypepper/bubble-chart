@@ -18,6 +18,7 @@ import {
   orange,
   purple,
   red,
+  softGrey,
   white,
   yellow,
 } from '../shared/tokens/colors'
@@ -419,7 +420,7 @@ export const GroupingBubble = ({
         data={`M 0,${textR} a ${textR},${textR} 0 1,1 0,${
           -2 * textR
         } a ${textR},${textR} 0 1,1 0,${2 * textR} `}
-        fill={delayedRefresh ? white : 'transparent'}
+        fill={delayedRefresh ? softGrey : 'transparent'}
         fontSize={R / 10}
         fontFamily={latoFont}
         rotation={offset}

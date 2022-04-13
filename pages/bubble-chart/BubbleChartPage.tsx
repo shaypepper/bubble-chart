@@ -31,6 +31,7 @@ const BubbleChartPage: NextPage = () => {
 
         <SignMenu>
           <SignMenuItem
+            index={0}
             onClick={() => {
               if (!showModal && !showColorConfig) {
                 setShowModal(true)
@@ -45,6 +46,7 @@ const BubbleChartPage: NextPage = () => {
             upload data
           </SignMenuItem>
           <SignMenuItem
+            index={1}
             onClick={() => {
               if (!showModal && !showColorConfig) {
                 setShowColorConfig(true)
@@ -59,8 +61,8 @@ const BubbleChartPage: NextPage = () => {
             customize chart
           </SignMenuItem>
 
-          <SignMenuItem>Reset Frame</SignMenuItem>
-          <SignMenuItem>Save Image</SignMenuItem>
+          <SignMenuItem index={2}>Reset Frame</SignMenuItem>
+          <SignMenuItem index={3}>Save Image</SignMenuItem>
         </SignMenu>
       </WorkerDataProvider>
     </Layout>

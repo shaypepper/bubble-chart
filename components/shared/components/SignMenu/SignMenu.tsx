@@ -31,28 +31,28 @@ const signButtonClass = css`
   position: relative;
   box-shadow: white 1px 1px 10px;
 `
-
+// ${() => (Math.random() * 2 - 1) * (Math.random() * 35 + 3)}deg
 const SignMenuItemStyled = styled.div`
-  transform: rotate(
-      ${() => (Math.random() * 2 - 1) * (Math.random() * 35 + 3)}deg
-    )
-    translateY(10px);
+  transform: rotate(${({ rotation = 10 }) => rotation}deg) translateY(10px);
   position: relative;
   transform-origin: 80%;
   transition: transform 200ms ease;
   padding-bottom: 20px;
 
   &:hover {
-    transform: translateY(-20px);
+    transform: rotate(${({ rotation = 10 }) => rotation}deg) translateY(-10px);
   }
 `
+
+const rotations = [-4, 15, -6, 20]
 
 export const SignMenuItem: React.FC<{
   stickLength?: number
   onClick?: React.ReactEventHandler
-}> = ({ children, stickLength = 40, onClick = () => {} }) => {
+  index?: number
+}> = ({ children, stickLength = 40, onClick = () => {}, index = 0 }) => {
   return (
-    <SignMenuItemStyled>
+    <SignMenuItemStyled rotation={rotations[index]}>
       <button className={signButtonClass} onClick={onClick}>
         <div>{children}</div>
       </button>
@@ -75,13 +75,11 @@ export const SignMenu = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  // height: 150px;
   background: linear-gradient(
-    rgba(0, 0, 0, 0),
-    rgba(50, 50, 50, 1),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.9),
     rgba(255, 255, 255, 1)
   );
-  z-index: -1;
 `
 
 export default SignMenu
