@@ -1,24 +1,18 @@
-import { cp } from 'fs'
 import { css } from 'pretty-lights'
 import { FC, useContext, useState } from 'react'
 import {
-  Button,
-  Form,
   FormControl,
   ListGroup,
-  ListGroupItem,
   OverlayTrigger,
   Popover,
 } from 'react-bootstrap'
 import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
-import ListOfColumns from '../../../shared/components/ListOfColumns'
-import { deepGrey, red, white } from '../../../shared/tokens/colors'
-import { bangersFont } from '../../../shared/tokens/fonts'
+import { deepGrey, white } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { MiniBubbleSVG } from '../../Bubble'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
-import { Value } from '../../types'
+import { Value } from '../../data/types'
 import ColorGrid from './ColorGrid'
 
 const valueListClass = css`
@@ -31,7 +25,6 @@ const colorPickerClass = css`
   margin-right: ${pxToRem(6)};
 `
 
-const valueKeyAndColor = css``
 const FillColorOptions: FC<{}> = ({}) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
   const columnList = workersData?.columns || []
@@ -49,13 +42,8 @@ const FillColorOptions: FC<{}> = ({}) => {
   valueList && valueList.sort()
   return (
     <div>
-      {/* <Form.Group>
-        <Form.Label htmlFor="star-options-label">
-          Label for legend
-          <Form.Control name="star-options-label" size="sm" />
-        </Form.Label>
-      </Form.Group> */}
       <DropdownWithFilter
+        id="fill-color-dropdown"
         toggleText={colorColumn || 'Choose column here...'}
         label="Column"
         list={columnList}

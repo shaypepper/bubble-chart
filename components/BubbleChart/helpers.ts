@@ -1,7 +1,20 @@
 type GetStarPathArgs = {
-  whichStar: 1 | 2 | 3
+  whichStar: number
   f?: (n: number) => number
   g?: (n: number) => number
+}
+
+export const getStarViewbox = ({ whichStar = 1 }: GetStarPathArgs): string => {
+  switch (whichStar) {
+    case 1:
+      return '24 10 22 22'
+    case 2:
+      return '40 10 20 22'
+    case 3:
+      return '58 10 22 22'
+    default:
+      return ''
+  }
 }
 
 export const getStarPath = ({

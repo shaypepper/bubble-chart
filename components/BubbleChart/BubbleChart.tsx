@@ -1,4 +1,12 @@
-import { useContext, useState, useRef, useEffect, FC, RefObject } from 'react'
+import {
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+  FC,
+  RefObject,
+  useMemo,
+} from 'react'
 import { width, height } from './tokens'
 import { pack } from 'd3'
 import { WorkerDataContext } from './data/WorkerDataProvider'
@@ -8,17 +16,13 @@ import { Layer as LayerType } from 'konva/types/Layer'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 import { css, styled } from 'pretty-lights'
-import { Node, isWorker } from './types'
+import { Node, isWorker } from './data/types'
 import { deepGrey } from '../shared/tokens/colors'
 import { Button } from 'react-bootstrap'
 import Legend from './Legend'
-
-const ButtonBar = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1;
-`
+import SignMenu from '../shared/components/SignMenu'
+import { SignMenuItem } from '../shared/components/SignMenu/SignMenu'
+import Signs from './Signs'
 
 const stageClass = css`
   width: 100vmin;
@@ -49,6 +53,11 @@ const BubbleChart: FC = () => {
   >([])
   const { stratifiedData } = useContext(WorkerDataContext)
 
+  const currentStageKey = useMemo(() => {
+    console.log('**new stage key!!', new Date())
+    return Math.round(Math.random() * 10000000)
+  }, [stratifiedData])
+
   useEffect(() => {
     if (stratifiedData) {
       setBubbleData(
@@ -78,45 +87,13 @@ const BubbleChart: FC = () => {
         width: '100vw',
       }}
     >
-      <ButtonBar>
-        <Legend />
-        <Button
-          size="sm"
-          variant="outline-secondary"
-          onClick={(e) => {
-            e.preventDefault()
-            const newPosition = {
-              x: width / 20,
-              y: width / 20,
-            }
-            setPosition(newPosition)
-            setScale(1)
-          }}
-        >
-          Reset frame
-        </Button>
-        {/* <button
-          onClick={(e) => {
-            e.preventDefault()
-            if (!stageRef.current) return
-            const dataUrl = stageRef.current.toDataURL({
-              pixelRatio: 20, // or other value you need
-            })
-            downloadURI(dataUrl, 'stage.png')
-          }}
-        >
-          Save image
-        </button> */}
-        <p>
-          position: {position.x}, {position.y} <br />
-          scale: {scale}
-        </p>
-      </ButtonBar>
       <Stage
         width={width * 2}
         height={height * 2}
         ref={stageRef}
         className={stageClass}
+        key={currentStageKey}
+        draggable
       >
         <Layer ref={layerRef} draggable={true}>
           {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
@@ -160,6 +137,24 @@ const BubbleChart: FC = () => {
           })}
         </Layer>
       </Stage>
+      <Legend />
+      <Signs
+        onReset={() => {
+          const newPosition = {
+            x: width / 20,
+            y: width / 20,
+          }
+          setPosition(newPosition)
+          setScale(1)
+        }}
+        onSaveImage={() => {
+          if (!stageRef.current) return
+          const dataUrl = stageRef.current.toDataURL({
+            pixelRatio: 10, // or other value you need
+          })
+          downloadURI(dataUrl, 'stage.png')
+        }}
+      />
     </div>
   )
 }

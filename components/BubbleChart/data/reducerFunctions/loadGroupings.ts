@@ -1,8 +1,8 @@
 import { DSVRowArray } from 'd3'
-import { Groupings } from '../../types'
+import { Groupings } from '../types'
 import { State } from '../dataFormattingReducer'
 
-export function uploadGroupings(
+export function loadGroupings(
   prevState: State,
   parsedData: DSVRowArray<string>
 ): State {
@@ -20,4 +20,4 @@ export function uploadGroupings(
   }
 }
 
-export default uploadGroupings
+export default loadGroupings

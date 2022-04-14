@@ -1,5 +1,5 @@
 import { csvParse, DSVRowArray, stratify } from 'd3'
-import { Grouping, Groupings, Node } from '../../types'
+import { Grouping, Groupings, Node } from '../types'
 import { State } from '../dataFormattingReducer'
 
 export function stratifyData(state: State): State {

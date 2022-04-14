@@ -1,5 +1,5 @@
 import { DSVRowArray } from 'd3'
-import { deepGrey, white } from '../shared/tokens/colors'
+import { deepGrey, white } from '../../shared/tokens/colors'
 
 type Person = {
   [key: Column]: Value
@@ -117,7 +117,7 @@ export function isWorker(node: Node): node is Worker {
 }
 
 export class ListFromCSV {
-  /** Uploaded csv file */
+  /** Loaded csv file */
   csvFile: DSVRowArray<string>
   /** Map of standardized labels to csv columns */
   columnMap: ColumnMap

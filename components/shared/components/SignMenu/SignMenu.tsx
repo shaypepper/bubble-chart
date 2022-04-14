@@ -25,15 +25,15 @@ const signButtonClass = css`
   letter-spacing: 1px;
   border: none;
   font-family: ${bangersFont};
-  background-color: ${blue};
+  background-color: ${deepGrey};
   color: ${white};
   padding: ${pxToRem(12)};
   position: relative;
   box-shadow: white 1px 1px 10px;
+  pointer-events: auto;
 `
 // ${() => (Math.random() * 2 - 1) * (Math.random() * 35 + 3)}deg
 const SignMenuItemStyled = styled.div`
-  transform: rotate(${({ rotation = 10 }) => rotation}deg) translateY(10px);
   position: relative;
   transform-origin: 80%;
   transition: transform 200ms ease;
@@ -44,7 +44,7 @@ const SignMenuItemStyled = styled.div`
   }
 `
 
-const rotations = [-4, 15, -6, 20]
+const rotations = [-15, 14, 0, -10]
 
 export const SignMenuItem: React.FC<{
   stickLength?: number
@@ -76,17 +76,23 @@ export const SignMenuItem: React.FC<{
 
 export const SignMenu = styled.div`
   position: fixed;
-  bottom: ${({ center }: { center: boolean }) => (center ? '50vh' : '-20px')};
+  bottom: -40px;
   right: 0;
+  transition: transform 700ms ease;
+  transform: translateY(
+    ${({ slideDown }: { slideDown: boolean }) => (slideDown ? '300px' : '0')}
+  );
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
+
+  align-items: flex-end;
+  justify-content: flex-end;
   background: linear-gradient(
     rgba(255, 255, 255, 0),
     rgba(255, 255, 255, 0.9),
     rgba(255, 255, 255, 1)
   );
+  pointer-events: none;
 `
 
 export default SignMenu

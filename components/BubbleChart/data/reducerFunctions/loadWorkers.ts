@@ -1,8 +1,8 @@
 import { DSVRowArray } from 'd3'
-import { Workers } from '../../types'
+import { Workers } from '../types'
 import { State } from '../dataFormattingReducer'
 
-export function uploadWorkers(
+export function loadWorkers(
   state: State,
   parsedData: DSVRowArray<string>
 ): State {
@@ -22,4 +22,4 @@ export function uploadWorkers(
   }
 }
 
-export default uploadWorkers
+export default loadWorkers

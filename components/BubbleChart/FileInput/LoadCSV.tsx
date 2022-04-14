@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useRef } from 'react'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
-import { Button, Dropdown, Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { FormatAction } from '../data/dataFormattingReducer'
 import DropdownWithFilter from '../../shared/components/DropdownWithFilter'
 
@@ -11,16 +11,16 @@ const columnMapLabels: { [s: string]: string } = {
   grouping: 'Grouping',
 }
 
-const UploadCSV: React.FC<{
+const LoadCSV: React.FC<{
   label: string
   csvType: 'worker' | 'grouping'
-}> = ({ label = 'Upload your outreach data', csvType }) => {
-  const { convertCsv, columns, dispatch, workersData, groupingsData } =
+}> = ({ label = 'Load your outreach data', csvType }) => {
+  const { convertCsv, dispatch, workersData, groupingsData } =
     useContext(WorkerDataContext)
   const action =
     csvType == 'worker'
-      ? FormatAction.UPLOAD_WORKERS_CSV
-      : FormatAction.UPLOAD_GROUPINGS_CSV
+      ? FormatAction.LOAD_WORKERS_CSV
+      : FormatAction.LOAD_GROUPINGS_CSV
   const convertedCsv = csvType == 'worker' ? workersData : groupingsData
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -50,6 +50,7 @@ const UploadCSV: React.FC<{
       {convertedCsv &&
         Object.entries(convertedCsv.columnMap).map(([key, columnLabel]) => (
           <DropdownWithFilter
+            id={`${key}-dropdown-for-csv`}
             list={convertedCsv.columns || []}
             label={columnMapLabels[`${key}`]}
             key={key}
@@ -69,4 +70,4 @@ const UploadCSV: React.FC<{
   )
 }
 
-export default UploadCSV
+export default LoadCSV

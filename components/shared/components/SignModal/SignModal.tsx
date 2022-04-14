@@ -1,4 +1,4 @@
-import { css, styled } from 'pretty-lights'
+import { css, cx, styled } from 'pretty-lights'
 import * as React from 'react'
 import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
@@ -20,7 +20,7 @@ const signClass = css`
 
 const pageTitleClass = css`
   font-family: ${bangersFont};
-  background-color: ${blue};
+  background-color: ${deepGrey};
   color: ${white};
   padding: ${pxToRem(18)};
   position: relative;
@@ -57,7 +57,7 @@ const signTitle = css`
   letter-spacing: 1px;
 `
 const armClass = css`
-  background-color: ${deepGrey};
+  background-color: #aaa;
   height: 24px;
   margin-bottom: 30px;
   flex-grow: 1;
@@ -85,27 +85,39 @@ const fullWidthContainerClass = css`
   top: 0;
   left: 0;
   backdrop-filter: blur(2px);
+  z-index: 2;
+  transition: transform 800ms ease;
 `
 
 const backdropFilterClass = css`
   height: 100%;
   width: 100%;
   backdrop-filter: blur(2px);
-  background-color: #30303090;
   position: absolute;
+  z-index: -1;
+`
+
+const hideClass = css`
+  transform: translateX(100vw);
 `
 
 const SignModal: React.FC<{
   onDismiss?: () => void
   stepNumber?: number
   title?: string
-}> = ({ children, onDismiss = () => {}, stepNumber, title }) => {
+  hide?: boolean
+}> = ({ children, onDismiss = () => {}, stepNumber, title, hide = false }) => {
   const [collapsed, setCollapsed] = React.useState<boolean>(false)
   const fullWidth = true
 
   return (
-    <div className={fullWidth ? fullWidthContainerClass : containerClass}>
-      {/* <div className={backdropFilterClass}></div> */}
+    <div
+      className={cx(
+        fullWidth ? fullWidthContainerClass : containerClass,
+        hide ? hideClass : ''
+      )}
+    >
+      <div className={backdropFilterClass} onClick={onDismiss}></div>
       <div className={signClass}>
         <div className={pageTitleClass}>
           {stepNumber && <p className={stepClass}>Step {stepNumber} </p>}
@@ -131,13 +143,7 @@ const SignModal: React.FC<{
       <SignHolder collapsed={collapsed}>
         <HandHoldingSign stickLength={50} className={handHoldClass} />
         <div className={armClass}>
-          <MinimalArrow
-            height={12}
-            direction={collapsed ? 'left' : 'right'}
-            onClick={() => {
-              setCollapsed((currentCollapsed) => !currentCollapsed)
-            }}
-          />
+          <MinimalArrow height={12} direction={'right'} onClick={onDismiss} />
         </div>
       </SignHolder>
     </div>

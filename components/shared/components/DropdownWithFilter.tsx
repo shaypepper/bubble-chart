@@ -7,7 +7,15 @@ const DropdownWithFilter: FC<{
   toggleText: string
   onSelect: (eventKey: any) => void
   disabled?: boolean
-}> = ({ list, label = 'Label TK', onSelect, toggleText, disabled = false }) => {
+  id: string
+}> = ({
+  list,
+  label = 'Label TK',
+  onSelect,
+  toggleText,
+  disabled = false,
+  id,
+}) => {
   const [value, setValue] = useState<string>()
   return (
     <Form.Group>
@@ -16,7 +24,7 @@ const DropdownWithFilter: FC<{
         <Dropdown role="select" onSelect={onSelect}>
           <Dropdown.Toggle
             size="sm"
-            id={`dropdownBasic{label.replace(' ', '')}`}
+            id={id || `dropdownBasic${label.replace(' ', '')}`}
             disabled={disabled}
           >
             {toggleText}

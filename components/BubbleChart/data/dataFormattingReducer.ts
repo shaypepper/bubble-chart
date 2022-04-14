@@ -12,14 +12,14 @@ import {
   StarOptionsKeys,
   Value,
   Workers,
-} from '../types'
+} from './types'
 import {
   createColumnMap,
   setStarOption,
   setTextLine,
   stratifyData,
-  uploadGroupings,
-  uploadWorkers,
+  loadGroupings,
+  loadWorkers,
 } from './reducerFunctions'
 import { setColorColumn, setColorMap } from './reducerFunctions/setColors'
 
@@ -31,9 +31,6 @@ export interface State {
   /** Groupings data object generated from CSV  */
   groupingsData?: Groupings
 
-  /** List of available columns from CSV */
-  columns?: string[]
-
   /** Stratified Data */
   stratifiedData?: HierarchyNode<Node>
 
@@ -41,19 +38,19 @@ export interface State {
 }
 
 export enum Steps {
-  UPLOAD_WORKERS = 1,
+  LOAD_WORKERS = 1,
   CHOOSE_COLUMNS = 2,
-  UPLOAD_GROUPINGS = 3,
+  LOAD_GROUPINGS = 3,
   CHOOSE_COLOR_SCHEME = 4,
   DRAW = 5,
 }
 
 export enum FormatAction {
-  UPLOAD_WORKERS_CSV = 'uploadWorkers',
+  LOAD_WORKERS_CSV = 'loadWorkers',
   SET_COLUMN_MAP = 'setColumnMap',
   SELECT_NAME_FIELD = 'selectNameField',
   SELECT_grouping_FIELD = 'selectgroupingField',
-  UPLOAD_GROUPINGS_CSV = 'uploadGroupings',
+  LOAD_GROUPINGS_CSV = 'loadGroupings',
   STRATIFY_DATA = 'stratifyData',
   SET_COLORS = 'setColors',
   GO_TO_STEP = 'goToStep',
@@ -67,11 +64,11 @@ export enum FormatAction {
 
 export type Action =
   | {
-      type: FormatAction.UPLOAD_WORKERS_CSV
+      type: FormatAction.LOAD_WORKERS_CSV
       parsedData: DSVRowArray<string>
     }
   | {
-      type: FormatAction.UPLOAD_GROUPINGS_CSV
+      type: FormatAction.LOAD_GROUPINGS_CSV
       parsedData: DSVRowArray<string>
     }
   | {
@@ -130,8 +127,8 @@ const dataFormattingReducer: Reducer<State, Action> = (
       newState = { ...state, currentStep: action.step }
       break
 
-    case FormatAction.UPLOAD_WORKERS_CSV:
-      return uploadWorkers(state, action.parsedData)
+    case FormatAction.LOAD_WORKERS_CSV:
+      return loadWorkers(state, action.parsedData)
 
     case FormatAction.SET_COLUMN_MAP:
       newState = createColumnMap(state, action.columnMap, action.listFromCsv)
@@ -142,8 +139,8 @@ const dataFormattingReducer: Reducer<State, Action> = (
       }
       break
 
-    case FormatAction.UPLOAD_GROUPINGS_CSV:
-      newState = uploadGroupings(state, action.parsedData)
+    case FormatAction.LOAD_GROUPINGS_CSV:
+      newState = loadGroupings(state, action.parsedData)
       break
 
     case FormatAction.STRATIFY_DATA:
@@ -161,6 +158,7 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_TEXT_LINE:
       newState = setTextLine(state, action.column, action.index)
+      break
 
     case FormatAction.SET_COLOR_COLUMN:
       newState = setColorColumn(state, action.column)
@@ -174,7 +172,7 @@ const dataFormattingReducer: Reducer<State, Action> = (
       newState = state
   }
 
-  return stratifyData(newState)
+  return newState
 }
 
 export default dataFormattingReducer

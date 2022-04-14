@@ -1,4 +1,4 @@
-import { ColumnMap, ListFromCSV } from '../../types'
+import { ColumnMap, ListFromCSV } from '../types'
 import { State } from '../dataFormattingReducer'
 
 export function createColumnMap(

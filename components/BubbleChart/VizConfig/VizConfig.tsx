@@ -66,7 +66,7 @@ const VizConfig: React.FC = () => {
           displayName={workersData?.list[3].displayName || ''}
           editMode
           textLines={textLines}
-          width={'50vmin'}
+          width={'40vmin'}
           showStars={[true, true, true]}
           starColors={chartOptions.stars.map((s) => s.color || '#404040')}
           generateOnClick={(panel: ConfigPanel) => () => {

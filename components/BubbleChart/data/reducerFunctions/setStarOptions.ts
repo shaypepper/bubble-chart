@@ -1,4 +1,4 @@
-import { StarOptionsKeys, Value } from '../../types'
+import { StarOptionsKeys, Value } from '../types'
 import { State } from '../dataFormattingReducer'
 
 export function setStarOption(

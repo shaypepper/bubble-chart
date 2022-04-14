@@ -4,7 +4,7 @@ import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Button, Form, ToggleButton } from 'react-bootstrap'
 import { FormatAction, Steps } from '../data/dataFormattingReducer'
 import BubbleChart from '..'
-import UploadCSV from './UploadCSV'
+import LoadCSV from './LoadCSV'
 
 const FileInput: React.FC = () => {
   const { dispatch, stratifiedData, currentStep } =
@@ -17,12 +17,15 @@ const FileInput: React.FC = () => {
   return (
     <>
       <Form>
-        {currentStep === Steps.UPLOAD_WORKERS && (
-          <UploadCSV label={'Upload workers data'} csvType={'worker'} />
+        {currentStep === Steps.LOAD_WORKERS && (
+          <LoadCSV
+            label={'Choose a CSV file with your worker data!'}
+            csvType={'worker'}
+          />
         )}
 
-        {currentStep === Steps.UPLOAD_GROUPINGS && (
-          <UploadCSV label={'Upload groupings data'} csvType={'grouping'} />
+        {currentStep === Steps.LOAD_GROUPINGS && (
+          <LoadCSV label={'Load groupings data'} csvType={'grouping'} />
         )}
       </Form>
     </>

@@ -1,13 +1,12 @@
 import { deepGrey, white } from '../../../shared/tokens/colors'
-import { ColorMap, Column } from '../../types'
+import { ColorMap, Column } from '../types'
 import { State } from '../dataFormattingReducer'
 
 export function setColorColumn(state: State, column: Column) {
   const newChartOptions = state.chartOptions.duplicate()
   newChartOptions.colors.currentColumn = column
-  newChartOptions.colors.colorMap[column] = newChartOptions.colors.colorMap[
-    column
-  ] || { fillColor: deepGrey, textColor: white }
+  newChartOptions.colors.colorMap[column] =
+    newChartOptions.colors.colorMap[column] || {}
   return { ...state, chartOptions: newChartOptions }
 }
 

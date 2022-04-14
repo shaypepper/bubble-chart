@@ -18,6 +18,7 @@ const headerClass = css`
   padding: 0 ${pxToRem(12)};
   background-color: ${deepGrey};
   box-shadow: black 0px 0px 8px;
+  z-index: 2;
 `
 
 const titleClass = css`
@@ -74,7 +75,7 @@ const Header: React.FC<{ currentPage: DataForPowerPages }> = ({
             Lessons
           </button>
         </Link>
-        <Link href="/bubble-chart" passHref>
+        <Link href="/" passHref>
           <button
             className={
               currentPage === DataForPowerPages.BUBBLE_CHART

@@ -444,7 +444,7 @@ const Star = ({
   whichStar,
 }: {
   size: number
-  whichStar: 1 | 2 | 3
+  whichStar: number
   color: string
 }) => {
   const pathCommands = getStarPath({

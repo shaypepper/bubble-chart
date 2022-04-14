@@ -4,6 +4,7 @@ import { pxToRem } from '../../shared/tokens/spacing'
 
 export const configTitleClass = css`
   font-family: ${latoFont};
+  font-size: ${pxToRem(18)};
 `
 
 export const configContainerClass = css`

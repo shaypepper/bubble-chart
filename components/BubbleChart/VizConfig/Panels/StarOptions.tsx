@@ -1,25 +1,11 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
-import {
-  Button,
-  ButtonGroup,
-  Dropdown,
-  Form,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  ToggleButton,
-} from 'react-bootstrap'
-import * as DropdownMenu from 'react-bootstrap/lib/DropdownMenu'
+import { Form } from 'react-bootstrap'
 import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
-import ListOfColumns from '../../../shared/components/ListOfColumns'
-import { pxToRem } from '../../../shared/tokens/spacing'
+
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
-import { StarOptionsKeys, Value } from '../../types'
-import { configTitleClass } from '../styles'
+import { StarOptionsKeys, Value } from '../../data/types'
 import ColorGrid from './ColorGrid'
-
-let colorsList = ['orange', 'red', 'blue', 'green', 'purple', 'yellow']
 
 const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
@@ -62,17 +48,8 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
           />
         </Form.Group>
 
-        {/* <Form.Group>
-          <Form.Label htmlFor="star-options-label">
-            Label for legend
-            <Form.Control
-              name="star-options-label"
-              disabled={!active}
-              size="sm"
-            />
-          </Form.Label>
-        </Form.Group> */}
-        <ListOfColumns
+        <DropdownWithFilter
+          id="star-options-column-dropdown"
           onSelect={(eventKey) => {
             dispatch({
               type: FormatAction.SET_STAR_OPTION,
@@ -82,12 +59,13 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
             })
           }}
           toggleText={column || '------'}
-          columnList={workersData?.columns || []}
+          list={workersData?.columns || []}
           disabled={!active}
         />
 
         {column && (
           <DropdownWithFilter
+            id="star-options-value-dropdown"
             list={[...possibleValues].map((v) => `${v}`)}
             onSelect={(eventKey) => {
               dispatch({

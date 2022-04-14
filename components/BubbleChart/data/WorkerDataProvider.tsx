@@ -6,7 +6,7 @@ import dataFormattingReducer, {
   State,
   Steps,
 } from './dataFormattingReducer'
-import { ChartOptions } from '../types'
+import { ChartOptions } from './types'
 
 type Worker = {
   [k: string]: string
@@ -16,7 +16,7 @@ type WorkerDataType = {
   convertWorkerCsv?: (files: FileList) => void
   convertGroupingCsv?: (files: FileList) => void
   convertCsv: (
-    action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
+    action: FormatAction.LOAD_WORKERS_CSV | FormatAction.LOAD_GROUPINGS_CSV,
     files: FileList
   ) => void
   workerHeirarchy?: HierarchyNode<unknown>
@@ -27,13 +27,13 @@ export const WorkerDataContext = createContext<WorkerDataType>({
   convertGroupingCsv: (files) => files && undefined,
   convertCsv: (action, files) => [action, files] && undefined,
   dispatch: () => undefined,
-  currentStep: Steps.UPLOAD_WORKERS,
+  currentStep: Steps.LOAD_WORKERS,
   chartOptions: new ChartOptions(),
 })
 
 const WorkerDataProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(dataFormattingReducer, {
-    currentStep: Steps.UPLOAD_WORKERS,
+    currentStep: Steps.LOAD_WORKERS,
     chartOptions: new ChartOptions(),
   })
 
@@ -55,7 +55,7 @@ export default WorkerDataProvider
 
 function generateConvertCsvFunction(dispatch: Dispatch<Action>) {
   return (
-    action: FormatAction.UPLOAD_WORKERS_CSV | FormatAction.UPLOAD_GROUPINGS_CSV,
+    action: FormatAction.LOAD_WORKERS_CSV | FormatAction.LOAD_GROUPINGS_CSV,
     files: FileList
   ) => {
     let reader = new FileReader()
