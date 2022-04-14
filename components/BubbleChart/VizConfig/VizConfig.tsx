@@ -42,9 +42,9 @@ export const configPanels: ConfigPanel[] = [
     type: 'textLine',
     translate: { x: 80, y: 20 },
   },
-  { name: 'Star 1', index: 0, type: 'star', translate: { x: 31, y: -40 } },
-  { name: 'Star 2', index: 1, type: 'star', translate: { x: 48, y: -42 } },
-  { name: 'Star 3', index: 2, type: 'star', translate: { x: 64, y: -40 } },
+  { name: 'Star 1', index: 0, type: 'star', translate: { x: 29, y: -28 } },
+  { name: 'Star 2', index: 1, type: 'star', translate: { x: 46, y: -27 } },
+  { name: 'Star 3', index: 2, type: 'star', translate: { x: 63, y: -30 } },
 ]
 
 const VizConfig: React.FC = () => {
@@ -59,6 +59,13 @@ const VizConfig: React.FC = () => {
       : 'Give us a column to visualize here'
   )
 
+  if (!workersData) {
+    return (
+      <div className={containerClass}>
+        You can't get very far without uploading some data!
+      </div>
+    )
+  }
   return (
     <div className={containerClass}>
       <div>

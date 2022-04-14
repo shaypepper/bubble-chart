@@ -1,6 +1,8 @@
 import { DSVRowArray } from 'd3'
-import { Workers } from '../types'
+import { ListFromCSV, Workers } from '../types'
 import { State } from '../dataFormattingReducer'
+import { exampleColumnMap, exampleData } from '../../exampleData'
+import { createColumnMap } from '.'
 
 export function loadWorkers(
   state: State,
@@ -20,6 +22,15 @@ export function loadWorkers(
     ...state,
     workersData,
   }
+}
+
+export function loadExampleWorkersAndChartOptions(state: State) {
+  let newState = loadWorkers(state, exampleData)
+  if (newState.workersData) {
+    newState = createColumnMap(newState, exampleColumnMap, newState.workersData)
+  }
+  console.log(newState.workersData?.columns)
+  return { ...newState }
 }
 
 export default loadWorkers

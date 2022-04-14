@@ -22,6 +22,7 @@ import {
   loadWorkers,
 } from './reducerFunctions'
 import { setColorColumn, setColorMap } from './reducerFunctions/setColors'
+import { loadExampleWorkersAndChartOptions } from './reducerFunctions/loadWorkers'
 
 export interface State {
   /**  Current step in the process */
@@ -60,6 +61,7 @@ export enum FormatAction {
   SET_COLOR_COLUMN = 'setColorColumn',
   SET_COLOR_MAP = 'setColorMap',
   RESET_CHART_FRAME = 'resetChartFrame',
+  LOAD_EXAMPLE_DATA = 'loadExampleData',
 }
 
 export type Action =
@@ -115,6 +117,7 @@ export type Action =
       y: number
       scale: number
     }
+  | { type: FormatAction.LOAD_EXAMPLE_DATA }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,
@@ -137,6 +140,10 @@ const dataFormattingReducer: Reducer<State, Action> = (
       if (!uniqueIdentifier || !displayName || !grouping) {
         return newState
       }
+      break
+
+    case FormatAction.LOAD_EXAMPLE_DATA:
+      newState = loadExampleWorkersAndChartOptions(state)
       break
 
     case FormatAction.LOAD_GROUPINGS_CSV:

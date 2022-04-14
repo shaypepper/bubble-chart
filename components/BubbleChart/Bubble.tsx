@@ -29,6 +29,8 @@ import { ConfigPanel } from './VizConfig/VizConfig'
 import { string } from 'prop-types'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
+const placeHolderGrey = '#202020'
+
 type BubbleProps = {
   displayName: string
   fullName?: string
@@ -136,7 +138,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
         </textPath>
       </text>
 
-      {textLines[0] && (
+      {textLines[0] ? (
         <>
           <path
             id="textLine0Path"
@@ -155,8 +157,17 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
             </textPath>
           </text>
         </>
-      )}
-      {textLines[1] && (
+      ) : editMode ? (
+        <rect
+          fill={placeHolderGrey}
+          height="3"
+          strokeLinecap="round"
+          width={55}
+          y={57}
+          x={20}
+        ></rect>
+      ) : null}
+      {textLines[1] ? (
         <>
           <path
             id="textLine1Path"
@@ -175,8 +186,17 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
             </textPath>
           </text>
         </>
-      )}
-      {textLines[2] && (
+      ) : editMode ? (
+        <rect
+          fill={placeHolderGrey}
+          height="3"
+          strokeLinecap="round"
+          width={55}
+          y={63}
+          x={20}
+        ></rect>
+      ) : null}
+      {textLines[2] ? (
         <>
           <path
             id="textLine2Path"
@@ -195,9 +215,20 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
             </textPath>
           </text>
         </>
-      )}
+      ) : editMode ? (
+        <rect
+          fill={placeHolderGrey}
+          height="3"
+          strokeLinecap="round"
+          width={55}
+          y={69}
+          x={20}
+        ></rect>
+      ) : null}
 
-      {editMode && <path d={getStarPath({ whichStar: 1 })} fill={'#202020'} />}
+      {editMode && (
+        <path d={getStarPath({ whichStar: 1 })} fill={placeHolderGrey} />
+      )}
       {showStars[0] && (
         <path d={getStarPath({ whichStar: 1 })} fill={starColors[0]} />
       )}
@@ -222,7 +253,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
               <Pencil
                 key={panelName}
                 label={panelName}
-                size={4}
+                size={7}
                 transform={`translate(${x} ${y})`}
                 fill={innerTextColor}
                 onClick={generateOnClick(panel)}

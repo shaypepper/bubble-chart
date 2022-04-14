@@ -82,7 +82,7 @@ const Lessons = () => {
                 Getting to a simple true/false flag isn&apos;t always simple,
                 but often helpful!
               </li>
-              <li>Use bins to make quantitative data easier t</li>
+              <li>Use bins to make data ranges easier to work with</li>
             </ul>
           </li>
           <li>
@@ -92,10 +92,19 @@ const Lessons = () => {
                 Color is like a good moisturizer or a pigmented eyeshadow. A
                 little bit goes a long way.
               </li>
-            </ul>
-            <ul>
-              Think outside of the box when grouping employees. You don&apos;t
-              just have to organize by the company&apos;s org chart.
+              <li>
+                Think outside of the box when grouping employees. You don&apos;t
+                just have to organize by the company&apos;s org chart.
+              </li>
+              <li>
+                Combine columns to provide more granularity and specificity in
+                your groupings
+              </li>
+              <li>Always include the point person. Always.</li>
+              <li>
+                Is there a feature missing? You can probably use google sheets
+                to get your data the way you need it before importing it here!
+              </li>
             </ul>
           </li>
         </ul>

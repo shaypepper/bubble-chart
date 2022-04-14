@@ -48,55 +48,62 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
           />
         </Form.Group>
 
-        <DropdownWithFilter
-          id="star-options-column-dropdown"
-          onSelect={(eventKey) => {
-            dispatch({
-              type: FormatAction.SET_STAR_OPTION,
-              optionType: StarOptionsKeys.COLUMN,
-              value: `${eventKey}`,
-              starIndex,
-            })
-          }}
-          toggleText={column || '------'}
-          list={workersData?.columns || []}
-          disabled={!active}
-        />
-
-        {column && (
-          <DropdownWithFilter
-            id="star-options-value-dropdown"
-            list={[...possibleValues].map((v) => `${v}`)}
-            onSelect={(eventKey) => {
-              dispatch({
-                type: FormatAction.SET_STAR_OPTION,
-                optionType: StarOptionsKeys.VALUE,
-                value: eventKey,
-                starIndex,
-              })
-            }}
-            label={'Value'}
-            toggleText={`${chartOptions.stars[starIndex].value}` || ''}
-          />
-        )}
-
-        <Form.Group>
-          <Form.Label style={{ width: '80%' }}>
-            Color
-            <ColorGrid
-              generateOnClick={(color) => () => {
+        {active && (
+          <>
+            <DropdownWithFilter
+              id="star-options-column-dropdown"
+              onSelect={(eventKey) => {
                 dispatch({
                   type: FormatAction.SET_STAR_OPTION,
-                  optionType: StarOptionsKeys.COLOR,
-                  value: color,
+                  optionType: StarOptionsKeys.COLUMN,
+                  value: `${eventKey}`,
                   starIndex,
                 })
               }}
-              noText
+              toggleText={column || '------'}
+              list={workersData?.columns || []}
               disabled={!active}
+              label={'Column'}
             />
-          </Form.Label>
-        </Form.Group>
+
+            {column && (
+              <DropdownWithFilter
+                id="star-options-value-dropdown"
+                list={[...possibleValues].map((v) => `${v}`)}
+                onSelect={(eventKey) => {
+                  dispatch({
+                    type: FormatAction.SET_STAR_OPTION,
+                    optionType: StarOptionsKeys.VALUE,
+                    value: eventKey,
+                    starIndex,
+                  })
+                }}
+                label={'Value'}
+                toggleText={`${chartOptions.stars[starIndex].value}` || ''}
+              />
+            )}
+
+            {column && value && (
+              <Form.Group>
+                <Form.Label style={{ width: '80%' }}>
+                  Color
+                  <ColorGrid
+                    generateOnClick={(color) => () => {
+                      dispatch({
+                        type: FormatAction.SET_STAR_OPTION,
+                        optionType: StarOptionsKeys.COLOR,
+                        value: color,
+                        starIndex,
+                      })
+                    }}
+                    noText
+                    disabled={!active}
+                  />
+                </Form.Label>
+              </Form.Group>
+            )}
+          </>
+        )}
       </Form>
     </div>
   )

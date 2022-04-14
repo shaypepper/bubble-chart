@@ -36,7 +36,7 @@ const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
 
       <SignModal
         hide={!showModal}
-        title={'Load data'}
+        title={'Upload your worker data!'}
         onDismiss={() => {
           dispatch({
             type: FormatAction.STRATIFY_DATA,
