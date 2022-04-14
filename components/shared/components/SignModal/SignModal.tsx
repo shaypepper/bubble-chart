@@ -87,6 +87,7 @@ const fullWidthContainerClass = css`
   backdrop-filter: blur(2px);
   z-index: 2;
   transition: transform 800ms ease;
+  transform: translateX(100vw);
 `
 
 const backdropFilterClass = css`
@@ -97,8 +98,8 @@ const backdropFilterClass = css`
   z-index: -1;
 `
 
-const hideClass = css`
-  transform: translateX(100vw);
+const showClass = css`
+  transform: translateX(0);
 `
 
 const SignModal: React.FC<{
@@ -114,7 +115,7 @@ const SignModal: React.FC<{
     <div
       className={cx(
         fullWidth ? fullWidthContainerClass : containerClass,
-        hide ? hideClass : ''
+        !hide ? showClass : ''
       )}
     >
       <div className={backdropFilterClass} onClick={onDismiss}></div>
