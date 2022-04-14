@@ -127,6 +127,7 @@ const BubbleChart: FC = () => {
                 key={d.id}
                 radius={d.r}
                 bubbleFillColor={colors?.fillColor || 'yellow'}
+                innerTextColor={colors?.textColor || 'yellow'}
                 textLines={d.data.textLines}
                 translation={translation}
                 stars={d.data.stars}

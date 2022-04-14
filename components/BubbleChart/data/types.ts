@@ -1,5 +1,5 @@
 import { DSVRowArray } from 'd3'
-import { deepGrey, white } from '../../shared/tokens/colors'
+import { colors, deepGrey, white } from '../../shared/tokens/colors'
 
 type Person = {
   [key: Column]: Value
@@ -193,8 +193,8 @@ class Worker extends Node {
 
     const currentColorMap =
       colorMap[currentColumn]?.[`${this.rawData[currentColumn]}`]
-    const fillColor = currentColorMap?.fillColor || deepGrey
-    const textColor = currentColorMap?.textColor || white
+    const fillColor = currentColorMap?.fillColor || colors.white.gradient[1]
+    const textColor = currentColorMap?.textColor || colors.white.gradient[2]
     return { fillColor, textColor }
   }
 }

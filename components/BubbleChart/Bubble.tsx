@@ -96,8 +96,8 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   displayName = 'Angelique',
   fullName = 'Shay Culpepper',
   width = 200,
-  bubbleFillColor = deepGrey,
-  innerTextColor = white,
+  bubbleFillColor = 'gainsboro',
+  innerTextColor = deepGrey,
   showStars = [false, false, false],
   starColors = [blue, red, yellow],
   textLines = [
@@ -325,11 +325,9 @@ export const BubbleKonva: FC<
   translation = { x: 0, y: 0 },
   bubbleBorderColor = purple,
   showBubbleBorder = true,
-  bubbleFillColor = deepGrey,
-  innerTextColor = white,
-  // showStars = [Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5],
+  bubbleFillColor = white,
+  innerTextColor = deepGrey,
   stars,
-  starColors = [orange, red, yellow],
   textLines = [
     'Steward: Sarah Duncan',
     'Assessment: 1. Doing Outreach',
@@ -338,14 +336,6 @@ export const BubbleKonva: FC<
   onClick = () => {},
 }) => {
   const R = radius * height
-
-  const showStarsRandom = useMemo(() => {
-    return [
-      Math.random() < 0.33333,
-      Math.random() > 0.33333,
-      Math.random() < 0.5,
-    ]
-  }, [])
 
   return (
     <Group className={'leaf'} x={translation.x} y={translation.y}>
@@ -376,13 +366,13 @@ export const BubbleKonva: FC<
       />
 
       {stars?.[0]?.show && (
-        <Star size={R * 3} color={starColors[0]} whichStar={1} />
+        <Star size={R * 3} color={stars[0].fillColor} whichStar={1} />
       )}
       {stars?.[1]?.show && (
-        <Star size={R * 3} color={starColors[1]} whichStar={2} />
+        <Star size={R * 3} color={stars[1].fillColor} whichStar={2} />
       )}
       {stars?.[2]?.show && (
-        <Star size={R * 3} color={starColors[2]} whichStar={3} />
+        <Star size={R * 3} color={stars[2].fillColor} whichStar={3} />
       )}
 
       {textLines?.map((t, i) => (
