@@ -62,7 +62,7 @@ const VizConfig: React.FC = () => {
   if (!workersData) {
     return (
       <div className={containerClass}>
-        You can't get very far without uploading some data!
+        You can&apos;t get very far without uploading some data!
       </div>
     )
   }
