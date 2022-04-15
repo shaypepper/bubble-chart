@@ -1,4 +1,4 @@
-import { css, cx, styled } from 'pretty-lights'
+import { css, cx, styled, useTheme } from 'pretty-lights'
 import * as React from 'react'
 import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
@@ -102,12 +102,28 @@ const showClass = css`
   transform: translateX(0);
 `
 
+const actionClass = css`
+  display: flex;
+  justify-content: flex-end;
+  padding: ${pxToRem(12)};
+`
+
 const SignModal: React.FC<{
   onDismiss?: () => void
   stepNumber?: number
   title?: string
   hide?: boolean
-}> = ({ children, onDismiss = () => {}, stepNumber, title, hide = false }) => {
+  actionText?: string
+  actionOnClick?: () => void
+}> = ({
+  children,
+  onDismiss = () => {},
+  stepNumber,
+  title,
+  hide = false,
+  actionText = '',
+  actionOnClick = () => {},
+}) => {
   const [collapsed, setCollapsed] = React.useState<boolean>(false)
   const fullWidth = true
 
@@ -140,6 +156,14 @@ const SignModal: React.FC<{
           </Button>
         </div>
         <div className={mainContentClass}>{children}</div>
+        {actionText && (
+          <div className={actionClass}>
+            <Button size="sm" onClick={actionOnClick}>
+              {' '}
+              {actionText}{' '}
+            </Button>
+          </div>
+        )}
       </div>
       <SignHolder collapsed={collapsed}>
         <HandHoldingSign stickLength={50} className={handHoldClass} />

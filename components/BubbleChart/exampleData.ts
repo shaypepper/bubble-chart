@@ -10,6 +10,7 @@ export const exampleData: DSVRowArray = Object.assign(
   [
     {
       'First Name': 'Sabrina ',
+
       'Last Name': 'Walls',
       'Full name': 'Sabrina Walls',
       'Point Person': 'Amanda Collier',

@@ -26,7 +26,7 @@ const FileInput: React.FC = () => {
           <LoadCSV csvType={'worker'}>
             <p
               style={{
-                fontSize: pxToRem(12),
+                fontSize: pxToRem(14),
                 lineHeight: '120%',
               }}
             >

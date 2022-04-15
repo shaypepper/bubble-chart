@@ -75,7 +75,7 @@ const VizConfig: React.FC = () => {
           textLines={textLines}
           width={'40vmin'}
           showStars={[true, true, true]}
-          starColors={chartOptions.stars.map((s) => s.color || '#404040')}
+          starColors={chartOptions.stars.map((s) => s.color || '#C0C0C0')}
           generateOnClick={(panel: ConfigPanel) => () => {
             setCurrentConfigPanel(panel)
           }}

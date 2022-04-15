@@ -27,7 +27,7 @@ const DropdownWithFilter: FC<{
             id={id || `dropdownBasic${label.replace(' ', '')}`}
             disabled={disabled}
           >
-            {toggleText}
+            {toggleText || `Choose a ${label.toLowerCase()}...`}
           </Dropdown.Toggle>
 
           <Dropdown.Menu role="select">

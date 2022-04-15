@@ -14,51 +14,97 @@ import SignMenu from '../../components/shared/components/SignMenu'
 import { SignMenuItem } from '../../components/shared/components/SignMenu/SignMenu'
 import { FormatAction } from './data/dataFormattingReducer'
 import Legend from './Legend'
+import { Button, Image } from 'react-bootstrap'
+
+enum SignSteps {
+  WELCOME = 'welcome',
+  UPLOAD_WORKERS = 'uploadWorkers',
+  CUSTOMIZE_CHART = 'customizeChart',
+  NONE = 'none',
+}
 
 const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
   onReset = () => {},
   onSaveImage,
 }) => {
+  const [currentStep, setCurrentStep] = useState<SignSteps>(SignSteps.WELCOME)
   const [showModal, setShowModal] = useState(true)
   const [showColorConfig, setShowColorConfig] = useState(false)
   const { dispatch } = useContext(WorkerDataContext)
   return (
     <>
       <SignModal
-        hide={!showColorConfig}
-        title={'Customize chart'}
+        hide={currentStep !== SignSteps.WELCOME}
+        title={'Welcome!'}
         onDismiss={() => {
-          setShowColorConfig(false)
+          setCurrentStep(SignSteps.NONE)
+        }}
+        actionText={'Continue to Bubble Chart'}
+        actionOnClick={() => {
+          setCurrentStep(SignSteps.UPLOAD_WORKERS)
         }}
       >
-        <VizConfig />
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 3fr',
+            gridGap: '20px',
+            maxWidth: '750px',
+          }}
+        >
+          <Image
+            src="/bubble-example.png"
+            alt="Example of a bubble chart with various shades of green"
+            width={'100%'}
+          />
+          <div>
+            <p>
+              Hello hello! You&apos;ve arrived at a quirky corner of the
+              internet. Someone who loves both her union <em>and</em> data
+              visualization has decided to share a tool. Welcome to the Bubble
+              Chart. This is a tool for unionists to map out relationships,
+              support, organization and various groupings among the rank and
+              file.
+            </p>
+          </div>
+        </div>
       </SignModal>
 
       <SignModal
-        hide={!showModal}
+        hide={currentStep !== SignSteps.UPLOAD_WORKERS}
         title={'Upload your worker data!'}
         onDismiss={() => {
           dispatch({
             type: FormatAction.STRATIFY_DATA,
           })
-          setShowModal(false)
+          setCurrentStep(SignSteps.NONE)
+        }}
+        actionText={'Customize your chart'}
+        actionOnClick={() => {
+          dispatch({
+            type: FormatAction.STRATIFY_DATA,
+          })
+          setCurrentStep(SignSteps.CUSTOMIZE_CHART)
         }}
       >
         <FileInput />
       </SignModal>
 
-      <SignMenu slideDown={showColorConfig || showModal}>
+      <SignModal
+        hide={currentStep !== SignSteps.CUSTOMIZE_CHART}
+        title={'Customize chart'}
+        onDismiss={() => {
+          setCurrentStep(SignSteps.NONE)
+        }}
+      >
+        <VizConfig />
+      </SignModal>
+
+      <SignMenu slideDown={currentStep !== SignSteps.NONE}>
         <SignMenuItem
           index={0}
           onClick={() => {
-            if (!showModal && !showColorConfig) {
-              setShowModal(true)
-            } else if (showModal) {
-              setShowModal(false)
-            } else if (!showModal && showColorConfig) {
-              setShowColorConfig(false)
-              setShowModal(true)
-            }
+            setCurrentStep(SignSteps.UPLOAD_WORKERS)
           }}
         >
           load data
@@ -66,14 +112,7 @@ const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
         <SignMenuItem
           index={1}
           onClick={() => {
-            if (!showModal && !showColorConfig) {
-              setShowColorConfig(true)
-            } else if (showColorConfig) {
-              setShowColorConfig(false)
-            } else if (showModal && !showColorConfig) {
-              setShowColorConfig(true)
-              setShowModal(false)
-            }
+            setCurrentStep(SignSteps.CUSTOMIZE_CHART)
           }}
         >
           customize chart

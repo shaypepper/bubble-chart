@@ -14,8 +14,6 @@ import { height } from './tokens'
 import {
   blue,
   deepGrey,
-  green,
-  orange,
   purple,
   red,
   softGrey,
@@ -26,10 +24,8 @@ import { bangersFont, bungeeFont, latoFont } from '../shared/tokens/fonts'
 import { getStarPath } from './helpers'
 import Pencil from '../shared/icons/Pencil'
 import { ConfigPanel } from './VizConfig/VizConfig'
-import { string } from 'prop-types'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-const placeHolderGrey = '#202020'
+const placeHolderGrey = '#c0c0c0'
 
 type BubbleProps = {
   displayName: string
@@ -159,9 +155,9 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
         </>
       ) : editMode ? (
         <rect
+          style={{ fill: placeHolderGrey }}
           fill={placeHolderGrey}
           height="3"
-          strokeLinecap="round"
           width={55}
           y={57}
           x={20}

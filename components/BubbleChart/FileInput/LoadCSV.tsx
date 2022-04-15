@@ -65,25 +65,37 @@ const LoadCSV: React.FC<{
             </Button>
           </Form.Label>
         </Form.Group>
-        {convertedCsv &&
-          Object.entries(convertedCsv.columnMap).map(([key, columnLabel]) => (
-            <DropdownWithFilter
-              id={`${key}-dropdown-for-csv`}
-              list={convertedCsv.columns || []}
-              label={columnMapLabels[`${key}`]}
-              key={key}
-              toggleText={columnLabel || 'Select column...'}
-              onSelect={(eventKey) => {
-                dispatch({
-                  type: FormatAction.SET_COLUMN_MAP,
-                  columnMap: {
-                    [key]: eventKey,
-                  },
-                  listFromCsv: convertedCsv,
-                })
-              }}
-            />
-          ))}
+
+        {convertedCsv && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'max-content max-content max-content',
+              gridGap: pxToRem(20),
+            }}
+          >
+            {Object.entries(convertedCsv.columnMap).map(
+              ([key, columnLabel]) => (
+                <DropdownWithFilter
+                  id={`${key}-dropdown-for-csv`}
+                  list={convertedCsv.columns || []}
+                  label={columnMapLabels[`${key}`]}
+                  key={key}
+                  toggleText={columnLabel || 'Select column...'}
+                  onSelect={(eventKey) => {
+                    dispatch({
+                      type: FormatAction.SET_COLUMN_MAP,
+                      columnMap: {
+                        [key]: eventKey,
+                      },
+                      listFromCsv: convertedCsv,
+                    })
+                  }}
+                />
+              )
+            )}
+          </div>
+        )}
       </div>
     </>
   )
