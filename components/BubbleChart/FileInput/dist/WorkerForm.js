@@ -1,8 +1,8 @@
 'use strict'
 exports.__esModule = true
 var react_1 = require('react')
-var WorkerDataProvider_1 = require('../BubbleChart/WorkerDataProvider')
 var react_bootstrap_1 = require('react-bootstrap')
+var WorkerDataProvider_1 = require('../BubbleChart/WorkerDataProvider')
 var dataFormattingReducer_1 = require('../ChartCreater/data/dataFormattingReducer')
 var BubbleChart_1 = require('../BubbleChart')
 var WorkersInput_1 = require('./WorkersInput')

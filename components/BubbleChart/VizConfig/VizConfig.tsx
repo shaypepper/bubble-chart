@@ -1,7 +1,6 @@
-import { css } from 'pretty-lights'
 import * as React from 'react'
 import { useContext } from 'react'
-import SignModal from '../../shared/components/SignModal'
+import { css } from 'pretty-lights'
 import { pxToRem } from '../../shared/tokens/spacing'
 import BubbleSVG from '../Bubble'
 import { WorkerDataContext } from '../data/WorkerDataProvider'

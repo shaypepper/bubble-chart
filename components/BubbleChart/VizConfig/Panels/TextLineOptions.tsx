@@ -1,11 +1,10 @@
-import { FC, useContext, useState } from 'react'
+import { FC, useContext } from 'react'
 import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 
 const TextLineOptions: FC<{ index: number }> = ({ index }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
-  const [toggleActive, setToggleActive] = useState(true)
 
   return (
     <div>

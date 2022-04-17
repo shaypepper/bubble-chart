@@ -1,9 +1,9 @@
-import { css, cx, styled, useTheme } from 'pretty-lights'
 import * as React from 'react'
+import { css, cx, styled } from 'pretty-lights'
 import { Button } from 'react-bootstrap'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
-import { blue, deepGrey, white } from '../../tokens/colors'
+import { deepGrey, white } from '../../tokens/colors'
 import { bangersFont, latoFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
@@ -124,7 +124,6 @@ const SignModal: React.FC<{
   actionText = '',
   actionOnClick = () => {},
 }) => {
-  const [collapsed, setCollapsed] = React.useState<boolean>(false)
   const fullWidth = true
 
   return (
@@ -165,7 +164,7 @@ const SignModal: React.FC<{
           </div>
         )}
       </div>
-      <SignHolder collapsed={collapsed}>
+      <SignHolder>
         <HandHoldingSign stickLength={50} className={handHoldClass} />
         <div className={armClass}>
           <MinimalArrow height={12} direction={'right'} onClick={onDismiss} />

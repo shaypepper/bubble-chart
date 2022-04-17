@@ -1,9 +1,6 @@
 import * as React from 'react'
-import Header, {
-  DataForPowerPages,
-} from '../../components/shared/components/Header'
-import FauxBubble, { BubbleKonva } from '../../components/BubbleChart/Bubble'
-import { bangersFont, latoFont } from '../../components/shared/tokens/fonts'
+import { DataForPowerPages } from '../../components/shared/components/Header'
+import { latoFont } from '../../components/shared/tokens/fonts'
 import Layout from '../../components/shared/components/Layout'
 
 const Lessons = () => {

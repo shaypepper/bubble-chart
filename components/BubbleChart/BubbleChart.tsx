@@ -50,8 +50,8 @@ const BubbleChart: FC = () => {
   const { stratifiedData } = useContext(WorkerDataContext)
 
   const currentStageKey = useMemo(() => {
-    console.log('**new stage key!!', new Date())
     return Math.round(Math.random() * 10000000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stratifiedData])
 
   useEffect(() => {
@@ -89,7 +89,6 @@ const BubbleChart: FC = () => {
         ref={stageRef}
         className={stageClass}
         key={currentStageKey}
-        draggable
       >
         <Layer ref={layerRef} draggable={true}>
           {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
@@ -107,7 +106,6 @@ const BubbleChart: FC = () => {
               })
               setScale(newScale)
             }
-            const r = d.r * height * (isWorker(d.data) ? 0.8 : 1.05)
             const circleR = d.r * height
 
             return !isWorker(d.data) ? (
@@ -149,7 +147,14 @@ const BubbleChart: FC = () => {
           const dataUrl = stageRef.current.toDataURL({
             pixelRatio: 10, // or other value you need
           })
-          downloadURI(dataUrl, 'stage.png')
+          const today = new Date()
+          downloadURI(
+            dataUrl,
+            `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(
+              2,
+              '0'
+            )}-${`${today.getDate() + 1}`.padStart(2, '0')} BubbleChart.png`
+          )
         }}
       />
     </div>

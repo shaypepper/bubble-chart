@@ -1,10 +1,8 @@
-import { css, styled } from 'pretty-lights'
 import * as React from 'react'
-import { Button } from 'react-bootstrap'
+import { css, styled } from 'pretty-lights'
 import HandHoldingSign from '../../icons/HandHoldingSign'
-import MinimalArrow from '../../icons/MinimalArrow'
-import { blue, deepGrey, green, white } from '../../tokens/colors'
-import { bangersFont, latoFont } from '../../tokens/fonts'
+import { deepGrey, white } from '../../tokens/colors'
+import { bangersFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
 const SignHolder = styled.div`
@@ -32,7 +30,6 @@ const signButtonClass = css`
   box-shadow: white 1px 1px 10px;
   pointer-events: auto;
 `
-// ${() => (Math.random() * 2 - 1) * (Math.random() * 35 + 3)}deg
 const SignMenuItemStyled = styled.div`
   position: relative;
   transform-origin: 80%;
@@ -51,13 +48,7 @@ export const SignMenuItem: React.FC<{
   onClick?: React.ReactEventHandler
   index?: number
   center?: boolean
-}> = ({
-  children,
-  stickLength = 40,
-  onClick = () => {},
-  index = 0,
-  center = false,
-}) => {
+}> = ({ children, stickLength = 40, onClick = () => {}, index = 0 }) => {
   return (
     <SignMenuItemStyled rotation={rotations[index]}>
       <button className={signButtonClass} onClick={onClick}>

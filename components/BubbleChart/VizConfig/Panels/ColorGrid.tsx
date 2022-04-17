@@ -1,16 +1,8 @@
-import { dispatch } from 'd3'
+import { FC } from 'react'
 import { css } from 'pretty-lights'
-import { FC, ReactEventHandler } from 'react'
-import {
-  blue,
-  green,
-  white,
-  colors,
-  deepGrey,
-} from '../../../shared/tokens/colors'
+import { colors, deepGrey } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { MiniBubbleSVG } from '../../Bubble'
-import { FormatAction } from '../../data/dataFormattingReducer'
 
 const gridContainerClass = css`
   display: flex;

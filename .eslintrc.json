@@ -2,7 +2,7 @@
   "extends": ["next/core-web-vitals", "prettier"],
   "plugins": ["unused-imports"],
   "rules": {
-    "import/no-unused-modules": [1, { "unusedExports": true }],
+    "import/no-unused-modules": [0, { "unusedExports": true }],
 
     "import/order": [
       "error",
@@ -18,7 +18,7 @@
       }
     ],
     "@typescript-eslint/no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
-    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-imports": "warn",
     "unused-imports/no-unused-vars": [
       "warn",
       {

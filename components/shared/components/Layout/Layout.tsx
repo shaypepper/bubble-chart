@@ -1,5 +1,5 @@
-import { css } from 'pretty-lights'
 import * as React from 'react'
+import { css } from 'pretty-lights'
 import { latoFont } from '../../tokens/fonts'
 import Header, { DataForPowerPages } from './../Header'
 

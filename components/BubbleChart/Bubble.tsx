@@ -244,10 +244,8 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
             return (
               <Pencil
                 key={panelName}
-                label={panelName}
                 size={7}
                 transform={`translate(${x} ${y})`}
-                fill={innerTextColor}
                 onClick={generateOnClick(panel)}
               />
             )

@@ -9,8 +9,6 @@ import dataFormattingReducer, {
 import { ChartOptions } from './types'
 
 type WorkerDataType = {
-  convertWorkerCsv?: (files: FileList) => void
-  convertGroupingCsv?: (files: FileList) => void
   convertCsv: (
     action: FormatAction.LOAD_WORKERS_CSV | FormatAction.LOAD_GROUPINGS_CSV,
     files: FileList
@@ -19,8 +17,6 @@ type WorkerDataType = {
   dispatch: Dispatch<Action>
 } & State
 export const WorkerDataContext = createContext<WorkerDataType>({
-  convertWorkerCsv: (files) => files && undefined,
-  convertGroupingCsv: (files) => files && undefined,
   convertCsv: (action, files) => [action, files] && undefined,
   dispatch: () => undefined,
   currentStep: Steps.LOAD_WORKERS,

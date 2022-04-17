@@ -1,8 +1,8 @@
 'use strict'
 exports.__esModule = true
 var react_1 = require('react')
-var WorkerDataProvider_1 = require('../BubbleChart/WorkerDataProvider')
 var react_bootstrap_1 = require('react-bootstrap')
+var WorkerDataProvider_1 = require('../BubbleChart/WorkerDataProvider')
 var GroupingsInput = function () {
   var _a = react_1.useContext(WorkerDataProvider_1.WorkerDataContext),
     convertGroupingCsv = _a.convertGroupingCsv,

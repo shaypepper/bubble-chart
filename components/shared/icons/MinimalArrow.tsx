@@ -1,5 +1,5 @@
-import { css, cx } from 'pretty-lights'
 import { FC, ReactEventHandler } from 'react'
+import { css, cx } from 'pretty-lights'
 
 const pointLeftClass = css``
 const pointRightClass = css`
@@ -10,8 +10,7 @@ const MinimalArrow: FC<{
   direction?: 'left' | 'right'
   onClick: ReactEventHandler
   height?: number
-  className?: string
-}> = ({ direction = 'left', onClick, height = 100, className = '' }) => {
+}> = ({ direction = 'left', onClick, height = 100 }) => {
   return (
     <button
       onClick={onClick}

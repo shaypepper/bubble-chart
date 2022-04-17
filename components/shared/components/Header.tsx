@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { css } from 'pretty-lights'
+import Link from 'next/link'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'
 import Scabby from '../icons/Scabby'
-import { molleFont, latoFont, bangersFont } from '../tokens/fonts'
-import Link from 'next/link'
+import { latoFont, bangersFont } from '../tokens/fonts'
 
 export enum DataForPowerPages {
   BUBBLE_CHART = 'bubble-chart',
