@@ -1,5 +1,5 @@
 import { DSVRowArray } from 'd3'
-import { ListFromCSV, Workers } from '../types'
+import { Workers } from '../types'
 import { State } from '../dataFormattingReducer'
 import { exampleColumnMap, exampleData } from '../../exampleData'
 import { createColumnMap } from '.'

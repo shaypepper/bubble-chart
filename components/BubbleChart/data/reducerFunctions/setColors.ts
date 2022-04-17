@@ -1,4 +1,3 @@
-import { deepGrey, white } from '../../../shared/tokens/colors'
 import { ColorMap, Column } from '../types'
 import { State } from '../dataFormattingReducer'
 

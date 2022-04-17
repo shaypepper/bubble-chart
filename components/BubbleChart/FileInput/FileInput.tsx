@@ -1,19 +1,13 @@
 import * as React from 'react'
 import { useContext } from 'react'
+import { Form } from 'react-bootstrap'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
-import { Button, Form, ToggleButton } from 'react-bootstrap'
-import { FormatAction, Steps } from '../data/dataFormattingReducer'
-import BubbleChart from '..'
-import LoadCSV from './LoadCSV'
+import { Steps } from '../data/dataFormattingReducer'
 import { pxToRem } from '../../shared/tokens/spacing'
+import LoadCSV from './LoadCSV'
 
 const FileInput: React.FC = () => {
-  const { dispatch, stratifiedData, currentStep } =
-    useContext(WorkerDataContext)
-
-  const goToStep = (step: Steps) => () => {
-    dispatch({ type: FormatAction.GO_TO_STEP, step })
-  }
+  const { currentStep } = useContext(WorkerDataContext)
 
   return (
     <>

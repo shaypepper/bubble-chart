@@ -7,21 +7,17 @@ import {
   RefObject,
   useMemo,
 } from 'react'
-import { width, height } from './tokens'
 import { pack } from 'd3'
-import { WorkerDataContext } from './data/WorkerDataProvider'
-import { Layer, Stage, Rect, TextPath } from 'react-konva'
+import { Layer, Stage } from 'react-konva'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
+import { css } from 'pretty-lights'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
-import { css, styled } from 'pretty-lights'
 import { Node, isWorker } from './data/types'
-import { deepGrey } from '../shared/tokens/colors'
-import { Button } from 'react-bootstrap'
 import Legend from './Legend'
-import SignMenu from '../shared/components/SignMenu'
-import { SignMenuItem } from '../shared/components/SignMenu/SignMenu'
+import { WorkerDataContext } from './data/WorkerDataProvider'
+import { width, height } from './tokens'
 import Signs from './Signs'
 
 const stageClass = css`

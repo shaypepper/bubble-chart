@@ -1,6 +1,3 @@
-import { KonvaEventObject } from 'konva/types/Node'
-import { TextPath as TextPathType } from 'konva/types/shapes/TextPath'
-import { css } from 'pretty-lights'
 import {
   FC,
   ReactEventHandler,
@@ -9,21 +6,22 @@ import {
   useRef,
   useState,
 } from 'react'
+import { TextPath as TextPathType } from 'konva/types/shapes/TextPath'
+import { css } from 'pretty-lights'
 import { Group, Circle, TextPath, Text, Path, Rect } from 'react-konva'
-import { height } from './tokens'
 import {
   blue,
   deepGrey,
-  purple,
   red,
   softGrey,
   white,
   yellow,
 } from '../shared/tokens/colors'
-import { bangersFont, bungeeFont, latoFont } from '../shared/tokens/fonts'
-import { getStarPath } from './helpers'
+import { bangersFont, latoFont } from '../shared/tokens/fonts'
 import Pencil from '../shared/icons/Pencil'
+import { getStarPath } from './helpers'
 import { ConfigPanel } from './VizConfig/VizConfig'
+import { height } from './tokens'
 
 const placeHolderGrey = '#c0c0c0'
 
@@ -90,7 +88,6 @@ export const MiniBubbleSVG: FC<{
 const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   editMode = false,
   displayName = 'Angelique',
-  fullName = 'Shay Culpepper',
   width = 200,
   bubbleFillColor = 'gainsboro',
   innerTextColor = deepGrey,
@@ -105,7 +102,6 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   configPanels = [],
 }) => {
   const R = 50
-  const r = R * 0.875
   return (
     <svg
       width={width}
@@ -262,6 +258,7 @@ const BubbleSVG: FC<BubbleProps & { configPanels?: ConfigPanel[] }> = ({
   )
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export const GroupingBubbleSVG: FC<BubbleProps> = ({
   fullName = 'Shay Culpepper',
   radius = 50,
@@ -311,16 +308,13 @@ export const GroupingBubbleSVG: FC<BubbleProps> = ({
 
 export const BubbleKonva: FC<
   BubbleProps & {
-    onClick: (evt: KonvaEventObject<MouseEvent>) => void
+    onClick: () => void
     stars: { fillColor: string; show: boolean }[]
   }
 > = ({
   displayName = 'Angelique',
-  fullName = 'Shay Culpepper',
   radius = 50,
   translation = { x: 0, y: 0 },
-  bubbleBorderColor = purple,
-  showBubbleBorder = true,
   bubbleFillColor = white,
   innerTextColor = deepGrey,
   stars,
@@ -409,12 +403,14 @@ export const GroupingBubble = ({
   const textRef = useRef<TextPathType>(null)
 
   const offset = useMemo(() => {
-    return (
-      180 *
-      (1 -
-        ((textRef?.current?.getTextWidth() || 0) + displayName.length * 0.1) /
-          (Math.PI * 2 * textR))
-    )
+    if (delayedRefresh) {
+      return (
+        180 *
+        (1 -
+          ((textRef?.current?.getTextWidth() || 0) + displayName.length * 0.1) /
+            (Math.PI * 2 * textR))
+      )
+    }
   }, [delayedRefresh, textR, displayName.length])
 
   useEffect(() => {

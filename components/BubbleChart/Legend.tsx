@@ -1,5 +1,5 @@
-import { css } from 'pretty-lights'
 import { FC, useContext } from 'react'
+import { css } from 'pretty-lights'
 import { pxToRem } from '../shared/tokens/spacing'
 import { MiniBubbleSVG } from './Bubble'
 import { WorkerDataContext } from './data/WorkerDataProvider'

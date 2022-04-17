@@ -4,4 +4,6 @@ export { createColumnMap } from './createColumnMap'
 export { setStarOption } from './setStarOptions'
 export { stratifyData } from './stratifyData'
 export { loadGroupings } from './loadGroupings'
-export { loadWorkers } from './loadWorkers'
+export { loadWorkers, loadExampleWorkersAndChartOptions } from './loadWorkers'
+
+export { setColorColumn, setColorMap } from './setColors'

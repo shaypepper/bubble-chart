@@ -1,12 +1,11 @@
 import { DSVRowArray } from 'd3'
-import { colors, deepGrey, white } from '../../shared/tokens/colors'
+import { colors } from '../../shared/tokens/colors'
 
 type Person = {
   [key: Column]: Value
 }
 export type Column = string
 export type Value = number | string | Date | null | boolean
-// export type Value = number | string | Date | boolean
 
 export type ColorMap = {
   [columnValue: string]: {
@@ -14,7 +13,7 @@ export type ColorMap = {
     fillColor: string
   }
 }
-export type ColorMapByColumn = {
+type ColorMapByColumn = {
   [columnName: Column]: ColorMap
 }
 
@@ -22,8 +21,6 @@ type ColorOptions = {
   currentColumn: Column
   colorMap: ColorMapByColumn
 }
-
-const s = (v: any) => `${v}`
 
 export type ColumnMap = {
   uniqueIdentifier?: string

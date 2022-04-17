@@ -9,16 +9,6 @@ export function setStarOption(
 ) {
   const newChartOptions = state.chartOptions.duplicate()
 
-  // if (!newChartOptions.stars[starIndex]) {
-  //   newChartOptions.stars[starIndex] = {
-  //     [StarOptionsKeys.COLOR]: '',
-  //     [StarOptionsKeys.COLUMN]: '',
-  //     [StarOptionsKeys.VALUE]: '',
-  //     [StarOptionsKeys.LABEL]: '',
-  //     [StarOptionsKeys.USE]: false,
-  //   }
-  // }
-
   switch (optionType) {
     case StarOptionsKeys.USE:
       if (typeof value === 'boolean') {

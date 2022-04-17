@@ -1,9 +1,8 @@
-import { DSVRowArray, HierarchyNode, StratifyOperator } from 'd3'
 import { Reducer } from 'react'
+import { DSVRowArray, HierarchyNode } from 'd3'
 import {
   ChartOptions,
   ColorMap,
-  ColorMapByColumn,
   Column,
   ColumnMap,
   Groupings,
@@ -20,9 +19,10 @@ import {
   stratifyData,
   loadGroupings,
   loadWorkers,
+  setColorColumn,
+  setColorMap,
+  loadExampleWorkersAndChartOptions,
 } from './reducerFunctions'
-import { setColorColumn, setColorMap } from './reducerFunctions/setColors'
-import { loadExampleWorkersAndChartOptions } from './reducerFunctions/loadWorkers'
 
 export interface State {
   /**  Current step in the process */

@@ -1,20 +1,13 @@
 import { FC, useContext } from 'react'
-import { DataForPowerPages } from '../../components/shared/components/Header'
-import { NextPage } from 'next'
-import Layout from '../../components/shared/components/Layout'
-import SignModal from '../../components/shared/components/SignModal'
-import WorkerDataProvider, {
-  WorkerDataContext,
-} from '../../components/BubbleChart/data/WorkerDataProvider'
-import FileInput from '../../components/BubbleChart/FileInput'
-import BubbleChart from '../../components/BubbleChart'
 import { useState } from 'react'
+import { Image } from 'react-bootstrap'
+import SignModal from '../../components/shared/components/SignModal'
+import { WorkerDataContext } from '../../components/BubbleChart/data/WorkerDataProvider'
+import FileInput from '../../components/BubbleChart/FileInput'
 import VizConfig from '../../components/BubbleChart/VizConfig'
 import SignMenu from '../../components/shared/components/SignMenu'
 import { SignMenuItem } from '../../components/shared/components/SignMenu/SignMenu'
 import { FormatAction } from './data/dataFormattingReducer'
-import Legend from './Legend'
-import { Button, Image } from 'react-bootstrap'
 
 enum SignSteps {
   WELCOME = 'welcome',
@@ -28,8 +21,6 @@ const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
   onSaveImage,
 }) => {
   const [currentStep, setCurrentStep] = useState<SignSteps>(SignSteps.WELCOME)
-  const [showModal, setShowModal] = useState(true)
-  const [showColorConfig, setShowColorConfig] = useState(false)
   const { dispatch } = useContext(WorkerDataContext)
   return (
     <>

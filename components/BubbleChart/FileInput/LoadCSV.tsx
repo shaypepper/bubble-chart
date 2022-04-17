@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useContext, useRef } from 'react'
-import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Button, Form } from 'react-bootstrap'
+import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { FormatAction } from '../data/dataFormattingReducer'
 import DropdownWithFilter from '../../shared/components/DropdownWithFilter'
 import { pxToRem } from '../../shared/tokens/spacing'

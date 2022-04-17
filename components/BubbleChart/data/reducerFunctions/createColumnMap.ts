@@ -1,6 +1,13 @@
 import { ColumnMap, ListFromCSV } from '../types'
 import { State } from '../dataFormattingReducer'
 
+/**
+ *
+ * @param state State
+ * @param columnMap ColumnMap
+ * @param listFromCSV listFromCSV
+ * @returns State
+ */
 export function createColumnMap(
   state: State,
   columnMap: ColumnMap,
