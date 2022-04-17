@@ -9,19 +9,17 @@ import { pxToRem } from '../../shared/tokens/spacing'
 const columnMapLabels: { [s: string]: string } = {
   uniqueIdentifier: 'Unique identifier',
   displayName: 'Display name',
-  grouping: 'Grouping',
+  primaryGrouping: '1st Grouping',
+  secondaryGrouping: '2nd Grouping (optional)',
 }
 
 const LoadCSV: React.FC<{
   csvType: 'worker' | 'grouping'
 }> = ({ children = 'Load your outreach data', csvType }) => {
-  const { convertCsv, dispatch, workersData, groupingsData } =
-    useContext(WorkerDataContext)
-  const action =
-    csvType == 'worker'
-      ? FormatAction.LOAD_WORKERS_CSV
-      : FormatAction.LOAD_GROUPINGS_CSV
-  const convertedCsv = csvType == 'worker' ? workersData : groupingsData
+  const { convertCsv, dispatch, workersData } = useContext(WorkerDataContext)
+  const action = FormatAction.LOAD_WORKERS_CSV
+
+  const convertedCsv = workersData
   React.useEffect(() => {
     console.log('CSV has changed', convertCsv)
   }, [convertedCsv, workersData])
@@ -70,7 +68,8 @@ const LoadCSV: React.FC<{
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'max-content max-content max-content',
+              gridTemplateColumns:
+                'max-content max-content max-content max-content',
               gridGap: pxToRem(20),
             }}
           >

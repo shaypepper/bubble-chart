@@ -107,6 +107,7 @@ const BubbleChart: FC = () => {
               setScale(newScale)
             }
             const circleR = d.r * height
+            !isWorker(d.data) && console.log(d)
 
             return !isWorker(d.data) ? (
               <GroupingBubble
@@ -114,7 +115,7 @@ const BubbleChart: FC = () => {
                 radius={d.r}
                 translation={translation}
                 onClick={refocus}
-                displayName={d.data?.displayName}
+                displayName={`${d.data?.displayName} - ${d.value}`}
               />
             ) : (
               <BubbleKonva

@@ -25,7 +25,8 @@ type ColorOptions = {
 export type ColumnMap = {
   uniqueIdentifier?: string
   displayName?: string
-  grouping?: string
+  primaryGrouping?: string
+  secondaryGrouping?: string
 }
 
 export enum StarOptionsKeys {
@@ -104,8 +105,20 @@ export class Node {
     return `${this.rawData[this.parent.columnMap.displayName || '']}`
   }
 
+  get primaryGrouping() {
+    return `${this.rawData[this.parent.columnMap.primaryGrouping || '']}`
+  }
+
+  get secondaryGrouping() {
+    return `${this.rawData[this.parent.columnMap.secondaryGrouping || '']}`
+  }
+
   get grouping() {
-    return `${this.rawData[this.parent.columnMap.grouping || '']}`
+    if (this.secondaryGrouping) {
+      return `g: ${this.primaryGrouping} - ${this.secondaryGrouping}`
+    } else {
+      return `g: ${this.primaryGrouping}`
+    }
   }
 }
 
@@ -132,7 +145,8 @@ export class ListFromCSV {
     this.columnMap = columnMap || {
       uniqueIdentifier: '',
       displayName: '',
-      grouping: '',
+      primaryGrouping: '',
+      secondaryGrouping: '',
     }
 
     this.csvFile = csvFile
@@ -147,6 +161,14 @@ export class ListFromCSV {
 
   get ids(): Set<Value | undefined> {
     return new Set(this.list.map((w) => w.id))
+  }
+
+  get primaryGroupings(): Set<Value | undefined> {
+    return new Set(this.list.map((n) => n.primaryGrouping))
+  }
+
+  get secondaryGroupings(): Set<Value | undefined> {
+    return new Set(this.list.map((n) => n.secondaryGrouping))
   }
 
   get groupings(): Set<Value | undefined> {
@@ -210,10 +232,10 @@ export class Workers extends ListFromCSV {
   }
 }
 
-export class Grouping extends Node {
+class Grouping extends Node {
   constructor(rawData: any, parent: ListFromCSV) {
     super(rawData, parent)
-    this.nodeType = 'grouping'
+    this.nodeType = 'primaryGrouping'
   }
 }
 

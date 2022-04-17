@@ -9,10 +9,7 @@ import dataFormattingReducer, {
 import { ChartOptions } from './types'
 
 type WorkerDataType = {
-  convertCsv: (
-    action: FormatAction.LOAD_WORKERS_CSV | FormatAction.LOAD_GROUPINGS_CSV,
-    files: FileList
-  ) => void
+  convertCsv: (action: FormatAction.LOAD_WORKERS_CSV, files: FileList) => void
   workerHeirarchy?: HierarchyNode<unknown>
   dispatch: Dispatch<Action>
 } & State
@@ -46,10 +43,7 @@ const WorkerDataProvider: React.FC = ({ children }) => {
 export default WorkerDataProvider
 
 function generateConvertCsvFunction(dispatch: Dispatch<Action>) {
-  return (
-    action: FormatAction.LOAD_WORKERS_CSV | FormatAction.LOAD_GROUPINGS_CSV,
-    files: FileList
-  ) => {
+  return (action: FormatAction.LOAD_WORKERS_CSV, files: FileList) => {
     let reader = new FileReader()
     let file = files[0]
 

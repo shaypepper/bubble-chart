@@ -5,7 +5,6 @@ import {
   ColorMap,
   Column,
   ColumnMap,
-  Groupings,
   ListFromCSV,
   Node,
   StarOptionsKeys,
@@ -17,7 +16,6 @@ import {
   setStarOption,
   setTextLine,
   stratifyData,
-  loadGroupings,
   loadWorkers,
   setColorColumn,
   setColorMap,
@@ -29,11 +27,16 @@ export interface State {
   currentStep: Steps
   /** Workers data object generated from CSV  */
   workersData?: Workers
-  /** Groupings data object generated from CSV  */
-  groupingsData?: Groupings
 
   /** Stratified Data */
-  stratifiedData?: HierarchyNode<Node>
+  stratifiedData?: HierarchyNode<
+    | Node
+    | {
+        id: unknown
+        grouping: string
+        displayName: string
+      }
+  >
 
   chartOptions: ChartOptions
 }
@@ -41,9 +44,8 @@ export interface State {
 export enum Steps {
   LOAD_WORKERS = 1,
   CHOOSE_COLUMNS = 2,
-  LOAD_GROUPINGS = 3,
-  CHOOSE_COLOR_SCHEME = 4,
-  DRAW = 5,
+  CHOOSE_COLOR_SCHEME = 3,
+  DRAW = 4,
 }
 
 export enum FormatAction {
@@ -51,7 +53,6 @@ export enum FormatAction {
   SET_COLUMN_MAP = 'setColumnMap',
   SELECT_NAME_FIELD = 'selectNameField',
   SELECT_grouping_FIELD = 'selectgroupingField',
-  LOAD_GROUPINGS_CSV = 'loadGroupings',
   STRATIFY_DATA = 'stratifyData',
   SET_COLORS = 'setColors',
   GO_TO_STEP = 'goToStep',
@@ -67,10 +68,6 @@ export enum FormatAction {
 export type Action =
   | {
       type: FormatAction.LOAD_WORKERS_CSV
-      parsedData: DSVRowArray<string>
-    }
-  | {
-      type: FormatAction.LOAD_GROUPINGS_CSV
       parsedData: DSVRowArray<string>
     }
   | {
@@ -135,19 +132,15 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_COLUMN_MAP:
       newState = createColumnMap(state, action.columnMap, action.listFromCsv)
-      let { uniqueIdentifier, displayName, grouping } =
+      let { uniqueIdentifier, displayName, primaryGrouping } =
         action.listFromCsv.columnMap
-      if (!uniqueIdentifier || !displayName || !grouping) {
+      if (!uniqueIdentifier || !displayName || !primaryGrouping) {
         return newState
       }
       break
 
     case FormatAction.LOAD_EXAMPLE_DATA:
       newState = loadExampleWorkersAndChartOptions(state)
-      break
-
-    case FormatAction.LOAD_GROUPINGS_CSV:
-      newState = loadGroupings(state, action.parsedData)
       break
 
     case FormatAction.STRATIFY_DATA:

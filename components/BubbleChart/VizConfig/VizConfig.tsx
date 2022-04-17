@@ -47,8 +47,7 @@ export const configPanels: ConfigPanel[] = [
 ]
 
 const VizConfig: React.FC = () => {
-  const { workersData, chartOptions, groupingsData } =
-    useContext(WorkerDataContext)
+  const { workersData, chartOptions } = useContext(WorkerDataContext)
   const [currentConfigPanel, setCurrentConfigPanel] =
     React.useState<ConfigPanel>()
 
