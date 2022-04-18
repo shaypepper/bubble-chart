@@ -44,10 +44,6 @@ const FileInput: React.FC = () => {
             </p>
           </LoadCSV>
         )}
-
-        {currentStep === Steps.LOAD_GROUPINGS && (
-          <LoadCSV csvType={'grouping'}>Load groupings data</LoadCSV>
-        )}
       </Form>
     </>
   )
