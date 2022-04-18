@@ -20,9 +20,6 @@ const LoadCSV: React.FC<{
   const action = FormatAction.LOAD_WORKERS_CSV
 
   const convertedCsv = workersData
-  React.useEffect(() => {
-    console.log('CSV has changed', convertCsv)
-  }, [convertedCsv, workersData])
 
   const inputRef = useRef<HTMLInputElement>(null)
 

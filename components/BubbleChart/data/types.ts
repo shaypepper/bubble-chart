@@ -193,8 +193,8 @@ export class Worker {
 
     const currentColorMap =
       colorMap[currentColumn]?.[`${this.rawData[currentColumn]}`]
-    const fillColor = currentColorMap?.fillColor || colors.white.gradient[1]
-    const textColor = currentColorMap?.textColor || colors.white.gradient[2]
+    const fillColor = currentColorMap?.fillColor || colors.white.default
+    const textColor = currentColorMap?.textColor || colors.white.gradient[5]
     return { fillColor, textColor }
   }
 

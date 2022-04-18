@@ -422,7 +422,7 @@ export const GroupingBubble = ({
     <Group className={'leaf'} x={translation.x} y={translation.y}>
       <Circle
         radius={R}
-        fill={'#00000015'}
+        fill={'#0000000B'}
         strokeLinecap="round"
         strokeDashArray={[10, 10]}
         mask="url(#circleMask)"

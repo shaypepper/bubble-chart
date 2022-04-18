@@ -104,7 +104,6 @@ const BubbleChart: FC = () => {
                 setScale(newScale)
               }
               const circleR = d.r * height
-              !isWorker(d.data) && console.log(d)
 
               return !isWorker(d.data) ? (
                 <GroupingBubble
@@ -118,8 +117,8 @@ const BubbleChart: FC = () => {
                 <BubbleKonva
                   key={d.id}
                   radius={d.r}
-                  bubbleFillColor={colors?.fillColor || 'yellow'}
-                  innerTextColor={colors?.textColor || 'yellow'}
+                  bubbleFillColor={colors?.fillColor}
+                  innerTextColor={colors?.textColor}
                   textLines={d.data.textLines}
                   translation={translation}
                   stars={d.data.stars}
