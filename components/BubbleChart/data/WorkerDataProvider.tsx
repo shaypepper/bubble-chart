@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useReducer } from 'react'
-import { csvParse, HierarchyNode } from 'd3'
+import { csvParse, HierarchyCircularNode } from 'd3'
 import dataFormattingReducer, {
   Action,
   FormatAction,
@@ -10,7 +10,7 @@ import { ChartOptions } from './types'
 
 type WorkerDataType = {
   convertCsv: (action: FormatAction.LOAD_WORKERS_CSV, files: FileList) => void
-  workerHeirarchy?: HierarchyNode<unknown>
+  workerHeirarchy?: HierarchyCircularNode<unknown>
   dispatch: Dispatch<Action>
 } & State
 export const WorkerDataContext = createContext<WorkerDataType>({

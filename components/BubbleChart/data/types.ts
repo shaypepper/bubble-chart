@@ -82,47 +82,8 @@ export class ChartOptions {
     return newOptions
   }
 }
-export class Node {
-  rawData: Person
-  parent: ListFromCSV
-  backupId: number
-  nodeType = 'node'
 
-  constructor(rawData: any, parent: ListFromCSV) {
-    this.rawData = rawData
-    this.parent = parent
-    this.backupId = Math.round(Math.random() * 10000000)
-  }
-
-  get id(): string {
-    return `${
-      this.rawData[this.parent.columnMap.uniqueIdentifier || ''] ||
-      this.backupId
-    }`
-  }
-
-  get displayName(): string {
-    return `${this.rawData[this.parent.columnMap.displayName || '']}`
-  }
-
-  get primaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.primaryGrouping || '']}`
-  }
-
-  get secondaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.secondaryGrouping || '']}`
-  }
-
-  get grouping() {
-    if (this.secondaryGrouping) {
-      return `g: ${this.primaryGrouping} - ${this.secondaryGrouping}`
-    } else {
-      return `g: ${this.primaryGrouping}`
-    }
-  }
-}
-
-export function isWorker(node: Node): node is Worker {
+export function isWorker(node: Worker | Grouping): node is Worker {
   return node.nodeType === 'worker'
 }
 
@@ -134,7 +95,7 @@ export class ListFromCSV {
   /** List of available columns from CSV */
   columns?: Column[]
 
-  list: Node[]
+  list: Worker[]
   chartOptions?: ChartOptions
 
   constructor(
@@ -177,18 +138,38 @@ export class ListFromCSV {
 
   listValues(columnName: string | number): Set<Value> {
     const valueSet = new Set<Value>()
-    this.list.forEach((node: Node) => {
+    this.list.forEach((node: Worker) => {
       valueSet.add(`${node.rawData[columnName]}`)
     })
     return valueSet
   }
 }
 
-class Worker extends Node {
-  constructor(rawData: any, parent: Workers) {
-    super(rawData, parent)
-    this.nodeType = 'worker'
+export type Grouping = {
+  displayName: string
+  grouping: string
+  id: string
+  nodeType: 'grouping'
+}
+export class Worker {
+  rawData: Person
+  parent: ListFromCSV
+  backupId: number
+  nodeType = 'worker'
+
+  constructor(rawData: any, parent: ListFromCSV) {
+    this.rawData = rawData
+    this.parent = parent
+    this.backupId = Math.round(Math.random() * 10000000)
   }
+
+  get id(): string {
+    return `${
+      this.rawData[this.parent.columnMap.uniqueIdentifier || ''] ||
+      this.backupId
+    }`
+  }
+
   get stars() {
     const stars = this.parent.chartOptions?.stars || []
     return stars.map(({ value, column, color, use }) => ({
@@ -216,6 +197,26 @@ class Worker extends Node {
     const textColor = currentColorMap?.textColor || colors.white.gradient[2]
     return { fillColor, textColor }
   }
+
+  get displayName(): string {
+    return `${this.rawData[this.parent.columnMap.displayName || '']}`
+  }
+
+  get primaryGrouping() {
+    return `${this.rawData[this.parent.columnMap.primaryGrouping || '']}`
+  }
+
+  get secondaryGrouping() {
+    return `${this.rawData[this.parent.columnMap.secondaryGrouping || '']}`
+  }
+
+  get grouping() {
+    if (this.secondaryGrouping) {
+      return `g: ${this.primaryGrouping} - ${this.secondaryGrouping}`
+    } else {
+      return `g: ${this.primaryGrouping}`
+    }
+  }
 }
 export class Workers extends ListFromCSV {
   list: Worker[]
@@ -228,23 +229,6 @@ export class Workers extends ListFromCSV {
     super(csvFile, columnMap, chartOptions)
     this.list = this.csvFile.map((row) => {
       return new Worker(row, this)
-    })
-  }
-}
-
-class Grouping extends Node {
-  constructor(rawData: any, parent: ListFromCSV) {
-    super(rawData, parent)
-    this.nodeType = 'primaryGrouping'
-  }
-}
-
-export class Groupings extends ListFromCSV {
-  list: Grouping[]
-  constructor(csvFile: DSVRowArray<string>, columnMap: ColumnMap) {
-    super(csvFile, columnMap)
-    this.list = this.csvFile.map((row) => {
-      return new Grouping(row, this)
     })
   }
 }

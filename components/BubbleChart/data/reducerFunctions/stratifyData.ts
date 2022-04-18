@@ -1,6 +1,6 @@
 import { stratify } from 'd3'
-import { Node } from '../types'
 import { State } from '../dataFormattingReducer'
+import { Grouping, Worker } from '../types'
 
 export function stratifyData(state: State): State {
   let { workersData } = state
@@ -25,14 +25,7 @@ export function stratifyData(state: State): State {
     ]
   }, [])
 
-  const strat = stratify<
-    | Node
-    | {
-        id: unknown
-        grouping: string
-        displayName: string
-      }
-  >()
+  const strat = stratify<Worker | Grouping>()
     .id((d) => `${d?.id}`)
     .parentId((d) => d?.grouping)
   if (!state.workersData) {

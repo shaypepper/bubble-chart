@@ -6,10 +6,11 @@ import {
   Column,
   ColumnMap,
   ListFromCSV,
-  Node,
+  Worker,
   StarOptionsKeys,
   Value,
   Workers,
+  Grouping,
 } from './types'
 import {
   createColumnMap,
@@ -29,14 +30,7 @@ export interface State {
   workersData?: Workers
 
   /** Stratified Data */
-  stratifiedData?: HierarchyNode<
-    | Node
-    | {
-        id: unknown
-        grouping: string
-        displayName: string
-      }
-  >
+  stratifiedData?: HierarchyNode<Worker | Grouping>
 
   chartOptions: ChartOptions
 }

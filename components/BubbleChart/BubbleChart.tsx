@@ -14,7 +14,7 @@ import { Layer as LayerType } from 'konva/types/Layer'
 import { css } from 'pretty-lights'
 import { downloadURI } from './utils'
 import { BubbleKonva, GroupingBubble } from './Bubble'
-import { Node, isWorker } from './data/types'
+import { Worker, isWorker, Grouping } from './data/types'
 import Legend from './Legend'
 import { WorkerDataContext } from './data/WorkerDataProvider'
 import { width, height } from './tokens'
@@ -32,10 +32,6 @@ const stageClass = css`
   }
 `
 
-const useScaleAndPosition = () => {
-  return { position: { x: 0, y: 0 }, scale: 1 }
-}
-
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
     x: 0,
@@ -45,7 +41,7 @@ const BubbleChart: FC = () => {
   const stageRef: RefObject<StageType> = useRef(null)
   const [scale, setScale] = useState(1)
   const [bubbleData, setBubbleData] = useState<
-    d3.HierarchyCircularNode<Node>[]
+    d3.HierarchyCircularNode<Worker | Grouping>[]
   >([])
   const { stratifiedData } = useContext(WorkerDataContext)
 
@@ -57,7 +53,7 @@ const BubbleChart: FC = () => {
   useEffect(() => {
     if (stratifiedData) {
       setBubbleData(
-        pack<Node>()
+        pack<Worker | Grouping>()
           .padding((d) => (d.height == 1 ? 0.0 : d.depth == 1 ? 0.008 : 0.002))(
             stratifiedData
           )
@@ -91,46 +87,48 @@ const BubbleChart: FC = () => {
         key={currentStageKey}
       >
         <Layer ref={layerRef} draggable={true}>
-          {bubbleData?.map((d: d3.HierarchyCircularNode<Node>, idx) => {
-            const colors = isWorker(d.data) ? d.data.bubbleColors : null
-            const translation = {
-              x: (idx ? d.x : 0.5) * width,
-              y: (idx ? d.y : 0.5) * height,
-            }
+          {bubbleData?.map(
+            (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
+              const colors = isWorker(d.data) ? d.data.bubbleColors : null
+              const translation = {
+                x: (idx ? d.x : 0.5) * width,
+                y: (idx ? d.y : 0.5) * height,
+              }
 
-            function refocus() {
-              const newScale = width / (circleR * 2)
-              setPosition({
-                x: (circleR - translation.x) * newScale + width / 20,
-                y: (circleR - translation.y) * newScale + width / 20,
-              })
-              setScale(newScale)
-            }
-            const circleR = d.r * height
-            !isWorker(d.data) && console.log(d)
+              function refocus() {
+                const newScale = width / (circleR * 2)
+                setPosition({
+                  x: (circleR - translation.x) * newScale + width / 20,
+                  y: (circleR - translation.y) * newScale + width / 20,
+                })
+                setScale(newScale)
+              }
+              const circleR = d.r * height
+              !isWorker(d.data) && console.log(d)
 
-            return !isWorker(d.data) ? (
-              <GroupingBubble
-                key={d.id}
-                radius={d.r}
-                translation={translation}
-                onClick={refocus}
-                displayName={`${d.data?.displayName} - ${d.value}`}
-              />
-            ) : (
-              <BubbleKonva
-                key={d.id}
-                radius={d.r}
-                bubbleFillColor={colors?.fillColor || 'yellow'}
-                innerTextColor={colors?.textColor || 'yellow'}
-                textLines={d.data.textLines}
-                translation={translation}
-                stars={d.data.stars}
-                onClick={refocus}
-                displayName={d.data?.displayName?.split(' ')[0] || '*******'}
-              />
-            )
-          })}
+              return !isWorker(d.data) ? (
+                <GroupingBubble
+                  key={d.id}
+                  radius={d.r}
+                  translation={translation}
+                  onClick={refocus}
+                  displayName={`${d.data?.displayName} - ${d.value}`}
+                />
+              ) : (
+                <BubbleKonva
+                  key={d.id}
+                  radius={d.r}
+                  bubbleFillColor={colors?.fillColor || 'yellow'}
+                  innerTextColor={colors?.textColor || 'yellow'}
+                  textLines={d.data.textLines}
+                  translation={translation}
+                  stars={d.data.stars}
+                  onClick={refocus}
+                  displayName={d.data?.displayName?.split(' ')[0] || '*******'}
+                />
+              )
+            }
+          )}
         </Layer>
       </Stage>
       <Legend />
