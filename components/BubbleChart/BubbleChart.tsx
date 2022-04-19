@@ -79,57 +79,61 @@ const BubbleChart: FC = () => {
         width: '100vw',
       }}
     >
-      <Stage
-        width={width * 2}
-        height={height * 2}
-        ref={stageRef}
-        className={stageClass}
-        key={currentStageKey}
-      >
-        <Layer ref={layerRef} draggable={true}>
-          {bubbleData?.map(
-            (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
-              const colors = isWorker(d.data) ? d.data.bubbleColors : null
-              const translation = {
-                x: (idx ? d.x : 0.5) * width,
-                y: (idx ? d.y : 0.5) * height,
-              }
+      {stratifiedData && (
+        <Stage
+          width={width * 2}
+          height={height * 2}
+          ref={stageRef}
+          className={stageClass}
+          key={currentStageKey}
+        >
+          <Layer ref={layerRef} draggable={true}>
+            {bubbleData?.map(
+              (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
+                const colors = isWorker(d.data) ? d.data.bubbleColors : null
+                const translation = {
+                  x: (idx ? d.x : 0.5) * width,
+                  y: (idx ? d.y : 0.5) * height,
+                }
 
-              function refocus() {
-                const newScale = width / (circleR * 2)
-                setPosition({
-                  x: (circleR - translation.x) * newScale + width / 20,
-                  y: (circleR - translation.y) * newScale + width / 20,
-                })
-                setScale(newScale)
-              }
-              const circleR = d.r * height
+                function refocus() {
+                  const newScale = width / (circleR * 2)
+                  setPosition({
+                    x: (circleR - translation.x) * newScale + width / 20,
+                    y: (circleR - translation.y) * newScale + width / 20,
+                  })
+                  setScale(newScale)
+                }
+                const circleR = d.r * height
 
-              return !isWorker(d.data) ? (
-                <GroupingBubble
-                  key={d.id}
-                  radius={d.r}
-                  translation={translation}
-                  onClick={refocus}
-                  displayName={`${d.data?.displayName} - ${d.value}`}
-                />
-              ) : (
-                <BubbleKonva
-                  key={d.id}
-                  radius={d.r}
-                  bubbleFillColor={colors?.fillColor}
-                  innerTextColor={colors?.textColor}
-                  textLines={d.data.textLines}
-                  translation={translation}
-                  stars={d.data.stars}
-                  onClick={refocus}
-                  displayName={d.data?.displayName?.split(' ')[0] || '*******'}
-                />
-              )
-            }
-          )}
-        </Layer>
-      </Stage>
+                return !isWorker(d.data) ? (
+                  <GroupingBubble
+                    key={d.id}
+                    radius={d.r}
+                    translation={translation}
+                    onClick={refocus}
+                    displayName={`${d.data?.displayName} - ${d.value}`}
+                  />
+                ) : (
+                  <BubbleKonva
+                    key={d.id}
+                    radius={d.r}
+                    bubbleFillColor={colors?.fillColor}
+                    innerTextColor={colors?.textColor}
+                    textLines={d.data.textLines}
+                    translation={translation}
+                    stars={d.data.stars}
+                    onClick={refocus}
+                    displayName={
+                      d.data?.displayName?.split(' ')[0] || '*******'
+                    }
+                  />
+                )
+              }
+            )}
+          </Layer>
+        </Stage>
+      )}
       <Legend />
       <Signs
         onReset={() => {
