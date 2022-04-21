@@ -68,7 +68,7 @@ const VizConfig: React.FC = () => {
     <div className={containerClass}>
       <div>
         <BubbleSVG
-          displayName={workersData?.list[3].displayName || ''}
+          displayName={workersData?.list[3].displayName.split(' ')[0] || ''}
           editMode
           textLines={textLines}
           width={'40vmin'}
