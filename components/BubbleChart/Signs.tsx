@@ -109,7 +109,7 @@ const Signs: FC<{
         </SignMenuItem>
 
         <SignMenuItem index={4} onClick={onSaveAsSVG}>
-          Save as SVG
+          Print
         </SignMenuItem>
       </SignMenu>
     </>
