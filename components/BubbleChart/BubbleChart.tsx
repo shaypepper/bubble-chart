@@ -7,18 +7,20 @@ import {
   RefObject,
   useMemo,
 } from 'react'
+import { renderToString } from 'react-dom/server'
 import { pack } from 'd3'
-import { Layer, Stage } from 'react-konva'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { css } from 'pretty-lights'
+import { Layer, Stage } from 'react-konva'
 import { downloadURI } from './utils'
-import { BubbleKonva, GroupingBubble } from './Bubble'
-import { Worker, isWorker, Grouping } from './data/types'
+import { Worker, Grouping, isWorker } from './data/types'
 import Legend from './Legend'
 import { WorkerDataContext } from './data/WorkerDataProvider'
-import { width, height } from './tokens'
+import { height, width } from './tokens'
 import Signs from './Signs'
+import BubbleChartSVG from './BubbleChartSVG'
+import { BubbleKonva, GroupingBubble } from './Bubble'
 
 const stageClass = css`
   width: 100vmin;
@@ -95,7 +97,6 @@ const BubbleChart: FC = () => {
                   x: (idx ? d.x : 0.5) * width,
                   y: (idx ? d.y : 0.5) * height,
                 }
-
                 function refocus() {
                   const newScale = width / (circleR * 2)
                   setPosition({
@@ -105,7 +106,6 @@ const BubbleChart: FC = () => {
                   setScale(newScale)
                 }
                 const circleR = d.r * height
-
                 return !isWorker(d.data) ? (
                   <GroupingBubble
                     key={d.id}
@@ -134,6 +134,7 @@ const BubbleChart: FC = () => {
           </Layer>
         </Stage>
       )}
+
       <Legend />
       <Signs
         onReset={() => {
@@ -157,6 +158,21 @@ const BubbleChart: FC = () => {
               '0'
             )}-${`${today.getDate() + 1}`.padStart(2, '0')} BubbleChart.png`
           )
+        }}
+        onSaveAsSVG={() => {
+          const as_text = renderToString(
+            <BubbleChartSVG bubbleData={bubbleData} />
+          )
+          // store in a blob
+          const blob = new Blob([as_text], { type: 'image/svg+xml' })
+          // create an URI pointing to that blob
+          const url = URL.createObjectURL(blob)
+          const win = open(url)
+          // so the Garbage Collector can collect the blob
+          if (win) {
+            win.onload = () => URL.revokeObjectURL(url)
+            win?.print()
+          }
         }}
       />
     </div>

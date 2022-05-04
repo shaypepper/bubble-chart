@@ -3,7 +3,15 @@ import SignModal from '../components/shared/components/SignModal'
 
 const FourOhFour: FC = () => {
   return (
-    <SignModal title={'404: Page not found'}>
+    <SignModal
+      title={'404: Page not found'}
+      onDismiss={() => {
+        if (window) {
+          window.location.href = '/'
+        }
+      }}
+      hide={false}
+    >
       <div>
         I&apos;m not sure where you were trying to go, but did you know that The
         New York Times&apos; technology employees won their election 404 to 88?

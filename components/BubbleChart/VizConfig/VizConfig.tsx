@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useContext } from 'react'
 import { css } from 'pretty-lights'
 import { pxToRem } from '../../shared/tokens/spacing'
-import BubbleSVG from '../Bubble'
+import { BubbleEditSVG } from '../Bubble'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import FillColorOptions from './Panels/FillColorOptions'
 import StarOptions from './Panels/StarOptions'
@@ -21,7 +21,7 @@ export type ConfigPanel = {
   type: string
   translate: { x: number; y: number }
 }
-export const configPanels: ConfigPanel[] = [
+const configPanels: ConfigPanel[] = [
   { name: 'Fill colors', index: 0, type: 'fill', translate: { x: 5, y: -5 } },
   {
     name: 'Text line 1',
@@ -67,13 +67,11 @@ const VizConfig: React.FC = () => {
   return (
     <div className={containerClass}>
       <div>
-        <BubbleSVG
-          displayName={workersData?.list[3].displayName || ''}
-          editMode
+        <BubbleEditSVG
+          displayName={workersData?.list[3].displayName.split(' ')[0] || ''}
           textLines={textLines}
           width={'40vmin'}
-          showStars={[true, true, true]}
-          starColors={chartOptions.stars.map((s) => s.color || '#C0C0C0')}
+          starOptions={chartOptions.stars}
           generateOnClick={(panel: ConfigPanel) => () => {
             setCurrentConfigPanel(panel)
           }}

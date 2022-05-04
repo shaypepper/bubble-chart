@@ -1,6 +1,5 @@
 import { FC, useContext } from 'react'
 import { useState } from 'react'
-import { Image } from 'react-bootstrap'
 import SignModal from '../../components/shared/components/SignModal'
 import { WorkerDataContext } from '../../components/BubbleChart/data/WorkerDataProvider'
 import FileInput from '../../components/BubbleChart/FileInput'
@@ -16,10 +15,11 @@ enum SignSteps {
   NONE = 'none',
 }
 
-const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
-  onReset = () => {},
-  onSaveImage,
-}) => {
+const Signs: FC<{
+  onReset: () => void
+  onSaveImage: () => void
+  onSaveAsSVG: () => void
+}> = ({ onReset = () => {}, onSaveImage, onSaveAsSVG }) => {
   const [currentStep, setCurrentStep] = useState<SignSteps>(SignSteps.WELCOME)
   const { dispatch } = useContext(WorkerDataContext)
   return (
@@ -37,17 +37,9 @@ const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
       >
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 3fr',
-            gridGap: '20px',
             maxWidth: '750px',
           }}
         >
-          <Image
-            src="/bubble-example.png"
-            alt="Example of a bubble chart with various shades of green"
-            width={'100%'}
-          />
           <div>
             <p>
               Hello hello! You&apos;ve arrived at a quirky corner of the
@@ -114,6 +106,10 @@ const Signs: FC<{ onReset: () => void; onSaveImage: () => void }> = ({
         </SignMenuItem>
         <SignMenuItem index={3} onClick={onSaveImage}>
           Save Image
+        </SignMenuItem>
+
+        <SignMenuItem index={4} onClick={onSaveAsSVG}>
+          Print
         </SignMenuItem>
       </SignMenu>
     </>
