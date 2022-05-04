@@ -23,7 +23,6 @@ const Home: NextPage = () => {
           <BubbleChart />
         </WorkerDataProvider>
       </Layout>
-      <footer className={styles.footer} />
     </div>
   )
 }

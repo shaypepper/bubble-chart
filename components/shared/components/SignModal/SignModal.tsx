@@ -84,7 +84,6 @@ const fullWidthContainerClass = css`
   ${containerClass};
   top: 0;
   left: 0;
-  backdrop-filter: blur(2px);
   z-index: 2;
   transition: transform 800ms ease;
   transform: translateX(100vw);
@@ -93,7 +92,6 @@ const fullWidthContainerClass = css`
 const backdropFilterClass = css`
   height: 100%;
   width: 100%;
-  backdrop-filter: blur(2px);
   position: absolute;
   z-index: -1;
 `
