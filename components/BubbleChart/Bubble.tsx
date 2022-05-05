@@ -341,28 +341,34 @@ export const BubbleKonva: FC<BubbleProps> = ({
         <Star size={R * 3} color={stars[2].fillColor} whichStar={3} />
       )}
 
-      {textLines?.map((t, i) => (
-        <>
-          <Rect
-            x={(-R * (1.7 - i * 0.15)) / 2}
-            width={R * (1.7 - i * 0.15)}
-            y={R * 0.25 + i}
-            height={R * 0.11}
-            fill={bubbleFillColor}
-          />
-          <Text
-            key={t}
-            x={-R}
-            y={R * 0.25 + i}
-            align={'center'}
-            width={R * 2}
-            fontFamily={latoFont}
-            fontSize={R * 0.11}
-            text={t}
-            fill={innerTextColor}
-          />
-        </>
-      ))}
+      {textLines?.map((t, i) => {
+        const x = (-R * (1.6 - i * 0.15)) / 2
+        const y = R * 0.15 * (2.5 + i)
+        const fontSize = R * 0.09
+        const rectangleWidth = R * (1.6 - i * 0.15)
+        return (
+          <>
+            <Rect
+              x={x}
+              width={rectangleWidth}
+              y={y}
+              height={fontSize}
+              fill={bubbleFillColor}
+            />
+            <Text
+              key={t}
+              x={-R}
+              y={y}
+              align={'center'}
+              width={R * 2}
+              fontFamily={latoFont}
+              fontSize={fontSize}
+              text={t}
+              fill={innerTextColor}
+            />
+          </>
+        )
+      })}
     </Group>
   )
 }

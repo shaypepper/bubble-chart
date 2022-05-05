@@ -32,9 +32,6 @@ const stageClass = css`
   }
 `
 
-const outerBubbleHeight = 1200
-const outerBubbleWidth = 1200
-
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
     x: 0,
