@@ -23,16 +23,17 @@ import BubbleChartSVG from './BubbleChartSVG'
 import { BubbleKonva, GroupingBubble } from './Bubble'
 
 const stageClass = css`
-  width: 100vmin;
-  height: 100vmin;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  // justify-content: center;
-  // margin: 0 auto;
 
   canvas {
     width: 100%;
   }
 `
+
+const outerBubbleHeight = 1200
+const outerBubbleWidth = 1200
 
 const BubbleChart: FC = () => {
   const [position, setPosition] = useState<{ [z: string]: number }>({
@@ -46,6 +47,19 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Worker | Grouping>[]
   >([])
   const { stratifiedData } = useContext(WorkerDataContext)
+
+  useEffect(() => {
+    setPosition({
+      y:
+        typeof document !== 'undefined'
+          ? document?.body.offsetHeight
+          : outerBubbleHeight,
+      x:
+        typeof document !== 'undefined'
+          ? document?.body.offsetWidth
+          : outerBubbleWidth,
+    })
+  }, [bubbleData])
 
   const currentStageKey = useMemo(() => {
     return Math.round(Math.random() * 10000000)
@@ -83,8 +97,10 @@ const BubbleChart: FC = () => {
     >
       {stratifiedData && (
         <Stage
-          width={width * 2}
-          height={height * 2}
+          width={document.body.offsetWidth}
+          height={document.body.offsetHeight}
+          // width={width * 2}
+          // height={height * 2}
           ref={stageRef}
           className={stageClass}
           key={currentStageKey}
@@ -98,10 +114,21 @@ const BubbleChart: FC = () => {
                   y: (idx ? d.y : 0.5) * height,
                 }
                 function refocus() {
-                  const newScale = width / (circleR * 2)
+                  const windowWidth = document?.body.offsetWidth
+                  const windowHeight = document?.body.offsetHeight
+                  const newScale = Math.min(
+                    windowHeight / (circleR * 2.5),
+                    windowWidth / (circleR * 2.5)
+                  )
                   setPosition({
-                    x: (circleR - translation.x) * newScale + width / 20,
-                    y: (circleR - translation.y) * newScale + width / 20,
+                    x:
+                      (circleR - translation.x) * newScale +
+                      windowWidth / 2 -
+                      circleR * newScale,
+                    y:
+                      (circleR - translation.y) * newScale +
+                      windowHeight / 2 -
+                      circleR * newScale * 1.1,
                   })
                   setScale(newScale)
                 }
@@ -138,9 +165,11 @@ const BubbleChart: FC = () => {
       <Legend />
       <Signs
         onReset={() => {
+          const windowWidth = document?.body.offsetWidth
+          const windowHeight = document?.body.offsetHeight
           const newPosition = {
-            x: width / 20,
-            y: width / 20,
+            x: (windowWidth - width) / 2,
+            y: (windowHeight - height) / 4,
           }
           setPosition(newPosition)
           setScale(1)

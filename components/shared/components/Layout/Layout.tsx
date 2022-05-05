@@ -7,7 +7,6 @@ const mainClass = css`
   display: flex;
   flex-direction: column;
   font-family: ${latoFont};
-  min-height: 100vh;
 `
 
 const Layout: React.FC<{ currentPage: DataForPowerPages }> = ({
