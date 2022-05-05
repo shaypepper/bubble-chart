@@ -49,16 +49,14 @@ const BubbleChart: FC = () => {
   const { stratifiedData } = useContext(WorkerDataContext)
 
   useEffect(() => {
-    setPosition({
-      y:
-        typeof document !== 'undefined'
-          ? document?.body.offsetHeight
-          : outerBubbleHeight,
-      x:
-        typeof document !== 'undefined'
-          ? document?.body.offsetWidth
-          : outerBubbleWidth,
-    })
+    const windowWidth = document?.body.offsetWidth
+    const windowHeight = document?.body.offsetHeight
+    const newPosition = {
+      x: (windowWidth - width) / 2,
+      y: (windowHeight - height) / 4,
+    }
+    setPosition(newPosition)
+    setScale(1)
   }, [bubbleData])
 
   const currentStageKey = useMemo(() => {
@@ -139,7 +137,7 @@ const BubbleChart: FC = () => {
                     radius={d.r}
                     translation={translation}
                     onClick={refocus}
-                    displayName={`${d.data?.displayName} - ${d.value}`}
+                    displayName={`${d.data?.displayName}`}
                   />
                 ) : (
                   <BubbleKonva
