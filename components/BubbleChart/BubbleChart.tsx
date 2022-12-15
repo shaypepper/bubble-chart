@@ -26,6 +26,7 @@ const stageClass = css`
   width: 100vw;
   height: 100vh;
   display: flex;
+  background-color: black;
 
   canvas {
     width: 100%;
@@ -39,6 +40,7 @@ const BubbleChart: FC = () => {
   })
   const layerRef: RefObject<LayerType> = useRef(null)
   const stageRef: RefObject<StageType> = useRef(null)
+  const focusedBubbleId = useRef('')
   const [scale, setScale] = useState(1)
   const [bubbleData, setBubbleData] = useState<
     d3.HierarchyCircularNode<Worker | Grouping>[]
@@ -94,8 +96,6 @@ const BubbleChart: FC = () => {
         <Stage
           width={document.body.offsetWidth}
           height={document.body.offsetHeight}
-          // width={width * 2}
-          // height={height * 2}
           ref={stageRef}
           className={stageClass}
           key={currentStageKey}
@@ -109,6 +109,7 @@ const BubbleChart: FC = () => {
                   y: (idx ? d.y : 0.5) * height,
                 }
                 function refocus() {
+                  focusedBubbleId.current = d.data.id
                   const windowWidth = document?.body.offsetWidth
                   const windowHeight = document?.body.offsetHeight
                   const newScale = Math.min(
@@ -134,6 +135,7 @@ const BubbleChart: FC = () => {
                     radius={d.r}
                     translation={translation}
                     onClick={refocus}
+                    focused={focusedBubbleId.current === d.id}
                     displayName={`${d.data?.displayName}`}
                   />
                 ) : (
@@ -146,6 +148,7 @@ const BubbleChart: FC = () => {
                     translation={translation}
                     stars={d.data.stars}
                     onClick={refocus}
+                    focused={focusedBubbleId.current === d.id}
                     displayName={
                       d.data?.displayName?.split(' ')[0] || '*******'
                     }

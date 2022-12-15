@@ -37,19 +37,25 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
-class StarOptions {
+export class StarOptions {
   [StarOptionsKeys.COLOR]: string;
   [StarOptionsKeys.COLUMN]: Column;
   [StarOptionsKeys.VALUE]: Value;
   [StarOptionsKeys.LABEL]: string;
   [StarOptionsKeys.USE]: boolean
 
-  constructor() {
-    this.column = ''
-    this.color = ''
-    this.value = ''
-    this.label = ''
-    this.use = false
+  constructor(
+    column: string = '',
+    color: Column = '',
+    value: Value = '',
+    label: string = '',
+    use: boolean = false
+  ) {
+    this.column = column
+    this.color = color
+    this.value = value
+    this.label = label
+    this.use = use
   }
 }
 

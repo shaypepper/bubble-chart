@@ -8,8 +8,8 @@ import { bangersFont, latoFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
 const signClass = css`
-  max-width: 824px;
-  min-width: 400px;
+  max-width: min(824px, calc(100vw - 20px));
+  min-width: min(400px, calc(100vw - 20px));
   margin: ${pxToRem(20)} ${pxToRem(20)} 0;
   display: flex;
   flex-direction: column;
