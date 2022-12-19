@@ -45,14 +45,14 @@ export const exampleData: DSVRowArray = Object.assign(
     },
     {
       Category: BubbleCategory.PLATFORM,
-      SubCategory: 'Organizing',
+      SubCategory: BubbleSubCategory.ORGANIZING,
       Issue: 'Respect',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
     },
     {
       Category: BubbleCategory.PLATFORM,
-      SubCategory: 'Organizing',
+      SubCategory: BubbleSubCategory.ORGANIZING,
       Issue: 'Power',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',

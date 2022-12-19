@@ -29,6 +29,7 @@ const signButtonClass = css`
   position: relative;
   box-shadow: black 1px 1px 10px;
   pointer-events: auto;
+  max-width: 200px;
 `
 const SignMenuItemStyled = styled.div`
   position: relative;
