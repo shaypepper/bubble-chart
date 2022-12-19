@@ -149,9 +149,7 @@ const BubbleChart: FC = () => {
                     stars={d.data.stars}
                     onClick={refocus}
                     focused={focusedBubbleId.current === d.id}
-                    displayName={
-                      d.data?.displayName?.split(' ')[0] || '*******'
-                    }
+                    displayName={d.data?.displayName || '*******'}
                   />
                 )
               }
