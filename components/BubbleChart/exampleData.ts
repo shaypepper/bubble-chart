@@ -35,6 +35,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Respect',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -42,6 +43,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Winning',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -49,6 +51,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Respect',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -56,6 +59,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Power',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -63,6 +67,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Humility',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -70,6 +75,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Fearlessness',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -77,6 +83,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Transparency',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -84,6 +91,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'JS+Web CoP',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -91,6 +99,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Women in tech',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -105,6 +114,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Data',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -112,6 +122,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Organizing',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -119,6 +130,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Empathy',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
@@ -126,6 +138,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Kindness',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
+      Text: '  ',
     },
   ],
   {

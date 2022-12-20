@@ -7,6 +7,7 @@ import {
   exampleStarOptions,
 } from '../../exampleData'
 import { loadStarOptions } from './setStarOptions'
+import { setTextLine } from './setTextLine'
 import { createColumnMap } from '.'
 
 export function loadWorkers(
@@ -35,6 +36,7 @@ export function loadExampleWorkersAndChartOptions(state: State) {
   if (newState.workersData) {
     newState = createColumnMap(newState, exampleColumnMap, newState.workersData)
     newState = loadStarOptions(newState, exampleStarOptions)
+    newState = setTextLine(newState, 'Text', 0)
   }
   console.log(newState.workersData?.columns)
   return { ...newState }

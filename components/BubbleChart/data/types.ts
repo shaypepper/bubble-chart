@@ -186,7 +186,7 @@ export class Worker {
 
   get textLines() {
     return this.parent.chartOptions?.textLineColumns.map((col) => {
-      return `${col}: ${this.rawData[col]}`
+      return this.rawData[col]
     })
   }
 

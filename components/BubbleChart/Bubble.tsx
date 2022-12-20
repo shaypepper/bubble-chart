@@ -383,7 +383,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
                 width={textSpaceWidth}
                 fontFamily={latoFont}
                 fontSize={fontSize}
-                text={t + t + t + t + t + t + t}
+                text={t}
                 fill={innerTextColor}
               />
             </>
