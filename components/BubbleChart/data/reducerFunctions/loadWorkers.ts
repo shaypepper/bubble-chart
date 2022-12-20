@@ -38,7 +38,6 @@ export function loadExampleWorkersAndChartOptions(state: State) {
     newState = loadStarOptions(newState, exampleStarOptions)
     newState = setTextLine(newState, 'Text', 0)
   }
-  console.log(newState.workersData?.columns)
   return { ...newState }
 }
 

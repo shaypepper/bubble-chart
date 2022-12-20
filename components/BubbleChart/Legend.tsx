@@ -83,8 +83,6 @@ const Legend: FC = () => {
     }
   })
 
-  console.log(mappedColumnList)
-
   return (
     <div className={containerClass}>
       <ul className={legendList}>
@@ -93,7 +91,6 @@ const Legend: FC = () => {
             {legendKey || ''}
             <ul className={legendList}>
               {valueList.map((v, index) => {
-                console.log(v)
                 if (v?.shape === 'bubble') {
                   return (
                     <li key={v.value}>

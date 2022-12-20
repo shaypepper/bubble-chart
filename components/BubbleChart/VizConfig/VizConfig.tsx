@@ -64,7 +64,6 @@ const VizConfig: React.FC = () => {
       </div>
     )
   }
-  console.log(chartOptions)
   return (
     <div className={containerClass}>
       <div>
