@@ -72,10 +72,10 @@ export const exampleData: DSVRowArray = Object.assign(
     {
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: BubbleSubCategory.LEADERSHIP,
-      Issue: 'JS+Web CoP',
+      Issue: 'Within NYT',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: '  ',
+      Text: 'I was the inaugural lead organizer for the JS+Web CoP when it launched in 2020. I also was part of WiT leadership, planning programming and the onboarding buddies program. Lastly I was chosen for the sponsorship program, which allowed me to meet (and challenge!) members of leadership throughout 2021. That experience has helped me be direct and firm with management, while still maintaining a productive relationship.',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
