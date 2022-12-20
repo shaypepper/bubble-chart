@@ -83,7 +83,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Member data chair',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: '  ',
+      Text: 'My proudest work has been as member data chair. Before and after the election, I have been a proponent for using data to make our union stronger. We can only build power if we know what we each want from our contract, and know how far we are willing to go to get it. I have also established data privacy norms for the union.',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
