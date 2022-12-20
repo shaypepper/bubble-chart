@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import { TextPath as TextPathType } from 'konva/types/shapes/TextPath'
-import { Group, Circle, TextPath, Text, Path, Rect } from 'react-konva'
+import { Group, Circle, TextPath, Text, Path } from 'react-konva'
 import { deepGrey, red, softGrey, white } from '../shared/tokens/colors'
 import { bangersFont, latoFont } from '../shared/tokens/fonts'
 import Pencil from '../shared/icons/Pencil'
@@ -304,6 +304,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
 }) => {
   const R = radius * height
   const [hovered, setHovered] = useState(false)
+  console.log(textLines)
 
   return (
     <Group
@@ -349,7 +350,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
         fontFamily={bangersFont}
         fontSize={
           displayName.length > 13
-            ? R / 9
+            ? R / 4
             : displayName.length > 8
             ? R / 3
             : R / 3
@@ -359,36 +360,26 @@ export const BubbleKonva: FC<BubbleProps> = ({
         width={R * 2}
       />
 
-      {focused &&
-        textLines?.slice(0, 1).map((t, i) => {
-          const textSpaceWidth = R * (1.6 - i * 0.15)
-          const x = -textSpaceWidth / 2
-          const y = R * (0.1 + 0.15 * i)
-          const fontSize = R * 0.08
+      {textLines?.slice(0, 1).map((t, i) => {
+        const textSpaceWidth = R * (1.6 - i * 0.15)
+        const x = -textSpaceWidth / 2
+        const y = R * (0.07 + 0.15 * i)
+        const fontSize = R * 0.08
 
-          return (
-            <>
-              <Rect
-                x={x}
-                width={textSpaceWidth}
-                y={y}
-                height={fontSize}
-                fill={bubbleFillColor}
-              />
-              <Text
-                key={t}
-                x={x}
-                y={y}
-                align={'center'}
-                width={textSpaceWidth}
-                fontFamily={latoFont}
-                fontSize={fontSize}
-                text={t}
-                fill={innerTextColor}
-              />
-            </>
-          )
-        })}
+        return (
+          <Text
+            key={t}
+            x={x}
+            y={y}
+            align={'center'}
+            width={textSpaceWidth}
+            fontFamily={latoFont}
+            fontSize={fontSize}
+            text={t.replace('\n', '')}
+            fill={innerTextColor}
+          />
+        )
+      })}
     </Group>
   )
 }

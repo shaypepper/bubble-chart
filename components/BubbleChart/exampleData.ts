@@ -51,7 +51,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Respect',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: '  ',
+      Text: `The collective actions we take come out of the relationships we are building with each other. If someone does not feel like they are contributing to the greater effort, that they are being ignored or that they are being kept from contributing, why would they join a walk out or sign a petition? That comes out of strong relationships and respect between stewards and our co-workers.`,
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -59,7 +59,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Power',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: '  ',
+      Text: `We will only win big things when we are backing each other, and we are not backing down. The newsroom has been rewarded with marathon bargaining sessions and a saved pension in response to their walk out. Wirecutter got the raises they asked for after their walk out. Contracts are won through power shown by action.`,
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -96,7 +96,7 @@ export const exampleData: DSVRowArray = Object.assign(
     {
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: BubbleSubCategory.LEADERSHIP,
-      Issue: 'Women in tech',
+      Issue: 'Member data chair',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
       Text: '  ',
