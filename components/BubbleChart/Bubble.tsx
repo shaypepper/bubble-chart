@@ -326,19 +326,22 @@ export const BubbleKonva: FC<BubbleProps> = ({
 
       <Star
         size={R * 3}
-        color={stars?.[0]?.show ? stars[0].fillColor : ''}
+        // color={stars?.[0]?.show ? stars[0].fillColor : ''}
+        color={stars?.[0]?.fillColor || ''}
         whichStar={1}
       />
 
       <Star
         size={R * 3}
-        color={stars?.[1]?.show ? stars[0].fillColor : ''}
+        // color={stars?.[1]?.show ? stars[0].fillColor : ''}
+        color={stars?.[1]?.fillColor || ''}
         whichStar={2}
       />
 
       <Star
         size={R * 3}
-        color={stars?.[2]?.show ? stars[0].fillColor : ''}
+        // color={stars?.[2]?.show ? stars[0].fillColor : ''}
+        color={stars?.[2]?.fillColor || ''}
         whichStar={3}
       />
 
