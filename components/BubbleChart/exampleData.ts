@@ -77,7 +77,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Fearlessness',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: `We know who we are. We know what we've built together as a union. We know what we are capable of. The unit chair should walk in that confidence when interacting with management, or on behalf of the unit.`,
+      Text: `We know who we are. We know what we've built together as a union. We know what we are capable of. The unit chair should walk in that confidence when interacting with management, or speaking on behalf of the unit. Separately, they should welcome opposing views from within the unit about what our union should be.`,
     },
     {
       Category: BubbleCategory.PLATFORM,
