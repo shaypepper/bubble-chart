@@ -48,11 +48,9 @@ const Signs: FC<{
           <div>
             <p>
               Hello hello! You&apos;ve arrived at a quirky corner of the
-              internet. Someone who loves both her union <em>and</em> data
-              visualization has decided to share a tool. Welcome to the Bubble
-              Chart. This is a tool for unionists to map out relationships,
-              support, organization and various groupings among the rank and
-              file.
+              internet. I'm Shay Culpepper, and I am running for unit chair for
+              the Times Tech Guild. This chart will show the experience and
+              philoosophies I hope to bring to the table!
             </p>
           </div>
         </div>
