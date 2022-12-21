@@ -91,20 +91,20 @@ const Signs: FC<{
       <SignMenu slideDown={currentStep !== SignSteps.NONE}>
         <SignMenuItem
           index={0}
-          // onClick={() => {
-          //   setCurrentStep(SignSteps.UPLOAD_WORKERS)
-          // }}
+          onClick={() => {
+            setCurrentStep(SignSteps.UPLOAD_WORKERS)
+          }}
         >
-          Click on a gropuing or issue for more detail
+          load data
         </SignMenuItem>
-        {/* <SignMenuItem
+        <SignMenuItem
           index={1}
           onClick={() => {
             setCurrentStep(SignSteps.CUSTOMIZE_CHART)
           }}
         >
           customize chart
-        </SignMenuItem> */}
+        </SignMenuItem>
 
         {/* <SignMenuItem index={2} onClick={onReset}>
           Reset Frame
