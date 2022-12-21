@@ -119,7 +119,6 @@ export const exampleData: DSVRowArray = Object.assign(
       BackgroundColor: 'Black',
       Text: '  ',
     },
-
     {
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: 'Traits',
