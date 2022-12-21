@@ -28,15 +28,11 @@ const Signs: FC<{
       <SignModal
         hide={currentStep !== SignSteps.WELCOME}
         title={'Welcome!'}
-        actionText={'Continue to Bubble Chart'}
-        actionOnClick={() => {
-          dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
-          dispatch({
-            type: FormatAction.STRATIFY_DATA,
-          })
+        onDismiss={() => {
           setCurrentStep(SignSteps.NONE)
         }}
-        onDismiss={() => {
+        actionText={'Continue to Bubble Chart'}
+        actionOnClick={() => {
           dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
           dispatch({
             type: FormatAction.STRATIFY_DATA,
