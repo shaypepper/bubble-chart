@@ -21,7 +21,7 @@ enum BubbleCategory {
 }
 
 enum BubbleSubCategory {
-  UNIT_COUNCIL = 'Unit Chair Role',
+  UNIT_COUNCIL = 'Unit Council',
   BARGAINING = 'Bargaining',
   ORGANIZING = 'Organizing',
   LEADERSHIP = 'Leadership positions',
@@ -29,6 +29,15 @@ enum BubbleSubCategory {
 
 export const exampleData: DSVRowArray = Object.assign(
   [
+    {
+      Category: BubbleCategory.PLATFORM,
+      SubCategory: BubbleSubCategory.BARGAINING,
+      Issue: 'Respect',
+      IssueType: 'Top issue',
+      BackgroundColor: 'Black',
+      Text: '  ',
+    },
+
     {
       Category: BubbleCategory.PLATFORM,
       SubCategory: BubbleSubCategory.ORGANIZING,
@@ -51,7 +60,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Humility',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: `I have respect for the weight of the power this position holds. I do not take it lightly that I will have blind spots. This requires the humility to accept criticism and correct course when needed. It also meaning bringing others into decisions at every opportunity.`,
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -59,7 +68,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Fearlessness',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: `We know who we are. We know what we've built together as a union. We know what we are capable of. The unit chair should walk in that confidence when interacting with management, or on behalf of the unit.`,
+      Text: '  ',
     },
     {
       Category: BubbleCategory.PLATFORM,
@@ -67,7 +76,7 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Transparency',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: `The process of writing our contract should be as inclusive and open as possible. I stand with the Bargaining Committee's choices regarding open bargaining and the rare Article Committee structure we are using.`,
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
