@@ -11,7 +11,6 @@ import { FormatAction } from './data/dataFormattingReducer'
 enum SignSteps {
   WELCOME = 'welcome',
   UPLOAD_WORKERS = 'uploadWorkers',
-  LOAD_PLATFORM = 'loadPlatform',
   CUSTOMIZE_CHART = 'customizeChart',
   NONE = 'none',
 }
@@ -33,11 +32,7 @@ const Signs: FC<{
         }}
         actionText={'Continue to Bubble Chart'}
         actionOnClick={() => {
-          dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
-          dispatch({
-            type: FormatAction.STRATIFY_DATA,
-          })
-          setCurrentStep(SignSteps.NONE)
+          setCurrentStep(SignSteps.UPLOAD_WORKERS)
         }}
       >
         <div
@@ -106,16 +101,16 @@ const Signs: FC<{
           customize chart
         </SignMenuItem>
 
-        {/* <SignMenuItem index={2} onClick={onReset}>
+        <SignMenuItem index={2} onClick={onReset}>
           Reset Frame
         </SignMenuItem>
         <SignMenuItem index={3} onClick={onSaveImage}>
           Save Image
-        </SignMenuItem> */}
+        </SignMenuItem>
 
-        {/* <SignMenuItem index={4} onClick={onSaveAsSVG}>
+        <SignMenuItem index={4} onClick={onSaveAsSVG}>
           Print
-        </SignMenuItem> */}
+        </SignMenuItem>
       </SignMenu>
     </>
   )

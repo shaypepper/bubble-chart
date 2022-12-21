@@ -1,4 +1,4 @@
-import { StarOptions, StarOptionsKeys, Value } from '../types'
+import { StarOptionsKeys, Value } from '../types'
 import { State } from '../dataFormattingReducer'
 
 export function setStarOption(
@@ -26,17 +26,5 @@ export function setStarOption(
   }
 
   return { ...state, chartOptions: newChartOptions }
-}
-
-export function loadStarOptions(
-  state: State,
-  starOptions: StarOptions[]
-): State {
-  const { chartOptions } = state
-  chartOptions.stars = starOptions
-  return {
-    ...state,
-    chartOptions,
-  }
 }
 export default setStarOption

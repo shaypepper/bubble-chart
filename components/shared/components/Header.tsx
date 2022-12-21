@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { css } from 'pretty-lights'
+import Link from 'next/link'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'
 import Scabby from '../icons/Scabby'
@@ -61,8 +62,8 @@ const Header: React.FC<{ currentPage: DataForPowerPages }> = ({
 }) => {
   return (
     <header className={headerClass}>
-      <h1 className={titleClass}>Shay for unit chair</h1>
-      {/* <nav className={navClass}>
+      <h1 className={titleClass}>Data for power</h1>
+      <nav className={navClass}>
         <Link href="/lessons" passHref>
           <button
             className={
@@ -96,7 +97,7 @@ const Header: React.FC<{ currentPage: DataForPowerPages }> = ({
             About
           </button>
         </Link>
-      </nav> */}
+      </nav>
       <Scabby fill={yellow} size={50} className={scabbyClass} />
     </header>
   )
