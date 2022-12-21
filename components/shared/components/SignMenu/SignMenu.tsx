@@ -52,7 +52,7 @@ export const SignMenuItem: React.FC<{
 }> = ({ children, stickLength = 40, onClick = () => {}, index = 0 }) => {
   return (
     <SignMenuItemStyled rotation={rotations[index]}>
-      <button className={signButtonClass} onClick={onClick} disabled>
+      <button className={signButtonClass} onClick={onClick}>
         <div>{children}</div>
       </button>
       <SignHolder>
