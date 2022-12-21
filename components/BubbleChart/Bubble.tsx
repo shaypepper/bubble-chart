@@ -304,6 +304,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
 }) => {
   const R = radius * height
   const [hovered, setHovered] = useState(false)
+  console.log(textLines)
 
   return (
     <Group
