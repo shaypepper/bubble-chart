@@ -8,8 +8,10 @@ export const exampleColumnMap = {
 }
 
 export const exampleStarOptions = []
+
+// [
 //   new StarOptions(),
-//   new StarOptions('IssueType', 'blue', `Don't miss`, 'Try this out', true),
+//   new StarOptions('IssueType', 'blue', 'Top Issue', 'Try this out', true),
 //   new StarOptions(),
 // ]
 
@@ -70,14 +72,6 @@ export const exampleData: DSVRowArray = Object.assign(
     {
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: BubbleSubCategory.LEADERSHIP,
-      Issue: 'Member data chair',
-      IssueType: `Don't miss`,
-      BackgroundColor: 'Black',
-      Text: 'My proudest work has been as member data chair. Before and after the election, I have been a proponent for using data to make our union stronger. We can only build power if we know what we each want from our contract, and know how far we are willing to go to get it. I have also established data privacy norms for the union.',
-    },
-    {
-      Category: BubbleCategory.QUALIFICATIONS,
-      SubCategory: BubbleSubCategory.LEADERSHIP,
       Issue: 'Within NYT',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
@@ -85,8 +79,24 @@ export const exampleData: DSVRowArray = Object.assign(
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
+      SubCategory: BubbleSubCategory.LEADERSHIP,
+      Issue: 'Member data chair',
+      IssueType: 'Top issue',
+      BackgroundColor: 'Black',
+      Text: 'My proudest work has been as member data chair. Before and after the election, I have been a proponent for using data to make our union stronger. We can only build power if we know what we each want from our contract, and know how far we are willing to go to get it. I have also established data privacy norms for the union.',
+    },
+    {
+      Category: BubbleCategory.QUALIFICATIONS,
+      SubCategory: BubbleSubCategory.LEADERSHIP,
+      Issue: 'Sponsorship',
+      IssueType: 'Top issue',
+      BackgroundColor: 'Black',
+      Text: ' ',
+    },
+    {
+      Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: 'Skills',
-      Issue: 'Spreadsheets',
+      Issue: 'Data',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
       Text: '  ',
@@ -103,17 +113,9 @@ export const exampleData: DSVRowArray = Object.assign(
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: 'Traits',
       Issue: 'Empathy',
-      IssueType: `Don't miss`,
+      IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: '',
-    },
-    {
-      Category: BubbleCategory.QUALIFICATIONS,
-      SubCategory: 'Traits',
-      Issue: 'Conviction',
-      IssueType: `Don't miss`,
-      BackgroundColor: 'Black',
-      Text: '',
+      Text: '  ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
