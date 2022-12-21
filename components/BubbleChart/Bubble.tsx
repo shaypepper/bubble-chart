@@ -324,23 +324,15 @@ export const BubbleKonva: FC<BubbleProps> = ({
         mask="url(#circleMask)"
       />
 
-      <Star
-        size={R * 3}
-        color={stars?.[0]?.show ? stars[0].fillColor : ''}
-        whichStar={1}
-      />
-
-      <Star
-        size={R * 3}
-        color={stars?.[1]?.show ? stars[0].fillColor : ''}
-        whichStar={2}
-      />
-
-      <Star
-        size={R * 3}
-        color={stars?.[2]?.show ? stars[0].fillColor : ''}
-        whichStar={3}
-      />
+      {stars?.[0]?.show && (
+        <Star size={R * 3} color={stars[0].fillColor} whichStar={1} />
+      )}
+      {stars?.[1]?.show && (
+        <Star size={R * 3} color={stars[1].fillColor} whichStar={2} />
+      )}
+      {stars?.[2]?.show && (
+        <Star size={R * 3} color={stars[2].fillColor} whichStar={3} />
+      )}
 
       <Text
         text={displayName}
@@ -479,14 +471,7 @@ const Star = ({
     g: getG(size),
     whichStar,
   })
-  return (
-    <Path
-      data={pathCommands}
-      fill={color}
-      stroke={color ? '' : 'gainsboro'}
-      strokeWidth={0.4}
-    />
-  )
+  return <Path data={pathCommands} fill={color} />
 }
 
 export default BubbleSVG
