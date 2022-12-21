@@ -93,7 +93,7 @@ const Signs: FC<{
           //   setCurrentStep(SignSteps.UPLOAD_WORKERS)
           // }}
         >
-          Click on a gropuing or issue to zoom in/out
+          Click on a gropuing or issue for more detail
         </SignMenuItem>
         {/* <SignMenuItem
           index={1}
