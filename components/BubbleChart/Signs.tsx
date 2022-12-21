@@ -48,7 +48,7 @@ const Signs: FC<{
           <div>
             <p>
               Hello hello! You&apos;ve arrived at a quirky corner of the
-              internet. I am Shay Culpepper, and I am running for unit chair for
+              internet. I'm Shay Culpepper, and I am running for unit chair for
               the Times Tech Guild. This chart will show the experience and
               philoosophies I hope to bring to the table!
             </p>
