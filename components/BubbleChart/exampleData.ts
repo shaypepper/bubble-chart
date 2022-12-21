@@ -37,7 +37,14 @@ export const exampleData: DSVRowArray = Object.assign(
       BackgroundColor: 'Black',
       Text: '  ',
     },
-
+    {
+      Category: BubbleCategory.PLATFORM,
+      SubCategory: BubbleSubCategory.BARGAINING,
+      Issue: 'Winning',
+      IssueType: 'Top issue',
+      BackgroundColor: 'Black',
+      Text: '  ',
+    },
     {
       Category: BubbleCategory.PLATFORM,
       SubCategory: BubbleSubCategory.ORGANIZING,
@@ -48,7 +55,7 @@ export const exampleData: DSVRowArray = Object.assign(
     },
     {
       Category: BubbleCategory.PLATFORM,
-      SubCategory: BubbleSubCategory.BARGAINING,
+      SubCategory: BubbleSubCategory.ORGANIZING,
       Issue: 'Power',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
@@ -72,7 +79,7 @@ export const exampleData: DSVRowArray = Object.assign(
     },
     {
       Category: BubbleCategory.PLATFORM,
-      SubCategory: BubbleSubCategory.BARGAINING,
+      SubCategory: BubbleSubCategory.UNIT_COUNCIL,
       Issue: 'Transparency',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
@@ -128,7 +135,7 @@ export const exampleData: DSVRowArray = Object.assign(
     {
       Category: BubbleCategory.QUALIFICATIONS,
       SubCategory: 'Traits',
-      Issue: 'Quirk',
+      Issue: 'Kindness',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
       Text: '  ',
