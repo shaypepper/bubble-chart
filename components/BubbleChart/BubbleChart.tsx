@@ -15,6 +15,7 @@ import { css } from 'pretty-lights'
 import { Layer, Stage } from 'react-konva'
 import { downloadURI } from './utils'
 import { Worker, Grouping, isWorker } from './data/types'
+import Legend from './Legend'
 import { WorkerDataContext } from './data/WorkerDataProvider'
 import { height, width } from './tokens'
 import Signs from './Signs'
@@ -157,7 +158,7 @@ const BubbleChart: FC = () => {
         </Stage>
       )}
 
-      {/* <Legend /> */}
+      <Legend />
       <Signs
         onReset={() => {
           const windowWidth = document?.body.offsetWidth

@@ -1,6 +1,4 @@
 import { DSVRowArray } from 'd3'
-import { colors } from '../shared/tokens/colors'
-import { StarOptions } from './data/types'
 
 export const exampleColumnMap = {
   uniqueIdentifier: 'Issue',
@@ -9,29 +7,11 @@ export const exampleColumnMap = {
   secondaryGrouping: 'SubCategory',
 }
 
-export const exampleStarOptions = [
-  new StarOptions(
-    'IssueType',
-    colors.yellow.default,
-    `Don't miss`,
-    'Try this out',
-    true
-  ),
-  new StarOptions(
-    'IssueType',
-    colors.yellow.default,
-    `Don't miss`,
-    'Try this out',
-    true
-  ),
-  new StarOptions(
-    'IssueType',
-    colors.yellow.default,
-    `Don't miss`,
-    'Try this out',
-    true
-  ),
-]
+export const exampleStarOptions = []
+//   new StarOptions(),
+//   new StarOptions('IssueType', 'blue', `Don't miss`, 'Try this out', true),
+//   new StarOptions(),
+// ]
 
 enum BubbleCategory {
   PLATFORM = 'Platform',
