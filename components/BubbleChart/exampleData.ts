@@ -91,7 +91,6 @@ export const exampleData: DSVRowArray = Object.assign(
       Issue: 'Sponsorship',
       IssueType: 'Top issue',
       BackgroundColor: 'Black',
-      Text: ' ',
     },
     {
       Category: BubbleCategory.QUALIFICATIONS,
