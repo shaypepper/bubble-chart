@@ -38,6 +38,7 @@ type BubbleProps = {
   onClick?: () => void
   stars?: { fillColor: string; show: boolean }[]
   id?: string
+  focused?: boolean
 }
 
 export const MiniBubbleSVG: FC<{
@@ -90,7 +91,6 @@ export const BubbleEditSVG: FC<
   configPanels = [],
 }) => {
   const R = 50
-  console.log(starOptions)
   return (
     <svg
       width={width}
@@ -300,35 +300,28 @@ export const BubbleKonva: FC<BubbleProps> = ({
     'G2K: Prefers text message',
   ],
   onClick = () => {},
+  focused = false,
 }) => {
   const R = radius * height
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <Group className={'leaf'} x={translation.x} y={translation.y}>
+    <Group
+      className={'leaf'}
+      x={translation.x}
+      y={translation.y}
+      onMouseEnter={(e) => setHovered(true)}
+      onMouseLeave={(e) => setHovered(false)}
+      opacity={hovered && !focused ? 0.9 : 1}
+      onClick={onClick}
+      onTap={onClick}
+    >
       <Circle
         radius={R}
         fill={bubbleFillColor}
         strokeLinecap="round"
         strokeDashArray={[10, 10]}
         mask="url(#circleMask)"
-        onClick={onClick}
-      />
-
-      <Text
-        text={displayName}
-        x={-R}
-        y={-R / 4.6}
-        fontFamily={bangersFont}
-        fontSize={
-          displayName.length > 13
-            ? R / 7
-            : displayName.length > 8
-            ? R / 3
-            : R / 2
-        }
-        fill={innerTextColor}
-        align={'center'}
-        width={R * 2}
       />
 
       {stars?.[0]?.show && (
@@ -341,34 +334,53 @@ export const BubbleKonva: FC<BubbleProps> = ({
         <Star size={R * 3} color={stars[2].fillColor} whichStar={3} />
       )}
 
-      {textLines?.map((t, i) => {
-        const x = (-R * (1.6 - i * 0.15)) / 2
-        const y = R * 0.15 * (2.5 + i)
-        const fontSize = R * 0.09
-        const rectangleWidth = R * (1.6 - i * 0.15)
-        return (
-          <>
-            <Rect
-              x={x}
-              width={rectangleWidth}
-              y={y}
-              height={fontSize}
-              fill={bubbleFillColor}
-            />
-            <Text
-              key={t}
-              x={-R}
-              y={y}
-              align={'center'}
-              width={R * 2}
-              fontFamily={latoFont}
-              fontSize={fontSize}
-              text={t}
-              fill={innerTextColor}
-            />
-          </>
-        )
-      })}
+      <Text
+        text={displayName}
+        x={-R}
+        y={-R / 3.2}
+        fontFamily={bangersFont}
+        fontSize={
+          displayName.length > 13
+            ? R / 9
+            : displayName.length > 8
+            ? R / 3
+            : R / 3
+        }
+        fill={innerTextColor}
+        align={'center'}
+        width={R * 2}
+      />
+
+      {focused &&
+        textLines?.slice(0, 1).map((t, i) => {
+          const textSpaceWidth = R * (1.6 - i * 0.15)
+          const x = -textSpaceWidth / 2
+          const y = R * (0.1 + 0.15 * i)
+          const fontSize = R * 0.08
+
+          return (
+            <>
+              <Rect
+                x={x}
+                width={textSpaceWidth}
+                y={y}
+                height={fontSize}
+                fill={bubbleFillColor}
+              />
+              <Text
+                key={t}
+                x={x}
+                y={y}
+                align={'center'}
+                width={textSpaceWidth}
+                fontFamily={latoFont}
+                fontSize={fontSize}
+                text={t + t + t + t + t + t + t}
+                fill={innerTextColor}
+              />
+            </>
+          )
+        })}
     </Group>
   )
 }
@@ -378,7 +390,9 @@ export const GroupingBubble = ({
   radius = 50,
   translation = { x: 0, y: 0 },
   onClick = () => {},
+  focused = false,
 }) => {
+  const [hovered, setHovered] = useState(false)
   const [delayedRefresh, setDelayedRefresh] = useState(false)
   const R = radius * height
   const textR = R
@@ -403,14 +417,24 @@ export const GroupingBubble = ({
   }, [])
 
   return (
-    <Group className={'leaf'} x={translation.x} y={translation.y}>
+    <Group
+      className={'leaf'}
+      x={translation.x}
+      y={translation.y}
+      onMouseEnter={(e) => setHovered(true)}
+      onMouseLeave={(e) => setHovered(false)}
+      opacity={hovered || focused ? 1 : 0.8}
+      onClick={onClick}
+      onTap={onClick}
+    >
       <Circle
         radius={R}
-        fill={'#0000000B'}
+        fill={'#FFFFFF0F'}
         strokeLinecap="round"
         strokeDashArray={[10, 10]}
         mask="url(#circleMask)"
         onClick={onClick}
+        onTap={onClick}
       />
 
       <TextPath
