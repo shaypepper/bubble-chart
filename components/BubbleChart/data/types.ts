@@ -37,25 +37,19 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
-export class StarOptions {
+class StarOptions {
   [StarOptionsKeys.COLOR]: string;
   [StarOptionsKeys.COLUMN]: Column;
   [StarOptionsKeys.VALUE]: Value;
   [StarOptionsKeys.LABEL]: string;
   [StarOptionsKeys.USE]: boolean
 
-  constructor(
-    column: string = '',
-    color: Column = '',
-    value: Value = '',
-    label: string = '',
-    use: boolean = false
-  ) {
-    this.column = column
-    this.color = color
-    this.value = value
-    this.label = label
-    this.use = use
+  constructor() {
+    this.column = ''
+    this.color = ''
+    this.value = ''
+    this.label = ''
+    this.use = false
   }
 }
 
@@ -186,7 +180,7 @@ export class Worker {
 
   get textLines() {
     return this.parent.chartOptions?.textLineColumns.map((col) => {
-      return `${this.rawData[col]}`
+      return `${col}: ${this.rawData[col]}`
     })
   }
 

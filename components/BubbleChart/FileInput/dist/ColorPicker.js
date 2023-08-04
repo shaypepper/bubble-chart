@@ -56,6 +56,7 @@ var ColorPicker = function () {
           react_1['default'].createElement(react_bootstrap_1.FormControl, {
             type: 'color',
             onBlur: function (e) {
+              console.log('blur', e.target.value)
               colorMap.current[v] = e.target.value
             },
           })

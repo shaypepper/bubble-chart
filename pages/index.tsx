@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>shay for unit chair!</title>
+        <title>Data for Power</title>
         <meta
           name="description"
           content="Created by Shay Culpepper for unionists everywhere"

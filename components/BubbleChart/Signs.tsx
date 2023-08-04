@@ -11,7 +11,6 @@ import { FormatAction } from './data/dataFormattingReducer'
 enum SignSteps {
   WELCOME = 'welcome',
   UPLOAD_WORKERS = 'uploadWorkers',
-  LOAD_PLATFORM = 'loadPlatform',
   CUSTOMIZE_CHART = 'customizeChart',
   NONE = 'none',
 }
@@ -28,20 +27,12 @@ const Signs: FC<{
       <SignModal
         hide={currentStep !== SignSteps.WELCOME}
         title={'Welcome!'}
-        actionText={'Continue to Bubble Chart'}
-        actionOnClick={() => {
-          dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
-          dispatch({
-            type: FormatAction.STRATIFY_DATA,
-          })
+        onDismiss={() => {
           setCurrentStep(SignSteps.NONE)
         }}
-        onDismiss={() => {
-          dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
-          dispatch({
-            type: FormatAction.STRATIFY_DATA,
-          })
-          setCurrentStep(SignSteps.NONE)
+        actionText={'Continue to Bubble Chart'}
+        actionOnClick={() => {
+          setCurrentStep(SignSteps.UPLOAD_WORKERS)
         }}
       >
         <div
@@ -52,9 +43,11 @@ const Signs: FC<{
           <div>
             <p>
               Hello hello! You&apos;ve arrived at a quirky corner of the
-              internet. I am Shay Culpepper, and I am running for unit chair for
-              the Times Tech Guild. This chart will show the experience and
-              philosophies I hope to bring to the table!
+              internet. Someone who loves both her union <em>and</em> data
+              visualization has decided to share a tool. Welcome to the Bubble
+              Chart. This is a tool for unionists to map out relationships,
+              support, organization and various groupings among the rank and
+              file.
             </p>
           </div>
         </div>
@@ -93,31 +86,31 @@ const Signs: FC<{
       <SignMenu slideDown={currentStep !== SignSteps.NONE}>
         <SignMenuItem
           index={0}
-          // onClick={() => {
-          //   setCurrentStep(SignSteps.UPLOAD_WORKERS)
-          // }}
+          onClick={() => {
+            setCurrentStep(SignSteps.UPLOAD_WORKERS)
+          }}
         >
-          Click on a gropuing or issue to zoom in/out
+          load data
         </SignMenuItem>
-        {/* <SignMenuItem
+        <SignMenuItem
           index={1}
           onClick={() => {
             setCurrentStep(SignSteps.CUSTOMIZE_CHART)
           }}
         >
           customize chart
-        </SignMenuItem> */}
+        </SignMenuItem>
 
-        {/* <SignMenuItem index={2} onClick={onReset}>
+        <SignMenuItem index={2} onClick={onReset}>
           Reset Frame
         </SignMenuItem>
         <SignMenuItem index={3} onClick={onSaveImage}>
           Save Image
-        </SignMenuItem> */}
+        </SignMenuItem>
 
-        {/* <SignMenuItem index={4} onClick={onSaveAsSVG}>
+        <SignMenuItem index={4} onClick={onSaveAsSVG}>
           Print
-        </SignMenuItem> */}
+        </SignMenuItem>
       </SignMenu>
     </>
   )

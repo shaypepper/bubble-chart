@@ -27,9 +27,8 @@ const signButtonClass = css`
   color: ${white};
   padding: ${pxToRem(12)};
   position: relative;
-  box-shadow: black 1px 1px 10px;
+  box-shadow: white 1px 1px 10px;
   pointer-events: auto;
-  max-width: 200px;
 `
 const SignMenuItemStyled = styled.div`
   position: relative;
@@ -52,7 +51,7 @@ export const SignMenuItem: React.FC<{
 }> = ({ children, stickLength = 40, onClick = () => {}, index = 0 }) => {
   return (
     <SignMenuItemStyled rotation={rotations[index]}>
-      <button className={signButtonClass} onClick={onClick} disabled>
+      <button className={signButtonClass} onClick={onClick}>
         <div>{children}</div>
       </button>
       <SignHolder>
@@ -80,9 +79,9 @@ export const SignMenu = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   background: linear-gradient(
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.9),
-    rgba(0, 0, 0, 1)
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 1)
   );
   pointer-events: none;
 `

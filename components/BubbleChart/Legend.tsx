@@ -8,8 +8,8 @@ import { ColorMap } from './data/types'
 
 const legendList = css`
   list-style-type: none;
+  padding: 0px;
   font-size: ${pxToRem(12)};
-  padding: 0;
   text-transform: uppercase;
   background: rgba(255, 255, 255, 0.85);
   * {
@@ -19,7 +19,6 @@ const legendList = css`
   > li {
     svg {
       margin-right: ${pxToRem(4)};
-      width: 10px;
     }
     font-weight: 900;
   }
@@ -36,16 +35,13 @@ const legendList = css`
 
 const containerClass = css`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 20px;
+  top: 20px;
+  bottom: 0;
   z-index: 1;
   background: none;
   overflow-y: scroll;
   max-height: 75vh;
-
-  > ul {
-    padding: 10px;
-  }
 `
 
 const Legend: FC = () => {
@@ -54,75 +50,55 @@ const Legend: FC = () => {
   } = useContext(WorkerDataContext)
   const currentColumnColorMap: ColorMap =
     colors.colorMap[colors.currentColumn] || {}
+
   const fillColorList = Object.entries(currentColumnColorMap)
-
-  const mappedColumnList: { [a: string]: any[] } = {}
-
-  fillColorList.forEach(([value, { fillColor, textColor }]) => {
-    if (colors.currentColumn in mappedColumnList) {
-      mappedColumnList[colors.currentColumn].push({
-        fillColor,
-        textColor,
-        shape: 'bubble',
-        value,
-      })
-    } else {
-      mappedColumnList[colors.currentColumn] = [
-        { fillColor, textColor, shape: 'bubble', value },
-      ]
-    }
-  })
-
-  stars.forEach((star, index) => {
-    if (star.use && star.column) {
-      if (star.column in mappedColumnList) {
-        mappedColumnList[star.column].push(star)
-      } else {
-        mappedColumnList[star.column] = [star]
-      }
-    }
-  })
-
   return (
     <div className={containerClass}>
       <ul className={legendList}>
-        {Object.entries(mappedColumnList).map(([legendKey, valueList]) => (
-          <li key={legendKey}>
-            {legendKey || ''}
+        {fillColorList.length > 0 && (
+          <li>
+            {colors.currentColumn || ''}
             <ul className={legendList}>
-              {valueList.map((v, index) => {
-                if (v?.shape === 'bubble') {
-                  return (
-                    <li key={v.value}>
-                      <MiniBubbleSVG
-                        fillColor={v.fillColor}
-                        textColor={v.textColor}
-                        height={15}
-                      />
-                      {v.value}
-                    </li>
-                  )
-                } else {
-                  return (
-                    <li>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox={getStarViewbox({ whichStar: index + 1 })}
-                        height={14}
-                      >
-                        <path
-                          d={getStarPath({ whichStar: index + 1 })}
-                          fill={v.color}
-                        />
-                      </svg>
-                      {v.value}
-                    </li>
-                  )
-                }
+              {fillColorList.map(([value, { fillColor, textColor }]) => {
+                return (
+                  <li key={value}>
+                    <MiniBubbleSVG
+                      fillColor={fillColor}
+                      textColor={textColor}
+                      height={15}
+                    />
+                    {value}
+                  </li>
+                )
               })}
             </ul>
           </li>
-        ))}
+        )}
+
+        {stars.map(
+          (star, index) =>
+            star.use &&
+            star.column && (
+              <li key={`${star.column} - ${index} - ${star.value}`}>
+                {star.column}
+                <ul className={legendList}>
+                  <li>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox={getStarViewbox({ whichStar: index + 1 })}
+                      height={14}
+                    >
+                      <path
+                        d={getStarPath({ whichStar: index + 1 })}
+                        fill={star.color}
+                      />
+                    </svg>
+                    {star.value}
+                  </li>
+                </ul>
+              </li>
+            )
+        )}
       </ul>
     </div>
   )
