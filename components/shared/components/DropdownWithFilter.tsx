@@ -42,7 +42,7 @@ const DropdownWithFilter: FC<{
             {list
               .filter(
                 (col: string) =>
-                  !value || col.toLowerCase().startsWith(value.toLowerCase())
+                    !value || col.toLowerCase().includes(value.toLowerCase())
               )
               .map((col: string) => (
                 <Dropdown.Item key={col} eventKey={col} as={Button}>
