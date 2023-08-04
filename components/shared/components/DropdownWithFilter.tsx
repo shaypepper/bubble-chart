@@ -1,5 +1,11 @@
 import { FC, useState } from 'react'
+import { css, cx } from 'pretty-lights'
 import { Button, Dropdown, Form, FormControl } from 'react-bootstrap'
+
+const optionListClass = css`
+  height: 200px;
+  overflow: scroll;
+`
 
 const DropdownWithFilter: FC<{
   list: string[]
@@ -39,16 +45,20 @@ const DropdownWithFilter: FC<{
               onChange={(e) => setValue(e.target.value)}
               value={value}
             />
-            {list
-              .filter(
-                (col: string) =>
+            <ul className={cx('list-unstyled', optionListClass)}>
+              {list
+                .filter(
+                  (col: string) =>
                     !value || col.toLowerCase().includes(value.toLowerCase())
-              )
-              .map((col: string) => (
-                <Dropdown.Item key={col} eventKey={col} as={Button}>
-                  {col}
-                </Dropdown.Item>
-              ))}
+                )
+                .map((col: string) => (
+                  <li key={col}>
+                    <Dropdown.Item eventKey={col} as={Button}>
+                      {col}
+                    </Dropdown.Item>
+                  </li>
+                ))}
+            </ul>
           </Dropdown.Menu>
         </Dropdown>
       </Form.Label>
