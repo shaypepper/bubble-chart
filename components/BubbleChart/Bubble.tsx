@@ -40,6 +40,27 @@ type BubbleProps = {
   id?: string
 }
 
+export const MiniBubbleG: FC<{
+  fillColor?: string
+  textColor?: string
+  fontSize?: number
+  r?: number
+}> = ({ fillColor = deepGrey, textColor = white, fontSize = 3, r = 5 }) => {
+  return (
+    <g>
+      <circle fill={fillColor} r={r} transform={`translate(${r} ${r})`} />
+      <text
+        fontFamily={bangersFont}
+        fill={textColor}
+        fontSize={fontSize}
+        transform={`translate(${0.56 * r} ${1.24 * r})`}
+      >
+        text
+      </text>
+    </g>
+  )
+}
+
 export const MiniBubbleSVG: FC<{
   fillColor?: string
   textColor?: string
@@ -55,21 +76,14 @@ export const MiniBubbleSVG: FC<{
 }) => {
   return (
     <svg
+      x="0"
       viewBox="0 0 10 10"
       height={height}
       role="button"
       className={className}
       onClick={onClick}
     >
-      <circle fill={fillColor} r="5" transform="translate(5 5)" />
-      <text
-        fontFamily={bangersFont}
-        fill={textColor}
-        fontSize={3}
-        transform="translate(2.8 6.2)"
-      >
-        text
-      </text>
+      <MiniBubbleG fillColor={fillColor} textColor={textColor} fontSize={3} />
     </svg>
   )
 }
@@ -275,10 +289,10 @@ export const GroupingBubbleSVG: FC<
           href={`#displayNamePath${id}`}
           style={{
             fontFamily: 'Lato',
-            fontWeight: 900,
+            fontWeight: 300,
             fontSize: radius / (1.5 * Math.sqrt(groupSize)),
           }}
-          fill={'#999'}
+          fill={'#333'}
         >
           {displayName}
         </textPath>

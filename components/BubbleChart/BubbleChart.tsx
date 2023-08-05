@@ -43,7 +43,7 @@ const BubbleChart: FC = () => {
   const [bubbleData, setBubbleData] = useState<
     d3.HierarchyCircularNode<Worker | Grouping>[]
   >([])
-  const { stratifiedData } = useContext(WorkerDataContext)
+  const { stratifiedData, chartOptions } = useContext(WorkerDataContext)
 
   useEffect(() => {
     const windowWidth = document?.body.offsetWidth
@@ -185,7 +185,10 @@ const BubbleChart: FC = () => {
         }}
         onSaveAsSVG={() => {
           const as_text = renderToString(
-            <BubbleChartSVG bubbleData={bubbleData} />
+            <BubbleChartSVG
+              bubbleData={bubbleData}
+              chartOptions={chartOptions}
+            />
           )
           // store in a blob
           const blob = new Blob([as_text], { type: 'image/svg+xml' })

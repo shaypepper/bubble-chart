@@ -37,7 +37,7 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
-class StarOptions {
+export class StarOptions {
   [StarOptionsKeys.COLOR]: string;
   [StarOptionsKeys.COLUMN]: Column;
   [StarOptionsKeys.VALUE]: Value;

@@ -30,7 +30,6 @@ export function loadExampleWorkersAndChartOptions(state: State) {
   if (newState.workersData) {
     newState = createColumnMap(newState, exampleColumnMap, newState.workersData)
   }
-  console.log(newState.workersData?.columns)
   return { ...newState }
 }
 
