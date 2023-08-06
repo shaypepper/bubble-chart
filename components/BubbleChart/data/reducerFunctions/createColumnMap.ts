@@ -3,7 +3,7 @@ import { State } from '../dataFormattingReducer'
 
 export function createColumnMap(
   state: State,
-  columnMap: ColumnMap,
+  columnMap: Partial<ColumnMap>,
   listFromCSV: ListFromCSV
 ): State {
   // This could be either a Workers object or a Groupings object

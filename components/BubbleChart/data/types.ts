@@ -25,8 +25,7 @@ type ColorOptions = {
 export type ColumnMap = {
   uniqueIdentifier?: string
   displayName?: string
-  primaryGrouping?: string
-  secondaryGrouping?: string
+  groupings: string[]
 }
 
 export enum StarOptionsKeys {
@@ -103,11 +102,11 @@ export class ListFromCSV {
     columnMap: ColumnMap | void = undefined,
     chartOptions?: ChartOptions
   ) {
-    this.columnMap = columnMap || {
+    this.columnMap = {
       uniqueIdentifier: '',
       displayName: '',
-      primaryGrouping: '',
-      secondaryGrouping: '',
+      groupings: [],
+      ...(columnMap || {}),
     }
 
     this.csvFile = csvFile
@@ -124,16 +123,19 @@ export class ListFromCSV {
     return new Set(this.list.map((w) => w.id))
   }
 
-  get primaryGroupings(): Set<Value | undefined> {
-    return new Set(this.list.map((n) => n.primaryGrouping))
+  getUniqueValuesByColName(colName: string): Value[] {
+    return [...new Set(this.list.map((n) => n.rawData[colName || '']))]
   }
 
-  get secondaryGroupings(): Set<Value | undefined> {
-    return new Set(this.list.map((n) => n.secondaryGrouping))
-  }
-
-  get groupings(): Set<Value | undefined> {
+  get uniqueGroupings(): Set<Value | undefined> {
     return new Set(this.list.map((n) => n.grouping))
+  }
+
+  get uniqueGroupingValues(): { colName: string; values: Value[] }[] {
+    return this.columnMap.groupings.map((g) => ({
+      colName: g,
+      values: this.getUniqueValuesByColName(g),
+    }))
   }
 
   listValues(columnName: string | number): Set<Value> {
@@ -202,20 +204,12 @@ export class Worker {
     return `${this.rawData[this.parent.columnMap.displayName || '']}`
   }
 
-  get primaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.primaryGrouping || '']}`
-  }
-
-  get secondaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.secondaryGrouping || '']}`
+  get groupingList() {
+    return this.parent.columnMap.groupings.map((g) => `${this.rawData[g]}`)
   }
 
   get grouping() {
-    if (this.secondaryGrouping) {
-      return `g: ${this.primaryGrouping} - ${this.secondaryGrouping}`
-    } else {
-      return `g: ${this.primaryGrouping}`
-    }
+    return `g: ${this.groupingList.join(' - ')}`
   }
 }
 export class Workers extends ListFromCSV {

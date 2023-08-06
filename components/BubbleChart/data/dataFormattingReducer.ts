@@ -66,7 +66,7 @@ export type Action =
     }
   | {
       type: FormatAction.SET_COLUMN_MAP
-      columnMap: ColumnMap
+      columnMap: Partial<ColumnMap>
       listFromCsv: ListFromCSV
     }
   | {

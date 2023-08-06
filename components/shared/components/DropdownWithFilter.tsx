@@ -14,6 +14,8 @@ const DropdownWithFilter: FC<{
   onSelect: (eventKey: any) => void
   disabled?: boolean
   id: string
+  dismissable?: boolean
+  onDismiss?: () => void
 }> = ({
   list,
   label = 'Label TK',
@@ -21,12 +23,31 @@ const DropdownWithFilter: FC<{
   toggleText,
   disabled = false,
   id,
+  dismissable = false,
+  onDismiss = () => null,
 }) => {
   const [value, setValue] = useState<string>()
   return (
     <Form.Group>
       <Form.Label>
-        {label}
+        {label}{' '}
+        {dismissable && (
+          <Button
+            onClick={onDismiss}
+            style={{
+              height: '1em',
+              width: '1em',
+              backgroundColor: 'white',
+              border: 'none',
+              color: 'grey',
+              padding: 0,
+              fontSize: '0.75em',
+              lineHeight: 1,
+            }}
+          >
+            x
+          </Button>
+        )}
         <Dropdown role="select" onSelect={onSelect}>
           <Dropdown.Toggle
             size="sm"

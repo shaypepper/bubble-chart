@@ -62,16 +62,19 @@ const LoadCSV: React.FC<{
         </Form.Group>
 
         {convertedCsv && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns:
-                'max-content max-content max-content max-content',
-              gridGap: pxToRem(20),
-            }}
-          >
-            {Object.entries(convertedCsv.columnMap).map(
-              ([key, columnLabel]) => (
+          <>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns:
+                  'max-content max-content max-content max-content',
+                gridGap: pxToRem(20),
+              }}
+            >
+              {Object.entries({
+                uniqueIdentifier: convertedCsv.columnMap.uniqueIdentifier,
+                displayName: convertedCsv.columnMap.displayName,
+              }).map(([key, columnLabel]) => (
                 <DropdownWithFilter
                   id={`${key}-dropdown-for-csv`}
                   list={convertedCsv.columns || []}
@@ -88,9 +91,52 @@ const LoadCSV: React.FC<{
                     })
                   }}
                 />
-              )
-            )}
-          </div>
+              ))}
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns:
+                  'max-content max-content max-content max-content',
+                gridGap: pxToRem(20),
+              }}
+            >
+              {[...convertedCsv.columnMap.groupings, null].map(
+                (columnLabel, groupingIndex) => (
+                  <DropdownWithFilter
+                    id={`grouping-${groupingIndex}-dropdown-for-csv`}
+                    list={convertedCsv.columns || []}
+                    label={`Grouping ${groupingIndex + 1}`}
+                    key={`${columnLabel} - ${groupingIndex}`}
+                    toggleText={columnLabel || 'Select column...'}
+                    dismissable={columnLabel !== null}
+                    onDismiss={() => {
+                      const newGroupings = [...convertedCsv.columnMap.groupings]
+                      newGroupings.splice(groupingIndex, 1)
+                      dispatch({
+                        type: FormatAction.SET_COLUMN_MAP,
+                        columnMap: {
+                          groupings: newGroupings,
+                        },
+                        listFromCsv: convertedCsv,
+                      })
+                    }}
+                    onSelect={(eventKey) => {
+                      const newGroupings = [...convertedCsv.columnMap.groupings]
+                      newGroupings[groupingIndex] = eventKey
+                      dispatch({
+                        type: FormatAction.SET_COLUMN_MAP,
+                        columnMap: {
+                          groupings: newGroupings,
+                        },
+                        listFromCsv: convertedCsv,
+                      })
+                    }}
+                  />
+                )
+              )}
+            </div>
+          </>
         )}
       </div>
     </>

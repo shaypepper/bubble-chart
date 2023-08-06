@@ -290,7 +290,7 @@ export const GroupingBubbleSVG: FC<
           style={{
             fontFamily: 'Lato',
             fontWeight: 300,
-            fontSize: radius / (1.5 * Math.sqrt(groupSize)),
+            fontSize: radius / 8,
           }}
           fill={'#333'}
         >
