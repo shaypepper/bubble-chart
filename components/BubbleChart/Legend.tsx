@@ -85,18 +85,20 @@ const Legend: FC = () => {
           <li>
             {colors.currentColumn || ''}
             <ul className={legendList}>
-              {fillColorList.map(([value, { fillColor, textColor }]) => {
-                return (
-                  <li key={value}>
-                    <MiniBubbleSVG
-                      fillColor={fillColor}
-                      textColor={textColor}
-                      height={15}
-                    />
-                    {value}
-                  </li>
-                )
-              })}
+              {fillColorList
+                .sort(([value], [prevValue]) => (value > prevValue ? 1 : -1))
+                .map(([value, { fillColor, textColor }]) => {
+                  return (
+                    <li key={value}>
+                      <MiniBubbleSVG
+                        fillColor={fillColor}
+                        textColor={textColor}
+                        height={15}
+                      />
+                      {value}
+                    </li>
+                  )
+                })}
             </ul>
           </li>
         )}

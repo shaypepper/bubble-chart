@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import { DataForPowerPages } from '../components/shared/components/Header'
 import Layout from '../components/shared/components/Layout'
 import WorkerDataProvider from '../components/BubbleChart/data/WorkerDataProvider'
-import BubbleChart from '../components/BubbleChart/BubbleChart'
+import BubbleChart from '../components/BubbleChart'
 
 const Home: NextPage = () => {
   return (

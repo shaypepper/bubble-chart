@@ -26,61 +26,9 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
             Legend
           </text>
         ) : null}
-        {fillColorList.length > 0 && (
-          <>
-            <rect
-              fill="red"
-              stroke="blue"
-              strokeWidth="1%"
-              height={textSize * 1.25}
-            />
-            <g
-              style={{
-                transform: `translateY(${textSize * 1.25 + 0.01}px)`,
-              }}
-            >
-              <text style={{ textTransform: 'uppercase' }}>
-                {colors.currentColumn}
-              </text>
-              {fillColorList.map(([value, { fillColor, textColor }], i) => {
-                return (
-                  <g
-                    key={value}
-                    style={{
-                      transform: `translateY(${i * textSize * 1.7 + 0.005}px)`,
-                    }}
-                  >
-                    <MiniBubbleG
-                      fillColor={fillColor}
-                      textColor={textColor}
-                      fontSize={textSize * 0.5}
-                      r={textSize * 0.8}
-                    />
-                    <text
-                      alignmentBaseline="hanging"
-                      style={{
-                        transform: `translate(${textSize * 2}px, ${
-                          textSize * 0.4
-                        }px)`,
-                        fontSize: textSize,
-                        fontWeight: 400,
-                      }}
-                    >
-                      {' '}
-                      {value}
-                    </text>
-                  </g>
-                )
-              })}
-            </g>
-          </>
-        )}
         <g
           style={{
-            transform: `translateY(${
-              textSize * fillColorList.length * 1.5 +
-              (fillColorList.length ? textSize * 5 : 0)
-            }px)`,
+            transform: `translateY(${textSize * 1.4}px)`,
           }}
         >
           {stars.map(
@@ -89,7 +37,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
               star.column && (
                 <g
                   style={{
-                    transform: `translateY(${index * textSize * 1.5}px)`,
+                    transform: `translateY(${index * textSize * 1.7}px)`,
                   }}
                   key={`${star.value}`}
                 >
@@ -120,6 +68,49 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
               )
           )}
         </g>
+        {fillColorList.length > 0 && (
+          <g
+            style={{
+              transform: `translateY(${textSize * 1.25 + 0.045}px)`,
+            }}
+          >
+            <text style={{ textTransform: 'uppercase' }}>
+              {colors.currentColumn}
+            </text>
+            {fillColorList
+              .sort(([value], [prevValue]) => (value > prevValue ? 1 : -1))
+              .map(([value, { fillColor, textColor }], i) => {
+                return (
+                  <g
+                    key={value}
+                    style={{
+                      transform: `translateY(${i * textSize * 1.7 + 0.005}px)`,
+                    }}
+                  >
+                    <MiniBubbleG
+                      fillColor={fillColor}
+                      textColor={textColor}
+                      fontSize={textSize * 0.5}
+                      r={textSize * 0.8}
+                    />
+                    <text
+                      alignmentBaseline="hanging"
+                      style={{
+                        transform: `translate(${textSize * 2}px, ${
+                          textSize * 0.4
+                        }px)`,
+                        fontSize: textSize,
+                        fontWeight: 400,
+                      }}
+                    >
+                      {' '}
+                      {value}
+                    </text>
+                  </g>
+                )
+              })}
+          </g>
+        )}
       </g>
     </>
   )

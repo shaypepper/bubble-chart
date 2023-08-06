@@ -12,15 +12,13 @@ import { pack } from 'd3'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { css } from 'pretty-lights'
-import { Layer, Stage } from 'react-konva'
 import { downloadURI } from './utils'
-import { Worker, Grouping, isWorker } from './data/types'
+import { Worker, Grouping } from './data/types'
 import Legend from './Legend'
 import { WorkerDataContext } from './data/WorkerDataProvider'
 import { height, width } from './tokens'
 import Signs from './Signs'
 import BubbleChartSVG from './BubbleChartSVG'
-import { BubbleKonva, GroupingBubble } from './Bubble'
 
 const stageClass = css`
   width: 100vw;
@@ -90,7 +88,7 @@ const BubbleChart: FC = () => {
         width: '100vw',
       }}
     >
-      {stratifiedData && (
+      {/* {stratifiedData && (
         <Stage
           width={document.body.offsetWidth}
           height={document.body.offsetHeight}
@@ -155,7 +153,9 @@ const BubbleChart: FC = () => {
             )}
           </Layer>
         </Stage>
-      )}
+      )} */}
+
+      <BubbleChartSVG bubbleData={bubbleData} chartOptions={chartOptions} />
 
       <Legend />
       <Signs
