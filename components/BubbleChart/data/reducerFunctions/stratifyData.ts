@@ -1,6 +1,6 @@
 import { stratify } from 'd3'
 import { State } from '../dataFormattingReducer'
-import { Grouping, Value, Worker, Workers } from '../types'
+import { blankValue, Grouping, Value, Worker, Workers } from '../types'
 
 export function stratifyData(state: State): State {
   let { workersData } = state
@@ -40,8 +40,6 @@ export function stratifyData(state: State): State {
   return { ...state, stratifiedData }
 }
 
-export default stratifyData
-
 function createGroups(
   nestedGroups: { values: Value[]; colName: string }[],
   parentGroupingValues: { value: Value; colName: string }[],
@@ -62,8 +60,8 @@ function createGroups(
         .map(
           (gv): Grouping => ({
             id: parentGroupingsId
-              ? `g: ${parentGroupingsId} - ${gv}`
-              : `g: ${gv}`,
+              ? `g: ${parentGroupingsId} - ${gv || blankValue}`
+              : `g: ${gv || blankValue}`,
             grouping:
               parentGroupingValues.length === 0
                 ? 'allGroups'
@@ -86,7 +84,8 @@ function createGroups(
 
   const groupingList: Grouping[] = []
 
-  currentGrouping?.values.forEach((groupingValue) => {
+  currentGrouping?.values.forEach((gv) => {
+    const groupingValue = gv || blankValue
     if (parentGroupingValues.length === 0) {
       groupingList.push({
         id: `g: ${groupingValue}`,
@@ -116,3 +115,5 @@ function createGroups(
     [...workersData?.uniqueGroupings].find((ug) => `${ug}`.startsWith(g.id))
   )
 }
+
+export default stratifyData

@@ -36,6 +36,8 @@ export enum StarOptionsKeys {
   USE = 'use',
 }
 
+export const blankValue = '(blank)'
+
 export class StarOptions {
   [StarOptionsKeys.COLOR]: string;
   [StarOptionsKeys.COLUMN]: Column;
@@ -205,7 +207,9 @@ export class Worker {
   }
 
   get groupingList() {
-    return this.parent.columnMap.groupings.map((g) => `${this.rawData[g]}`)
+    return this.parent.columnMap.groupings.map(
+      (g) => `${this.rawData[g] || blankValue}`
+    )
   }
 
   get grouping() {
