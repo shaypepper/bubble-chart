@@ -126,9 +126,9 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_COLUMN_MAP:
       newState = createColumnMap(state, action.columnMap, action.listFromCsv)
-      let { uniqueIdentifier, displayName, primaryGrouping } =
+      let { uniqueIdentifier, displayName, groupings } =
         action.listFromCsv.columnMap
-      if (!uniqueIdentifier || !displayName || !primaryGrouping) {
+      if (!uniqueIdentifier || !displayName || !groupings.length) {
         return newState
       }
       break

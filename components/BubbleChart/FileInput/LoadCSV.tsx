@@ -9,8 +9,6 @@ import { pxToRem } from '../../shared/tokens/spacing'
 const columnMapLabels: { [s: string]: string } = {
   uniqueIdentifier: 'Unique identifier',
   displayName: 'Display name',
-  primaryGrouping: '1st Grouping',
-  secondaryGrouping: '2nd Grouping (optional)',
 }
 
 const LoadCSV: React.FC<{
