@@ -11,6 +11,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
   const currentColumnColorMap: ColorMap =
     colors.colorMap[colors.currentColumn] || {}
   const fillColorList = Object.entries(currentColumnColorMap)
+  const filteredShapes = shapes.filter((s) => s.use && s.column)
 
   return (
     <>
@@ -21,7 +22,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
           fontSize: textSize,
         }}
       >
-        {fillColorList.length || shapes.find((s) => s.use) ? (
+        {fillColorList.length || filteredShapes.length ? (
           <text style={{ fontSize: textSize * 1.5, fontWeight: 'bold' }}>
             Legend
           </text>
@@ -31,41 +32,39 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
             transform: `translateY(${textSize * 1.4}px)`,
           }}
         >
-          {shapes.map(
-            (shape, index) =>
-              shape.use &&
-              shape.column && (
-                <g
-                  style={{
-                    transform: `translateY(${index * textSize * 1.7}px)`,
-                  }}
-                  key={`${shape.value}`}
-                >
-                  <path
-                    d={shapePaths[shape.shape].pathCommands}
-                    transform={`scale(0.0001)`}
-                    fill={shape.color}
-                  />
-                  <text
-                    alignmentBaseline="hanging"
-                    style={{
-                      transform: `translate(${textSize * 2}px, ${
-                        textSize * 0.3
-                      }px)`,
-                      fontSize: textSize,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {shape.column}: {shape.value}
-                  </text>
-                </g>
-              )
-          )}
+          {filteredShapes.map((shape, index) => (
+            <g
+              style={{
+                transform: `translateY(${index * textSize * 1.7}px)`,
+              }}
+              key={`${shape.value}`}
+            >
+              <path
+                d={shapePaths[shape.shape].pathCommands}
+                transform={`scale(0.0001)`}
+                fill={shape.color}
+              />
+              <text
+                alignmentBaseline="hanging"
+                style={{
+                  transform: `translate(${textSize * 2}px, ${
+                    textSize * 0.3
+                  }px)`,
+                  fontSize: textSize,
+                  fontWeight: 400,
+                }}
+              >
+                {shape.column}: {shape.value}
+              </text>
+            </g>
+          ))}
         </g>
         {fillColorList.length > 0 && (
           <g
             style={{
-              transform: `translateY(${textSize * 1.25 + 0.045}px)`,
+              transform: `translateY(${
+                textSize * 2 * filteredShapes.length + 0.04
+              }px)`,
             }}
           >
             <text style={{ textTransform: 'uppercase' }}>
