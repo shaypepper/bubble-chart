@@ -2,11 +2,20 @@ import * as React from 'react'
 import { Path } from 'react-konva'
 import { red } from '../../shared/tokens/colors'
 import { getShapePath } from '../helpers'
+import Cloud from './Cloud'
+import Fist1 from './Fist1'
+import Fist2 from './Fist2'
+import Heart from './Heart'
+import Pillow from './Pillow'
+import Splat from './Splat'
+import Star from './Star'
+import TShirt from './TShirt'
 
 export type ShapeComponent = React.FC<{
   height: number
   fillColor: string
-}>
+  onClick?: React.MouseEventHandler
+}> & { pathCommands: string }
 
 const getF = (r: number) => (n: number) => (n * r) / 110 - r * 0.46
 const getG = (r: number) => (n: number) => (n * r) / 110 - r * 0.37
@@ -24,7 +33,10 @@ export const Shape: React.FC<{
   return <Path data={pathCommands} fill={color} />
 }
 
-export const ShapeSVG: React.FC<{ size: number }> = ({ size, children }) => {
+export const ShapeSVG: React.FC<{
+  size: number
+  onClick?: React.MouseEventHandler
+}> = ({ size, children, onClick = () => {} }) => {
   return (
     <svg
       width={size}
@@ -32,6 +44,7 @@ export const ShapeSVG: React.FC<{ size: number }> = ({ size, children }) => {
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
     >
       {children}
     </svg>
@@ -80,4 +93,28 @@ export const shapeTransform: {
       4: konvaTransformFn(4),
     },
   },
+}
+
+export enum Shapes {
+  HEART = 'heart',
+  SPLAT = 'splat',
+  FIST_1 = 'fist1',
+  FIST_2 = 'fist2',
+  PILLOW = 'pillow',
+  CLOUD = 'cloud',
+  STAR = 'star',
+  // AVATAR = 'avatar',
+  T_SHIRT = 't-shirt',
+}
+
+export const shapePaths = {
+  [Shapes.HEART]: Heart,
+  [Shapes.SPLAT]: Splat,
+  [Shapes.FIST_1]: Fist1,
+  [Shapes.FIST_2]: Fist2,
+  [Shapes.PILLOW]: Pillow,
+  [Shapes.CLOUD]: Cloud,
+  [Shapes.STAR]: Star,
+  // [Shapes.AVATAR]: Avatar,
+  [Shapes.T_SHIRT]: TShirt,
 }

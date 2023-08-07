@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { ChartOptions, ColorMap } from './data/types'
 import { MiniBubbleG } from './Bubble'
-import { getSplatPathCommands } from './shapes/Splat'
+import { shapePaths } from './shapes/Shape'
 
 const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
   textSize,
@@ -42,7 +42,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
                   key={`${shape.value}`}
                 >
                   <path
-                    d={getSplatPathCommands({})}
+                    d={shapePaths[shape.shape].pathCommands}
                     transform={`scale(0.0001)`}
                     fill={shape.color}
                   />

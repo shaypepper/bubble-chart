@@ -1,5 +1,6 @@
 import { DSVRowArray } from 'd3'
 import { colors } from '../../shared/tokens/colors'
+import { Shapes } from '../shapes/Shape'
 
 type Person = {
   [key: Column]: Value
@@ -34,6 +35,7 @@ export enum ShapeOptionsKeys {
   VALUE = 'value',
   LABEL = 'label',
   USE = 'use',
+  SHAPE = 'shape',
 }
 
 export const blankValue = '(blank)'
@@ -43,7 +45,8 @@ export class ShapeOptions {
   [ShapeOptionsKeys.COLUMN]: Column;
   [ShapeOptionsKeys.VALUE]: Value;
   [ShapeOptionsKeys.LABEL]: string;
-  [ShapeOptionsKeys.USE]: boolean
+  [ShapeOptionsKeys.USE]: boolean;
+  [ShapeOptionsKeys.SHAPE]: Shapes
 
   constructor() {
     this.column = ''
@@ -51,6 +54,7 @@ export class ShapeOptions {
     this.value = ''
     this.label = ''
     this.use = false
+    this.shape = Shapes.HEART
   }
 }
 
@@ -69,7 +73,13 @@ export class ChartOptions {
   ) {
     this.shapes = shapes.length
       ? shapes
-      : [new ShapeOptions(), new ShapeOptions(), new ShapeOptions()]
+      : [
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+        ]
     this.textLineColumns = textLineColumns
     this.colors = colors
   }
@@ -176,9 +186,10 @@ export class Worker {
 
   get shapes() {
     const shapes = this.parent.chartOptions?.shapes || []
-    return shapes.map(({ value, column, color, use }) => ({
+    return shapes.map(({ value, column, color, use, shape }) => ({
       fillColor: color,
       show: value === this.rawData[column] && use,
+      shape,
     }))
   }
 

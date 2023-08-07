@@ -84,7 +84,7 @@ const BubbleChart: FC = () => {
 
   return (
     <>
-      <BubbleChartSVG bubbleData={bubbleData} chartOptions={chartOptions} />
+      {/* <BubbleChartSVG bubbleData={bubbleData} chartOptions={chartOptions} /> */}
       <div
         style={{
           position: 'fixed',
@@ -92,7 +92,7 @@ const BubbleChart: FC = () => {
           width: '100vw',
         }}
       >
-        <div style={{ display: 'none' }}>
+        <div style={{ display: '' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}

@@ -4,7 +4,7 @@ import { pxToRem } from '../shared/tokens/spacing'
 import { MiniBubbleSVG } from './Bubble'
 import { WorkerDataContext } from './data/WorkerDataProvider'
 import { ColorMap, Column, ShapeOptions } from './data/types'
-import Splat from './shapes/Splat'
+import { shapePaths } from './shapes/Shape'
 
 const legendList = css`
   list-style-type: none;
@@ -107,12 +107,15 @@ const Legend: FC = () => {
           <li key={`${column}`}>
             {column}
             <ul className={legendList}>
-              {values.map((s) => (
-                <li key={`${s.value}`}>
-                  <Splat height={14} fillColor={s.color} />
-                  {s.value}
-                </li>
-              ))}
+              {values.map((s) => {
+                const ShapeComponent = shapePaths[s.shape]
+                return (
+                  <li key={`${s.value}`}>
+                    <ShapeComponent height={14} fillColor={s.color} />
+                    {s.value}
+                  </li>
+                )
+              })}
             </ul>
           </li>
         ))}

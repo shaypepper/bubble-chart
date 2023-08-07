@@ -6,6 +6,7 @@ import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 import { ShapeOptionsKeys, Value } from '../../data/types'
 import ColorGrid from './ColorGrid'
+import ShapeGrid from './ShapeGrid'
 
 const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
@@ -81,6 +82,25 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
                 label={'Value'}
                 toggleText={`${chartOptions.shapes[shapeIndex].value}` || ''}
               />
+            )}
+
+            {column && value && (
+              <Form.Group>
+                <Form.Label style={{ width: '80%' }}>
+                  Shape
+                  <ShapeGrid
+                    generateOnClick={(shape) => () => {
+                      dispatch({
+                        type: FormatAction.SET_STAR_OPTION,
+                        optionType: ShapeOptionsKeys.SHAPE,
+                        value: shape,
+                        shapeIndex,
+                      })
+                    }}
+                    fillColor={chartOptions.shapes[shapeIndex].color}
+                  />
+                </Form.Label>
+              </Form.Group>
             )}
 
             {column && value && (

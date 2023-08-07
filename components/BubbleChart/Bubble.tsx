@@ -14,8 +14,8 @@ import Pencil from '../shared/icons/Pencil'
 import { getShapePath } from './helpers'
 import { ConfigPanel } from './VizConfig/VizConfig'
 import { height } from './tokens'
-import { getSplatPathCommands } from './shapes/Splat'
-import { shapeTransform } from './shapes/Shape'
+import { shapePaths, Shapes, shapeTransform } from './shapes/Shape'
+import { ShapeOptions } from './data/types'
 
 const placeHolderGrey = '#c0c0c0'
 
@@ -33,7 +33,7 @@ type BubbleProps = {
   width?: number | string
   generateOnClick?: (s: ConfigPanel) => () => void
   onClick?: () => void
-  shapes?: { fillColor: string; show: boolean }[]
+  shapes?: { fillColor: string; show: boolean; shape: Shapes }[]
   id?: string
 }
 
@@ -88,7 +88,7 @@ export const MiniBubbleSVG: FC<{
 export const BubbleEditSVG: FC<
   BubbleProps & {
     configPanels?: ConfigPanel[]
-    shapeOptions: { use: boolean; color: string }[]
+    shapeOptions: ShapeOptions[]
   }
 > = ({
   displayName = 'Angelique',
@@ -158,15 +158,16 @@ export const BubbleEditSVG: FC<
           ></rect>
         )
       )}
-
-      {shapeOptions.map((shape, shapeIndex) => (
-        <path
-          key={`shape${shapeIndex}`}
-          d={getShapePath({ whichShape: shapeIndex + 1 })}
-          fill={shape.use ? shape.color : placeHolderGrey}
-        />
-      ))}
-
+      <g transform="translate(50 45) scale(1.7)">
+        {shapeOptions.map((shapeOption, shapeOptionIndex) => (
+          <path
+            key={`shape${shapeOptionIndex}`}
+            d={shapePaths[shapeOption.shape]?.pathCommands}
+            transform={shapeTransform.SVG[shapeOptionIndex](R / 2)}
+            fill={shapeOption.use ? shapeOption.color : placeHolderGrey}
+          />
+        ))}
+      </g>
       {configPanels.map((panel) => {
         const {
           name: panelName,
@@ -247,7 +248,7 @@ export const BubbleSVG: FC<BubbleProps> = ({
           shape.show && (
             <path
               transform={shapeTransform.SVG[shapeIndex]?.(R)}
-              d={getSplatPathCommands({})}
+              d={shapePaths[shape.shape].pathCommands}
               fill={shape.fillColor}
             />
           )
@@ -345,7 +346,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
         (shape, shapeIndex: number) =>
           shape.show && (
             <Path
-              data={getSplatPathCommands({})}
+              data={shapePaths[shape.shape].pathCommands}
               fill={shape.fillColor}
               position={shapeTransform.Konva.position[shapeIndex](R)}
               scale={shapeTransform.Konva.scale(R)}

@@ -41,9 +41,11 @@ const configPanels: ConfigPanel[] = [
     type: 'textLine',
     translate: { x: 80, y: 20 },
   },
-  { name: 'Shape 1', index: 0, type: 'shape', translate: { x: 29, y: -28 } },
-  { name: 'Shape 2', index: 1, type: 'shape', translate: { x: 46, y: -27 } },
-  { name: 'Shape 3', index: 2, type: 'shape', translate: { x: 63, y: -30 } },
+  { name: 'Shape 1', index: 0, type: 'shape', translate: { x: 15, y: -20 } },
+  { name: 'Shape 2', index: 1, type: 'shape', translate: { x: 30, y: -35 } },
+  { name: 'Shape 3', index: 2, type: 'shape', translate: { x: 48.5, y: -40 } },
+  { name: 'Shape 4', index: 3, type: 'shape', translate: { x: 68, y: -35 } },
+  { name: 'Shape 5', index: 4, type: 'shape', translate: { x: 80, y: -20 } },
 ]
 
 const VizConfig: React.FC = () => {
