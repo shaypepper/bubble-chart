@@ -31,7 +31,7 @@ const BubbleChartSVG: FC<{
                 bubbleFillColor={d.data.bubbleColors?.fillColor}
                 innerTextColor={d.data.bubbleColors?.textColor}
                 textLines={['shay'] && d.data.textLines}
-                stars={d.data.stars || []}
+                shapes={d.data.shapes || []}
                 displayName={d.data?.displayName?.split(' ')[0] || '*******'}
               />
             </g>

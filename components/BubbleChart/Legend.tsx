@@ -3,8 +3,8 @@ import { css } from 'pretty-lights'
 import { pxToRem } from '../shared/tokens/spacing'
 import { MiniBubbleSVG } from './Bubble'
 import { WorkerDataContext } from './data/WorkerDataProvider'
-import { getStarPath, getStarViewbox } from './helpers'
-import { ColorMap, Column, StarOptions } from './data/types'
+import { ColorMap, Column, ShapeOptions } from './data/types'
+import Splat from './shapes/Splat'
 
 const legendList = css`
   list-style-type: none;
@@ -46,24 +46,24 @@ const containerClass = css`
 
 const Legend: FC = () => {
   const {
-    chartOptions: { colors, stars },
+    chartOptions: { colors, shapes },
   } = useContext(WorkerDataContext)
   const currentColumnColorMap: ColorMap =
     colors.colorMap[colors.currentColumn] || {}
 
   const fillColorList = Object.entries(currentColumnColorMap)
 
-  const reducedStars = stars.reduce<
-    { column: Column; values: StarOptions[] }[]
-  >((memo, currentStar: StarOptions, index) => {
-    if (!currentStar.use) return memo
+  const reducedShapes = shapes.reduce<
+    { column: Column; values: ShapeOptions[] }[]
+  >((memo, currentShape: ShapeOptions, index) => {
+    if (!currentShape.use) return memo
 
     let columnFound = false
     memo.forEach((s, memoIndex) => {
-      if (currentStar.column === s.column) {
+      if (currentShape.column === s.column) {
         memo[memoIndex] = {
           column: s.column,
-          values: [...s.values, currentStar],
+          values: [...s.values, currentShape],
         }
         columnFound = true
       }
@@ -71,8 +71,8 @@ const Legend: FC = () => {
 
     if (!columnFound) {
       memo.push({
-        column: currentStar.column,
-        values: [currentStar],
+        column: currentShape.column,
+        values: [currentShape],
       })
     }
     return memo
@@ -103,22 +103,13 @@ const Legend: FC = () => {
           </li>
         )}
 
-        {reducedStars.map(({ column, values }, index) => (
+        {reducedShapes.map(({ column, values }, index) => (
           <li key={`${column}`}>
             {column}
             <ul className={legendList}>
               {values.map((s) => (
                 <li key={`${s.value}`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox={getStarViewbox({ whichStar: index + 1 })}
-                    height={14}
-                  >
-                    <path
-                      d={getStarPath({ whichStar: index + 1 })}
-                      fill={s.color}
-                    />
-                  </svg>
+                  <Splat height={14} fillColor={s.color} />
                   {s.value}
                 </li>
               ))}

@@ -1,7 +1,7 @@
 export { setTextLine } from './setTextLine'
 
 export { createColumnMap } from './createColumnMap'
-export { setStarOption } from './setStarOptions'
+export { setShapeOption } from './setShapeOptions'
 export { stratifyData } from './stratifyData'
 export { loadWorkers, loadExampleWorkersAndChartOptions } from './loadWorkers'
 

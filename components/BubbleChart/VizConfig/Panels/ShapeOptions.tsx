@@ -4,18 +4,18 @@ import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
 
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
-import { StarOptionsKeys, Value } from '../../data/types'
+import { ShapeOptionsKeys, Value } from '../../data/types'
 import ColorGrid from './ColorGrid'
 
-const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
+const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
 
-  const column = chartOptions.stars[starIndex]?.column
-  const active = chartOptions.stars[starIndex]?.use
+  const column = chartOptions.shapes[shapeIndex]?.column
+  const active = chartOptions.shapes[shapeIndex]?.use
 
   const value = useMemo<Value>(
-    () => chartOptions.stars[starIndex]?.value,
-    [chartOptions, starIndex]
+    () => chartOptions.shapes[shapeIndex]?.value,
+    [chartOptions, shapeIndex]
   )
 
   const possibleValues = useMemo<Set<Value>>(
@@ -23,9 +23,9 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
     [column, workersData]
   )
 
-  const starColor = useMemo<string>(
-    () => chartOptions.stars[starIndex]?.color,
-    [chartOptions, starIndex]
+  const shapeColor = useMemo<string>(
+    () => chartOptions.shapes[shapeIndex]?.color,
+    [chartOptions, shapeIndex]
   )
 
   return (
@@ -33,16 +33,16 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
       <Form>
         <Form.Group>
           <Form.Check
-            id={`use-star-${starIndex + 1}`}
+            id={`use-shape-${shapeIndex + 1}`}
             type="switch"
-            label={`Use Star ${starIndex + 1}`}
+            label={`Use Shape ${shapeIndex + 1}`}
             checked={active}
             onChange={() => {
               dispatch({
                 type: FormatAction.SET_STAR_OPTION,
-                optionType: StarOptionsKeys.USE,
+                optionType: ShapeOptionsKeys.USE,
                 value: !active,
-                starIndex,
+                shapeIndex,
               })
             }}
           />
@@ -51,13 +51,13 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
         {active && (
           <>
             <DropdownWithFilter
-              id="star-options-column-dropdown"
+              id="shape-options-column-dropdown"
               onSelect={(eventKey) => {
                 dispatch({
                   type: FormatAction.SET_STAR_OPTION,
-                  optionType: StarOptionsKeys.COLUMN,
+                  optionType: ShapeOptionsKeys.COLUMN,
                   value: `${eventKey}`,
-                  starIndex,
+                  shapeIndex,
                 })
               }}
               toggleText={column || '------'}
@@ -68,18 +68,18 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
 
             {column && (
               <DropdownWithFilter
-                id="star-options-value-dropdown"
+                id="shape-options-value-dropdown"
                 list={[...possibleValues].map((v) => `${v}`)}
                 onSelect={(eventKey) => {
                   dispatch({
                     type: FormatAction.SET_STAR_OPTION,
-                    optionType: StarOptionsKeys.VALUE,
+                    optionType: ShapeOptionsKeys.VALUE,
                     value: eventKey,
-                    starIndex,
+                    shapeIndex,
                   })
                 }}
                 label={'Value'}
-                toggleText={`${chartOptions.stars[starIndex].value}` || ''}
+                toggleText={`${chartOptions.shapes[shapeIndex].value}` || ''}
               />
             )}
 
@@ -91,9 +91,9 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
                     generateOnClick={(color) => () => {
                       dispatch({
                         type: FormatAction.SET_STAR_OPTION,
-                        optionType: StarOptionsKeys.COLOR,
+                        optionType: ShapeOptionsKeys.COLOR,
                         value: color,
-                        starIndex,
+                        shapeIndex,
                       })
                     }}
                     noText
@@ -109,4 +109,4 @@ const StarOptionsForm: FC<{ starIndex: number }> = ({ starIndex = 0 }) => {
   )
 }
 
-export default StarOptionsForm
+export default ShapeOptionsForm

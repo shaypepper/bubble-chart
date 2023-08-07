@@ -1,13 +1,13 @@
 import { FC } from 'react'
 import { ChartOptions, ColorMap } from './data/types'
 import { MiniBubbleG } from './Bubble'
-import { getStarPath } from './helpers'
+import { getSplatPathCommands } from './shapes/Splat'
 
 const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
   textSize,
   chartOptions,
 }) => {
-  const { colors, stars } = chartOptions
+  const { colors, shapes } = chartOptions
   const currentColumnColorMap: ColorMap =
     colors.colorMap[colors.currentColumn] || {}
   const fillColorList = Object.entries(currentColumnColorMap)
@@ -21,7 +21,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
           fontSize: textSize,
         }}
       >
-        {fillColorList.length || stars.find((s) => s.use) ? (
+        {fillColorList.length || shapes.find((s) => s.use) ? (
           <text style={{ fontSize: textSize * 1.5, fontWeight: 'bold' }}>
             Legend
           </text>
@@ -31,38 +31,32 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
             transform: `translateY(${textSize * 1.4}px)`,
           }}
         >
-          {stars.map(
-            (star, index) =>
-              star.use &&
-              star.column && (
+          {shapes.map(
+            (shape, index) =>
+              shape.use &&
+              shape.column && (
                 <g
                   style={{
                     transform: `translateY(${index * textSize * 1.7}px)`,
                   }}
-                  key={`${star.value}`}
+                  key={`${shape.value}`}
                 >
                   <path
-                    d={getStarPath({
-                      whichStar: index + 1,
-                      f: (n) =>
-                        n * textSize * 0.08 -
-                        textSize * 1.3 * (index + 1) -
-                        textSize * 0.6,
-                      g: (n) => n * textSize * 0.08 - textSize * 1.25,
-                    })}
-                    fill={star.color}
+                    d={getSplatPathCommands({})}
+                    transform={`scale(0.0001)`}
+                    fill={shape.color}
                   />
                   <text
                     alignmentBaseline="hanging"
                     style={{
                       transform: `translate(${textSize * 2}px, ${
-                        textSize * 0.2
+                        textSize * 0.3
                       }px)`,
                       fontSize: textSize,
                       fontWeight: 400,
                     }}
                   >
-                    {star.column}: {star.value}
+                    {shape.column}: {shape.value}
                   </text>
                 </g>
               )

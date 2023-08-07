@@ -28,7 +28,7 @@ export type ColumnMap = {
   groupings: string[]
 }
 
-export enum StarOptionsKeys {
+export enum ShapeOptionsKeys {
   COLOR = 'color',
   COLUMN = 'column',
   VALUE = 'value',
@@ -38,12 +38,12 @@ export enum StarOptionsKeys {
 
 export const blankValue = '(blank)'
 
-export class StarOptions {
-  [StarOptionsKeys.COLOR]: string;
-  [StarOptionsKeys.COLUMN]: Column;
-  [StarOptionsKeys.VALUE]: Value;
-  [StarOptionsKeys.LABEL]: string;
-  [StarOptionsKeys.USE]: boolean
+export class ShapeOptions {
+  [ShapeOptionsKeys.COLOR]: string;
+  [ShapeOptionsKeys.COLUMN]: Column;
+  [ShapeOptionsKeys.VALUE]: Value;
+  [ShapeOptionsKeys.LABEL]: string;
+  [ShapeOptionsKeys.USE]: boolean
 
   constructor() {
     this.column = ''
@@ -55,28 +55,28 @@ export class StarOptions {
 }
 
 export class ChartOptions {
-  stars: StarOptions[]
+  shapes: ShapeOptions[]
   textLineColumns: Column[]
   colors: ColorOptions
 
   constructor(
-    stars: StarOptions[] = [],
+    shapes: ShapeOptions[] = [],
     textLineColumns: Column[] = [],
     colors: ColorOptions = {
       currentColumn: '',
       colorMap: {},
     }
   ) {
-    this.stars = stars.length
-      ? stars
-      : [new StarOptions(), new StarOptions(), new StarOptions()]
+    this.shapes = shapes.length
+      ? shapes
+      : [new ShapeOptions(), new ShapeOptions(), new ShapeOptions()]
     this.textLineColumns = textLineColumns
     this.colors = colors
   }
 
   duplicate() {
     const newOptions = new ChartOptions(
-      this.stars,
+      this.shapes,
       this.textLineColumns,
       this.colors
     )
@@ -174,9 +174,9 @@ export class Worker {
     }`
   }
 
-  get stars() {
-    const stars = this.parent.chartOptions?.stars || []
-    return stars.map(({ value, column, color, use }) => ({
+  get shapes() {
+    const shapes = this.parent.chartOptions?.shapes || []
+    return shapes.map(({ value, column, color, use }) => ({
       fillColor: color,
       show: value === this.rawData[column] && use,
     }))
