@@ -1,11 +1,13 @@
-type GetStarPathArgs = {
-  whichStar: number
+type GetShapePathArgs = {
+  whichShape: number
   f?: (n: number) => number
   g?: (n: number) => number
 }
 
-export const getStarViewbox = ({ whichStar = 1 }: GetStarPathArgs): string => {
-  switch (whichStar) {
+export const getShapeViewbox = ({
+  whichShape = 1,
+}: GetShapePathArgs): string => {
+  switch (whichShape) {
     case 1:
       return '24 10 22 22'
     case 2:
@@ -17,12 +19,12 @@ export const getStarViewbox = ({ whichStar = 1 }: GetStarPathArgs): string => {
   }
 }
 
-export const getStarPath = ({
-  whichStar = 1,
+export const getShapePath = ({
+  whichShape = 1,
   f = (n) => n,
   g = (n) => n,
-}: GetStarPathArgs): string => {
-  switch (whichStar) {
+}: GetShapePathArgs): string => {
+  switch (whichShape) {
     case 1:
       return [
         `M${f(25.3067)} ${g(13.7123)}`,

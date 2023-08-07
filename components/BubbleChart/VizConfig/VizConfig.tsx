@@ -5,7 +5,7 @@ import { pxToRem } from '../../shared/tokens/spacing'
 import { BubbleEditSVG } from '../Bubble'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import FillColorOptions from './Panels/FillColorOptions'
-import StarOptions from './Panels/StarOptions'
+import ShapeOptions from './Panels/ShapeOptions'
 import TextLineOptions from './Panels/TextLineOptions'
 import { configTitleClass } from './styles'
 
@@ -22,7 +22,7 @@ export type ConfigPanel = {
   translate: { x: number; y: number }
 }
 const configPanels: ConfigPanel[] = [
-  { name: 'Fill colors', index: 0, type: 'fill', translate: { x: 5, y: -5 } },
+  { name: 'Fill color', index: 0, type: 'fill', translate: { x: 5, y: -5 } },
   {
     name: 'Text line 1',
     index: 0,
@@ -41,9 +41,11 @@ const configPanels: ConfigPanel[] = [
     type: 'textLine',
     translate: { x: 80, y: 20 },
   },
-  { name: 'Star 1', index: 0, type: 'star', translate: { x: 29, y: -28 } },
-  { name: 'Star 2', index: 1, type: 'star', translate: { x: 46, y: -27 } },
-  { name: 'Star 3', index: 2, type: 'star', translate: { x: 63, y: -30 } },
+  { name: 'Shape 1', index: 0, type: 'shape', translate: { x: 15, y: -20 } },
+  { name: 'Shape 2', index: 1, type: 'shape', translate: { x: 30, y: -35 } },
+  { name: 'Shape 3', index: 2, type: 'shape', translate: { x: 48.5, y: -40 } },
+  { name: 'Shape 4', index: 3, type: 'shape', translate: { x: 68, y: -35 } },
+  { name: 'Shape 5', index: 4, type: 'shape', translate: { x: 80, y: -20 } },
 ]
 
 const VizConfig: React.FC = () => {
@@ -71,7 +73,7 @@ const VizConfig: React.FC = () => {
           displayName={workersData?.list[3].displayName.split(' ')[0] || ''}
           textLines={textLines}
           width={'40vmin'}
-          starOptions={chartOptions.stars}
+          shapeOptions={chartOptions.shapes}
           generateOnClick={(panel: ConfigPanel) => () => {
             setCurrentConfigPanel(panel)
           }}
@@ -84,10 +86,10 @@ const VizConfig: React.FC = () => {
             ? `${currentConfigPanel?.name} options`
             : ''}{' '}
         </h3>
-        {currentConfigPanel?.type === 'star' && (
-          <StarOptions
-            starIndex={currentConfigPanel.index}
-            key={`star${currentConfigPanel.index}`}
+        {currentConfigPanel?.type === 'shape' && (
+          <ShapeOptions
+            shapeIndex={currentConfigPanel.index}
+            key={`shape${currentConfigPanel.index}`}
           />
         )}
 

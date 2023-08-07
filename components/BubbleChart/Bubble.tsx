@@ -11,22 +11,19 @@ import { Group, Circle, TextPath, Text, Path, Rect } from 'react-konva'
 import { deepGrey, red, softGrey, white } from '../shared/tokens/colors'
 import { bangersFont, latoFont } from '../shared/tokens/fonts'
 import Pencil from '../shared/icons/Pencil'
-import { getStarPath } from './helpers'
+import { getShapePath } from './helpers'
 import { ConfigPanel } from './VizConfig/VizConfig'
 import { height } from './tokens'
+import { shapePaths, Shapes, shapeTransform } from './shapes/Shape'
+import { ShapeOptions } from './data/types'
 
 const placeHolderGrey = '#c0c0c0'
 
 type BubbleProps = {
   displayName: string
-  fullName?: string
   radius?: number
-  bubbleBorderColor?: string
-  showBubbleBorder?: boolean
   bubbleFillColor?: string
   innerTextColor?: string
-  showStars?: boolean[]
-  starColors?: string[]
   translation?: {
     x: number
     y: number
@@ -36,8 +33,29 @@ type BubbleProps = {
   width?: number | string
   generateOnClick?: (s: ConfigPanel) => () => void
   onClick?: () => void
-  stars?: { fillColor: string; show: boolean }[]
+  shapes?: { fillColor: string; show: boolean; shape: Shapes }[]
   id?: string
+}
+
+export const MiniBubbleG: FC<{
+  fillColor?: string
+  textColor?: string
+  fontSize?: number
+  r?: number
+}> = ({ fillColor = deepGrey, textColor = white, fontSize = 3, r = 5 }) => {
+  return (
+    <g>
+      <circle fill={fillColor} r={r} transform={`translate(${r} ${r})`} />
+      <text
+        fontFamily={bangersFont}
+        fill={textColor}
+        fontSize={fontSize}
+        transform={`translate(${0.56 * r} ${1.24 * r})`}
+      >
+        text
+      </text>
+    </g>
+  )
 }
 
 export const MiniBubbleSVG: FC<{
@@ -55,21 +73,14 @@ export const MiniBubbleSVG: FC<{
 }) => {
   return (
     <svg
+      x="0"
       viewBox="0 0 10 10"
       height={height}
       role="button"
       className={className}
       onClick={onClick}
     >
-      <circle fill={fillColor} r="5" transform="translate(5 5)" />
-      <text
-        fontFamily={bangersFont}
-        fill={textColor}
-        fontSize={3}
-        transform="translate(2.8 6.2)"
-      >
-        text
-      </text>
+      <MiniBubbleG fillColor={fillColor} textColor={textColor} fontSize={3} />
     </svg>
   )
 }
@@ -77,7 +88,7 @@ export const MiniBubbleSVG: FC<{
 export const BubbleEditSVG: FC<
   BubbleProps & {
     configPanels?: ConfigPanel[]
-    starOptions: { use: boolean; color: string }[]
+    shapeOptions: ShapeOptions[]
   }
 > = ({
   displayName = 'Angelique',
@@ -86,11 +97,11 @@ export const BubbleEditSVG: FC<
   innerTextColor = deepGrey,
   textLines = ['----', '----', '----'],
   generateOnClick = () => () => null,
-  starOptions = [],
+  shapeOptions = [],
   configPanels = [],
 }) => {
   const R = 50
-  console.log(starOptions)
+  console.log(shapeOptions)
   return (
     <svg
       width={width}
@@ -147,15 +158,16 @@ export const BubbleEditSVG: FC<
           ></rect>
         )
       )}
-
-      {starOptions.map((star, starIndex) => (
-        <path
-          key={`star${starIndex}`}
-          d={getStarPath({ whichStar: starIndex + 1 })}
-          fill={star.use ? star.color : placeHolderGrey}
-        />
-      ))}
-
+      <g transform="translate(50 45) scale(1.7)">
+        {shapeOptions.map((shapeOption, shapeOptionIndex) => (
+          <path
+            key={`shape${shapeOptionIndex}`}
+            d={shapePaths[shapeOption.shape]?.pathCommands}
+            transform={shapeTransform.SVG[shapeOptionIndex](R / 2)}
+            fill={shapeOption.use ? shapeOption.color : placeHolderGrey}
+          />
+        ))}
+      </g>
       {configPanels.map((panel) => {
         const {
           name: panelName,
@@ -179,7 +191,7 @@ export const BubbleSVG: FC<BubbleProps> = ({
   bubbleFillColor = 'gainsboro',
   innerTextColor = deepGrey,
   textLines = ['----', '----', '----'],
-  stars = [],
+  shapes = [],
   radius = 1,
 }) => {
   const R = radius
@@ -231,13 +243,13 @@ export const BubbleSVG: FC<BubbleProps> = ({
         </>
       ))}
 
-      {stars.map(
-        (star, starIndex) =>
-          star.show && (
+      {shapes.map(
+        (shape, shapeIndex: number) =>
+          shape.show && (
             <path
-              transform={`translate(${-R * 1.1} ${-R}) scale(${R / 45})`}
-              d={getStarPath({ whichStar: starIndex + 1 })}
-              fill={star.fillColor}
+              transform={shapeTransform.SVG[shapeIndex]?.(R)}
+              d={shapePaths[shape.shape].pathCommands}
+              fill={shape.fillColor}
             />
           )
       )}
@@ -253,7 +265,6 @@ export const GroupingBubbleSVG: FC<
   bubbleFillColor = '#6666661d',
   innerTextColor = white,
   radius = 5,
-  groupSize = 10,
 }) => {
   const id = Math.random()
   return (
@@ -275,10 +286,10 @@ export const GroupingBubbleSVG: FC<
           href={`#displayNamePath${id}`}
           style={{
             fontFamily: 'Lato',
-            fontWeight: 900,
-            fontSize: radius / (1.5 * Math.sqrt(groupSize)),
+            fontWeight: 300,
+            fontSize: radius / 8,
           }}
-          fill={'#999'}
+          fill={'#333'}
         >
           {displayName}
         </textPath>
@@ -293,7 +304,7 @@ export const BubbleKonva: FC<BubbleProps> = ({
   translation = { x: 0, y: 0 },
   bubbleFillColor = white,
   innerTextColor = deepGrey,
-  stars,
+  shapes,
   textLines = [
     'Steward: Sarah Duncan',
     'Assessment: 1. Doing Outreach',
@@ -331,14 +342,16 @@ export const BubbleKonva: FC<BubbleProps> = ({
         width={R * 2}
       />
 
-      {stars?.[0]?.show && (
-        <Star size={R * 3} color={stars[0].fillColor} whichStar={1} />
-      )}
-      {stars?.[1]?.show && (
-        <Star size={R * 3} color={stars[1].fillColor} whichStar={2} />
-      )}
-      {stars?.[2]?.show && (
-        <Star size={R * 3} color={stars[2].fillColor} whichStar={3} />
+      {shapes?.map(
+        (shape, shapeIndex: number) =>
+          shape.show && (
+            <Path
+              data={shapePaths[shape.shape].pathCommands}
+              fill={shape.fillColor}
+              position={shapeTransform.Konva.position[shapeIndex](R)}
+              scale={shapeTransform.Konva.scale(R)}
+            />
+          )
       )}
 
       {textLines?.map((t, i) => {
@@ -433,19 +446,19 @@ export const GroupingBubble = ({
 const getF = (r: number) => (n: number) => (n * r) / 110 - r * 0.46
 const getG = (r: number) => (n: number) => (n * r) / 110 - r * 0.37
 
-const Star = ({
+const Shape = ({
   size = 50,
   color = red,
-  whichStar,
+  whichShape,
 }: {
   size: number
-  whichStar: number
+  whichShape: number
   color: string
 }) => {
-  const pathCommands = getStarPath({
+  const pathCommands = getShapePath({
     f: getF(size),
     g: getG(size),
-    whichStar,
+    whichShape,
   })
   return <Path data={pathCommands} fill={color} />
 }

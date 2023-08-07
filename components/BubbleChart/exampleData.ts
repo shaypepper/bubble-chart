@@ -3,8 +3,7 @@ import { DSVRowArray } from 'd3'
 export const exampleColumnMap = {
   uniqueIdentifier: 'Full name',
   displayName: 'First Name',
-  primaryGrouping: 'Department',
-  secondaryGrouping: 'Job',
+  groupings: ['Department', 'Job'],
 }
 
 export const exampleData: DSVRowArray = Object.assign(

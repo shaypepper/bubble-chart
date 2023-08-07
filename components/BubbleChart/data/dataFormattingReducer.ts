@@ -7,14 +7,14 @@ import {
   ColumnMap,
   ListFromCSV,
   Worker,
-  StarOptionsKeys,
+  ShapeOptionsKeys,
   Value,
   Workers,
   Grouping,
 } from './types'
 import {
   createColumnMap,
-  setStarOption,
+  setShapeOption,
   setTextLine,
   stratifyData,
   loadWorkers,
@@ -50,8 +50,8 @@ export enum FormatAction {
   STRATIFY_DATA = 'stratifyData',
   SET_COLORS = 'setColors',
   GO_TO_STEP = 'goToStep',
-  SET_STAR_OPTION = 'setStarOption',
-  TOGGLE_STAR = 'toggleStarUse',
+  SET_STAR_OPTION = 'setShapeOption',
+  TOGGLE_STAR = 'toggleShapeUse',
   SET_TEXT_LINE = 'setTextLine',
   SET_COLOR_COLUMN = 'setColorColumn',
   SET_COLOR_MAP = 'setColorMap',
@@ -66,7 +66,7 @@ export type Action =
     }
   | {
       type: FormatAction.SET_COLUMN_MAP
-      columnMap: ColumnMap
+      columnMap: Partial<ColumnMap>
       listFromCsv: ListFromCSV
     }
   | {
@@ -87,13 +87,13 @@ export type Action =
   | { type: FormatAction.GO_TO_STEP; step: Steps }
   | {
       type: FormatAction.SET_STAR_OPTION
-      optionType: StarOptionsKeys
+      optionType: ShapeOptionsKeys
       value: Value
-      starIndex: number
+      shapeIndex: number
     }
   | {
       type: FormatAction.TOGGLE_STAR
-      starIndex: number
+      shapeIndex: number
     }
   | {
       type: FormatAction.SET_TEXT_LINE
@@ -126,9 +126,9 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_COLUMN_MAP:
       newState = createColumnMap(state, action.columnMap, action.listFromCsv)
-      let { uniqueIdentifier, displayName, primaryGrouping } =
+      let { uniqueIdentifier, displayName, groupings } =
         action.listFromCsv.columnMap
-      if (!uniqueIdentifier || !displayName || !primaryGrouping) {
+      if (!uniqueIdentifier || !displayName || !groupings.length) {
         return newState
       }
       break
@@ -142,11 +142,11 @@ const dataFormattingReducer: Reducer<State, Action> = (
       break
 
     case FormatAction.SET_STAR_OPTION:
-      newState = setStarOption(
+      newState = setShapeOption(
         state,
         action.optionType,
         action.value,
-        action.starIndex
+        action.shapeIndex
       )
       break
 

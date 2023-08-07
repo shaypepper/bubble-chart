@@ -1,16 +1,19 @@
 import { FC } from 'react'
-import { Worker, Grouping, isWorker } from './data/types'
+import { Worker, Grouping, isWorker, ChartOptions } from './data/types'
 import BubbleSVG, { GroupingBubbleSVG } from './Bubble'
+import LegendSVG from './LegendSVG'
 
 const BubbleChartSVG: FC<{
   bubbleData: d3.HierarchyCircularNode<Worker | Grouping>[]
-}> = ({ bubbleData }) => {
+  chartOptions: ChartOptions
+}> = ({ bubbleData, chartOptions }) => {
   const radius = 0.5
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       // width={'100%'}
       viewBox={`0 0 1 1`}
+      style={{ height: '100vmin' }}
       // viewBox={`0 0 ${width} ${width}`}
     >
       <defs>
@@ -28,7 +31,7 @@ const BubbleChartSVG: FC<{
                 bubbleFillColor={d.data.bubbleColors?.fillColor}
                 innerTextColor={d.data.bubbleColors?.textColor}
                 textLines={['shay'] && d.data.textLines}
-                stars={d.data.stars || []}
+                shapes={d.data.shapes || []}
                 displayName={d.data?.displayName?.split(' ')[0] || '*******'}
               />
             </g>
@@ -45,6 +48,7 @@ const BubbleChartSVG: FC<{
           )
         }
       )}
+      <LegendSVG textSize={0.006} chartOptions={chartOptions} />
     </svg>
   )
 }

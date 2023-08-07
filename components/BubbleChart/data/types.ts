@@ -1,5 +1,6 @@
 import { DSVRowArray } from 'd3'
 import { colors } from '../../shared/tokens/colors'
+import { Shapes } from '../shapes/Shape'
 
 type Person = {
   [key: Column]: Value
@@ -25,24 +26,27 @@ type ColorOptions = {
 export type ColumnMap = {
   uniqueIdentifier?: string
   displayName?: string
-  primaryGrouping?: string
-  secondaryGrouping?: string
+  groupings: string[]
 }
 
-export enum StarOptionsKeys {
+export enum ShapeOptionsKeys {
   COLOR = 'color',
   COLUMN = 'column',
   VALUE = 'value',
   LABEL = 'label',
   USE = 'use',
+  SHAPE = 'shape',
 }
 
-class StarOptions {
-  [StarOptionsKeys.COLOR]: string;
-  [StarOptionsKeys.COLUMN]: Column;
-  [StarOptionsKeys.VALUE]: Value;
-  [StarOptionsKeys.LABEL]: string;
-  [StarOptionsKeys.USE]: boolean
+export const blankValue = '(blank)'
+
+export class ShapeOptions {
+  [ShapeOptionsKeys.COLOR]: string;
+  [ShapeOptionsKeys.COLUMN]: Column;
+  [ShapeOptionsKeys.VALUE]: Value;
+  [ShapeOptionsKeys.LABEL]: string;
+  [ShapeOptionsKeys.USE]: boolean;
+  [ShapeOptionsKeys.SHAPE]: Shapes
 
   constructor() {
     this.column = ''
@@ -50,32 +54,39 @@ class StarOptions {
     this.value = ''
     this.label = ''
     this.use = false
+    this.shape = Shapes.HEART
   }
 }
 
 export class ChartOptions {
-  stars: StarOptions[]
+  shapes: ShapeOptions[]
   textLineColumns: Column[]
   colors: ColorOptions
 
   constructor(
-    stars: StarOptions[] = [],
+    shapes: ShapeOptions[] = [],
     textLineColumns: Column[] = [],
     colors: ColorOptions = {
       currentColumn: '',
       colorMap: {},
     }
   ) {
-    this.stars = stars.length
-      ? stars
-      : [new StarOptions(), new StarOptions(), new StarOptions()]
+    this.shapes = shapes.length
+      ? shapes
+      : [
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
+        ]
     this.textLineColumns = textLineColumns
     this.colors = colors
   }
 
   duplicate() {
     const newOptions = new ChartOptions(
-      this.stars,
+      this.shapes,
       this.textLineColumns,
       this.colors
     )
@@ -103,11 +114,11 @@ export class ListFromCSV {
     columnMap: ColumnMap | void = undefined,
     chartOptions?: ChartOptions
   ) {
-    this.columnMap = columnMap || {
+    this.columnMap = {
       uniqueIdentifier: '',
       displayName: '',
-      primaryGrouping: '',
-      secondaryGrouping: '',
+      groupings: [],
+      ...(columnMap || {}),
     }
 
     this.csvFile = csvFile
@@ -124,16 +135,19 @@ export class ListFromCSV {
     return new Set(this.list.map((w) => w.id))
   }
 
-  get primaryGroupings(): Set<Value | undefined> {
-    return new Set(this.list.map((n) => n.primaryGrouping))
+  getUniqueValuesByColName(colName: string): Value[] {
+    return [...new Set(this.list.map((n) => n.rawData[colName || '']))]
   }
 
-  get secondaryGroupings(): Set<Value | undefined> {
-    return new Set(this.list.map((n) => n.secondaryGrouping))
-  }
-
-  get groupings(): Set<Value | undefined> {
+  get uniqueGroupings(): Set<Value | undefined> {
     return new Set(this.list.map((n) => n.grouping))
+  }
+
+  get uniqueGroupingValues(): { colName: string; values: Value[] }[] {
+    return this.columnMap.groupings.map((g) => ({
+      colName: g,
+      values: this.getUniqueValuesByColName(g),
+    }))
   }
 
   listValues(columnName: string | number): Set<Value> {
@@ -170,11 +184,12 @@ export class Worker {
     }`
   }
 
-  get stars() {
-    const stars = this.parent.chartOptions?.stars || []
-    return stars.map(({ value, column, color, use }) => ({
+  get shapes() {
+    const shapes = this.parent.chartOptions?.shapes || []
+    return shapes.map(({ value, column, color, use, shape }) => ({
       fillColor: color,
       show: value === this.rawData[column] && use,
+      shape,
     }))
   }
 
@@ -202,20 +217,14 @@ export class Worker {
     return `${this.rawData[this.parent.columnMap.displayName || '']}`
   }
 
-  get primaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.primaryGrouping || '']}`
-  }
-
-  get secondaryGrouping() {
-    return `${this.rawData[this.parent.columnMap.secondaryGrouping || '']}`
+  get groupingList() {
+    return this.parent.columnMap.groupings.map(
+      (g) => `${this.rawData[g] || blankValue}`
+    )
   }
 
   get grouping() {
-    if (this.secondaryGrouping) {
-      return `g: ${this.primaryGrouping} - ${this.secondaryGrouping}`
-    } else {
-      return `g: ${this.primaryGrouping}`
-    }
+    return `g: ${this.groupingList.join(' - ')}`
   }
 }
 export class Workers extends ListFromCSV {

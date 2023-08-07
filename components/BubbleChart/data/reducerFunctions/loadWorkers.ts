@@ -15,8 +15,7 @@ export function loadWorkers(
   const workersData = new Workers(parsedData, state.chartOptions, {
     uniqueIdentifier: '',
     displayName: '',
-    primaryGrouping: '',
-    secondaryGrouping: '',
+    groupings: []
   })
 
   return {
@@ -30,7 +29,6 @@ export function loadExampleWorkersAndChartOptions(state: State) {
   if (newState.workersData) {
     newState = createColumnMap(newState, exampleColumnMap, newState.workersData)
   }
-  console.log(newState.workersData?.columns)
   return { ...newState }
 }
 
