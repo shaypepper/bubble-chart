@@ -110,7 +110,7 @@ function createGroups(
     )
   })
 
-  return groupingList.filter((g) => uniqueGroupings.has(g.id)),
+  return groupingList.filter((g) => uniqueGroupings.has(g.id))
 }
 
 export default stratifyData

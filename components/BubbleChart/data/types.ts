@@ -79,6 +79,8 @@ export class ChartOptions {
           new ShapeOptions(),
           new ShapeOptions(),
           new ShapeOptions(),
+          new ShapeOptions(),
+          new ShapeOptions(),
         ]
     this.textLineColumns = textLineColumns
     this.colors = colors

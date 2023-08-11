@@ -42,10 +42,12 @@ const configPanels: ConfigPanel[] = [
     translate: { x: 80, y: 20 },
   },
   { name: 'Shape 1', index: 0, type: 'shape', translate: { x: 15, y: -20 } },
-  { name: 'Shape 2', index: 1, type: 'shape', translate: { x: 30, y: -35 } },
-  { name: 'Shape 3', index: 2, type: 'shape', translate: { x: 48.5, y: -40 } },
-  { name: 'Shape 4', index: 3, type: 'shape', translate: { x: 68, y: -35 } },
-  { name: 'Shape 5', index: 4, type: 'shape', translate: { x: 80, y: -20 } },
+  { name: 'Shape 2', index: 1, type: 'shape', translate: { x: 28, y: -34 } },
+  { name: 'Shape 3', index: 2, type: 'shape', translate: { x: 37, y: -22 } },
+  { name: 'Shape 4', index: 3, type: 'shape', translate: { x: 47, y: -38 } },
+  { name: 'Shape 5', index: 4, type: 'shape', translate: { x: 54, y: -22 } },
+  { name: 'Shape 6', index: 5, type: 'shape', translate: { x: 62, y: -34 } },
+  { name: 'Shape 7', index: 6, type: 'shape', translate: { x: 76, y: -20 } },
 ]
 
 const VizConfig: React.FC = () => {
