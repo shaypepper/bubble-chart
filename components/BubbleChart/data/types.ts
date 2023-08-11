@@ -140,7 +140,14 @@ export class ListFromCSV {
   }
 
   get uniqueGroupings(): Set<Value | undefined> {
-    return new Set(this.list.map((n) => n.grouping))
+    const allGroupings = new Set<Value | undefined>()
+    this.list.forEach((n) => {
+      const groupings = n.groupingList.map(
+        (g, i, gList): string => `g: ${gList.slice(0, i + 1).join(' | ')}`
+      )
+      groupings.forEach((g) => allGroupings.add(g))
+    })
+    return allGroupings
   }
 
   get uniqueGroupingValues(): { colName: string; values: Value[] }[] {
@@ -224,7 +231,7 @@ export class Worker {
   }
 
   get grouping() {
-    return `g: ${this.groupingList.join(' - ')}`
+    return `g: ${this.groupingList.join(' | ')}`
   }
 }
 export class Workers extends ListFromCSV {
