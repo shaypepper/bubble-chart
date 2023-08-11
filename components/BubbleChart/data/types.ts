@@ -227,9 +227,10 @@ export class Worker {
   }
 
   get groupingList() {
-    return this.parent.columnMap.groupings.map(
+    const list = this.parent.columnMap.groupings.map(
       (g) => `${this.rawData[g] || blankValue}`
     )
+    return list.length ? list : ['allGroups']
   }
 
   get grouping() {

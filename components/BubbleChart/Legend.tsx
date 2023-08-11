@@ -87,9 +87,9 @@ const Legend: FC = () => {
             <ul className={legendList}>
               {fillColorList
                 .sort(([value], [prevValue]) => (value > prevValue ? 1 : -1))
-                .map(([value, { fillColor, textColor }]) => {
+                .map(([value, { fillColor, textColor }], i) => {
                   return (
-                    <li key={value}>
+                    <li key={`${value} - i`}>
                       <MiniBubbleSVG
                         fillColor={fillColor}
                         textColor={textColor}

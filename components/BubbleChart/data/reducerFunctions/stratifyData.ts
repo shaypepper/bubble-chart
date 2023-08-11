@@ -11,7 +11,6 @@ export function stratifyData(state: State): State {
     workersData,
     workersData?.uniqueGroupings || new Set<Value | undefined>()
   )
-  console.log({ mappedGroupings: mappedGroupings.map((g) => g.id) })
 
   const strat = stratify<Worker | Grouping>()
     .id((d) => `${d?.id}`)
@@ -23,7 +22,7 @@ export function stratifyData(state: State): State {
   const wtf: (Worker | Grouping)[] = [
     ...state.workersData.list,
     ...mappedGroupings,
-    { id: 'allGroups', displayName: '', grouping: '', nodeType: 'grouping' },
+    { id: 'g: allGroups', displayName: '', grouping: '', nodeType: 'grouping' },
   ]
   let stratifiedData
   try {
@@ -66,7 +65,7 @@ function createGroups(
               : `g: ${gv || blankValue}`,
             grouping:
               parentGroupingValues.length === 0
-                ? 'allGroups'
+                ? 'g: allGroups'
                 : `g: ${parentGroupingsId}`,
             displayName: `${
               parentGroupingValues.length >= 2
@@ -87,7 +86,7 @@ function createGroups(
     if (parentGroupingValues.length === 0) {
       groupingList.push({
         id: `g: ${groupingValue}`,
-        grouping: 'allGroups',
+        grouping: 'g: allGroups',
         displayName: `${groupingValue}`,
         nodeType: 'grouping',
       })

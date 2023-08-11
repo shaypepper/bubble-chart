@@ -31,8 +31,6 @@ export function setShapeOption(
       }
   }
 
-  console.log(newChartOptions)
-
   return { ...state, chartOptions: newChartOptions }
 }
 export default setShapeOption

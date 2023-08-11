@@ -101,7 +101,6 @@ export const BubbleEditSVG: FC<
   configPanels = [],
 }) => {
   const R = 50
-  console.log(shapeOptions)
   return (
     <svg
       width={width}
@@ -161,7 +160,7 @@ export const BubbleEditSVG: FC<
       <g transform="translate(50 45) scale(1.7)">
         {shapeOptions.map((shapeOption, shapeOptionIndex) => (
           <path
-            key={`shape${shapeOptionIndex}`}
+            key={`shape${shapeOptionIndex} - ${shapeOption.value}`}
             d={shapePaths[shapeOption.shape]?.pathCommands}
             transform={shapeTransform.SVG[shapeOptionIndex](R / 2)}
             fill={shapeOption.use ? shapeOption.color : placeHolderGrey}
@@ -435,7 +434,7 @@ export const GroupingBubble = ({
         fontSize={R / 10}
         fontFamily={latoFont}
         rotation={offset}
-        text={displayName === 'allGroups' ? '' : displayName}
+        text={displayName === 'g: allGroups' ? '' : displayName}
         textBaseline={'alphabetic'}
         kerningFunc={() => 0.01}
       />
