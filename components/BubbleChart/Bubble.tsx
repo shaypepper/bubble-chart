@@ -314,14 +314,18 @@ export const BubbleKonva: FC<BubbleProps> = ({
   const R = radius * height
 
   return (
-    <Group className={'leaf'} x={translation.x} y={translation.y}>
+    <Group
+      className={'leaf'}
+      x={translation.x}
+      y={translation.y}
+      onClick={onClick}
+    >
       <Circle
         radius={R}
         fill={bubbleFillColor}
         strokeLinecap="round"
         strokeDashArray={[10, 10]}
         mask="url(#circleMask)"
-        onClick={onClick}
       />
 
       <Text

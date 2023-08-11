@@ -13,6 +13,7 @@ import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
 import { css } from 'pretty-lights'
 import { Layer, Stage } from 'react-konva'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import { downloadURI } from './utils'
 import { Worker, Grouping, isWorker } from './data/types'
 import Legend from './Legend'
@@ -92,6 +93,45 @@ const BubbleChart: FC = () => {
           width: '100vw',
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 10,
+            top: '10px',
+            right: '10px',
+          }}
+        >
+          <ButtonGroup size="sm">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale * 1.25)
+                  return {
+                    x: currentPosition.x * 1.25,
+                    y: currentPosition.y * 1.25,
+                  }
+                })
+              }}
+            >
+              +
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale / 1.25)
+                  return {
+                    x: currentPosition.x / 1.25,
+                    y: currentPosition.y / 1.25,
+                  }
+                })
+              }}
+            >
+              -
+            </Button>
+          </ButtonGroup>
+        </div>
         <div style={{ display: '' }}>
           {stratifiedData && (
             <Stage
@@ -103,7 +143,14 @@ const BubbleChart: FC = () => {
               className={stageClass}
               key={currentStageKey}
             >
-              <Layer ref={layerRef} draggable={true}>
+              <Layer
+                ref={layerRef}
+                draggable={true}
+                onDragEnd={(e) => {
+                  setPosition(e.target.attrs)
+                  console.log('!')
+                }}
+              >
                 {bubbleData?.map(
                   (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
                     const colors = isWorker(d.data) ? d.data.bubbleColors : null

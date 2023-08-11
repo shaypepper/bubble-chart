@@ -3,7 +3,7 @@ import { css } from 'pretty-lights'
 import { pxToRem } from '../shared/tokens/spacing'
 import { MiniBubbleSVG } from './Bubble'
 import { WorkerDataContext } from './data/WorkerDataProvider'
-import { ColorMap, Column, ShapeOptions } from './data/types'
+import { blankValue, ColorMap, Column, ShapeOptions } from './data/types'
 import { shapePaths } from './shapes/Shape'
 
 const legendList = css`
@@ -35,7 +35,7 @@ const legendList = css`
 
 const containerClass = css`
   position: absolute;
-  right: 20px;
+  left: 20px;
   top: 20px;
   bottom: 0;
   z-index: 1;
@@ -95,7 +95,7 @@ const Legend: FC = () => {
                         textColor={textColor}
                         height={15}
                       />
-                      {value}
+                      {value || blankValue}
                     </li>
                   )
                 })}
