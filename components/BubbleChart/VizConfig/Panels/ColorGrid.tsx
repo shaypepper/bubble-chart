@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { css } from 'pretty-lights'
 import { colors, deepGrey } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
-import { MiniBubbleSVG } from '../../Bubble'
+import { MiniBubbleSVG } from '../../Bubble/MiniBubble'
 
 const gridContainerClass = css`
   display: flex;

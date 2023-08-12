@@ -11,6 +11,7 @@ import {
   Value,
   Workers,
   Grouping,
+  BubbleShape,
 } from './types'
 import {
   createColumnMap,
@@ -22,6 +23,7 @@ import {
   setColorMap,
   loadExampleWorkersAndChartOptions,
 } from './reducerFunctions'
+import { setBubbleShape } from './reducerFunctions/setBubbleShape'
 
 export interface State {
   /**  Current step in the process */
@@ -57,6 +59,7 @@ export enum FormatAction {
   SET_COLOR_MAP = 'setColorMap',
   RESET_CHART_FRAME = 'resetChartFrame',
   LOAD_EXAMPLE_DATA = 'loadExampleData',
+  SET_BUBBLE_SHAPE = 'setBubbleShape',
 }
 
 export type Action =
@@ -109,6 +112,7 @@ export type Action =
       scale: number
     }
   | { type: FormatAction.LOAD_EXAMPLE_DATA }
+  | { type: FormatAction.SET_BUBBLE_SHAPE; bubbleShape: BubbleShape }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,
@@ -160,6 +164,10 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_COLOR_MAP:
       newState = setColorMap(state, action.colorMap)
+      break
+
+    case FormatAction.SET_BUBBLE_SHAPE:
+      newState = setBubbleShape(state, action.bubbleShape)
       break
 
     default:

@@ -2,8 +2,10 @@ import * as React from 'react'
 import { useContext } from 'react'
 import { css } from 'pretty-lights'
 import { pxToRem } from '../../shared/tokens/spacing'
-import { BubbleEditSVG } from '../Bubble'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
+import { FormatAction } from '../data/dataFormattingReducer'
+import { BubbleShape } from '../data/types'
+import { EditBubble } from '../Bubble/EditBubble'
 import FillColorOptions from './Panels/FillColorOptions'
 import ShapeOptions from './Panels/ShapeOptions'
 import TextLineOptions from './Panels/TextLineOptions'
@@ -51,7 +53,7 @@ const configPanels: ConfigPanel[] = [
 ]
 
 const VizConfig: React.FC = () => {
-  const { workersData, chartOptions } = useContext(WorkerDataContext)
+  const { workersData, chartOptions, dispatch } = useContext(WorkerDataContext)
   const [currentConfigPanel, setCurrentConfigPanel] =
     React.useState<ConfigPanel>()
 
@@ -71,7 +73,7 @@ const VizConfig: React.FC = () => {
   return (
     <div className={containerClass}>
       <div>
-        <BubbleEditSVG
+        <EditBubble
           displayName={workersData?.list[3].displayName.split(' ')[0] || ''}
           textLines={textLines}
           width={'40vmin'}
@@ -80,6 +82,13 @@ const VizConfig: React.FC = () => {
             setCurrentConfigPanel(panel)
           }}
           configPanels={configPanels}
+          setBubbleShape={(shape: BubbleShape) => {
+            dispatch({
+              type: FormatAction.SET_BUBBLE_SHAPE,
+              bubbleShape: shape,
+            })
+          }}
+          bubbleShape={chartOptions.bubbleShape}
         />
       </div>
       <div>

@@ -29,6 +29,11 @@ export type ColumnMap = {
   groupings: string[]
 }
 
+export enum BubbleShape {
+  CIRCLE = 'circle',
+  HEX = 'hex',
+}
+
 export enum ShapeOptionsKeys {
   COLOR = 'color',
   COLUMN = 'column',
@@ -62,6 +67,7 @@ export class ChartOptions {
   shapes: ShapeOptions[]
   textLineColumns: Column[]
   colors: ColorOptions
+  bubbleShape: BubbleShape
 
   constructor(
     shapes: ShapeOptions[] = [],
@@ -69,7 +75,8 @@ export class ChartOptions {
     colors: ColorOptions = {
       currentColumn: '',
       colorMap: {},
-    }
+    },
+    bubbleShape: BubbleShape = BubbleShape.CIRCLE
   ) {
     this.shapes = shapes.length
       ? shapes
@@ -84,6 +91,7 @@ export class ChartOptions {
         ]
     this.textLineColumns = textLineColumns
     this.colors = colors
+    this.bubbleShape = bubbleShape
   }
 
   duplicate() {

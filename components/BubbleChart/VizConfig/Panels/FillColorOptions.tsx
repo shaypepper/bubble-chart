@@ -9,10 +9,10 @@ import {
 import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
 import { deepGrey, white } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
-import { MiniBubbleSVG } from '../../Bubble'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 import { Value } from '../../data/types'
+import { MiniBubbleSVG } from '../../Bubble/MiniBubble'
 import ColorGrid from './ColorGrid'
 
 const valueListClass = css`

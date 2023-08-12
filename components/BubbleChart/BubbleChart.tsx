@@ -21,7 +21,8 @@ import { WorkerDataContext } from './data/WorkerDataProvider'
 import { height, width } from './tokens'
 import Signs from './Signs'
 import BubbleChartSVG from './BubbleChartSVG'
-import { BubbleKonva, GroupingBubble } from './Bubble'
+import { KonvaGroupingBubble } from './Bubble/KonvaGroupingBubble'
+import { KonvaBubble } from './Bubble/KonvaBubble'
 
 const stageClass = css`
   width: 100vw;
@@ -85,7 +86,11 @@ const BubbleChart: FC = () => {
 
   return (
     <>
-      {/* <BubbleChartSVG bubbleData={bubbleData} chartOptions={chartOptions} /> */}
+      <BubbleChartSVG
+        bubbleData={bubbleData}
+        chartOptions={chartOptions}
+        multiplier={1}
+      />
       <div
         style={{
           position: 'fixed',
@@ -141,7 +146,7 @@ const BubbleChart: FC = () => {
             </Button>
           </ButtonGroup>
         </div>
-        <div style={{ display: '' }}>
+        <div style={{ display: 'none' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}
@@ -157,7 +162,6 @@ const BubbleChart: FC = () => {
                 draggable={true}
                 onDragEnd={(e) => {
                   setPosition(e.target.attrs)
-                  console.log('!')
                 }}
               >
                 {bubbleData?.map(
@@ -188,7 +192,7 @@ const BubbleChart: FC = () => {
                     }
                     const circleR = d.r * height
                     return !isWorker(d.data) ? (
-                      <GroupingBubble
+                      <KonvaGroupingBubble
                         key={d.id}
                         radius={d.r}
                         translation={translation}
@@ -196,7 +200,7 @@ const BubbleChart: FC = () => {
                         displayName={`${d.data?.displayName}`}
                       />
                     ) : (
-                      <BubbleKonva
+                      <KonvaBubble
                         key={d.id}
                         radius={d.r}
                         bubbleFillColor={colors?.fillColor}
@@ -208,6 +212,7 @@ const BubbleChart: FC = () => {
                         displayName={
                           d.data?.displayName?.split(' ')[0] || '*******'
                         }
+                        bubbleShape={chartOptions.bubbleShape}
                       />
                     )
                   }

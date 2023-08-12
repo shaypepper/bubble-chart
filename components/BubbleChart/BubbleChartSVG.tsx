@@ -1,18 +1,19 @@
 import { FC } from 'react'
 import { Worker, Grouping, isWorker, ChartOptions } from './data/types'
-import BubbleSVG, { GroupingBubbleSVG } from './Bubble'
 import LegendSVG from './LegendSVG'
+import { SVGGroupingBubble } from './Bubble/SVGGroupingBubble'
+import { SVGBubble } from './Bubble/SVGBubble'
 
 const BubbleChartSVG: FC<{
   bubbleData: d3.HierarchyCircularNode<Worker | Grouping>[]
   chartOptions: ChartOptions
-}> = ({ bubbleData, chartOptions }) => {
-  const radius = 0.5
+  multiplier: number
+}> = ({ bubbleData, chartOptions, multiplier = 100 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       // width={'100%'}
-      viewBox={`0 0 1 1`}
+      viewBox={`0 0 ${multiplier} ${multiplier}`}
       style={{ height: '100vmin' }}
       // viewBox={`0 0 ${width} ${width}`}
     >
@@ -25,21 +26,28 @@ const BubbleChartSVG: FC<{
       {bubbleData?.map(
         (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
           return isWorker(d.data) ? (
-            <g key={d.id} transform={`translate(${d.x} ${d.y})`}>
-              <BubbleSVG
-                radius={d.r}
+            <g
+              key={d.id}
+              transform={`translate(${d.x * multiplier} ${d.y * multiplier})`}
+            >
+              <SVGBubble
+                radius={d.r * multiplier}
                 bubbleFillColor={d.data.bubbleColors?.fillColor}
                 innerTextColor={d.data.bubbleColors?.textColor}
                 textLines={['shay'] && d.data.textLines}
                 shapes={d.data.shapes || []}
                 displayName={d.data?.displayName?.split(' ')[0] || '*******'}
+                bubbleShape={chartOptions.bubbleShape}
               />
             </g>
           ) : (
-            <g key={d.id} transform={`translate(${d.x} ${d.y})`}>
-              <GroupingBubbleSVG
+            <g
+              key={d.id}
+              transform={`translate(${d.x * multiplier} ${d.y * multiplier})`}
+            >
+              <SVGGroupingBubble
                 displayName={d.data?.displayName || ''}
-                radius={d.r}
+                radius={d.r * multiplier}
                 id={d.data.id}
                 depth={d.depth}
                 groupSize={d.value || 0}
