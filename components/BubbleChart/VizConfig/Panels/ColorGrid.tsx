@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import { colors, deepGrey } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { MiniBubbleSVG } from '../../Bubble/MiniBubble'

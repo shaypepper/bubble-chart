@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import Link from 'next/link'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'

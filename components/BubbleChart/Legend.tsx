@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import { pxToRem } from '../shared/tokens/spacing'
 import { WorkerDataContext } from './data/WorkerDataProvider'
 import { blankValue, ColorMap, Column, ShapeOptions } from './data/types'

@@ -1,5 +1,5 @@
 import { FC, ReactEventHandler } from 'react'
-import { css, cx } from 'pretty-lights'
+import { css, cx } from '@emotion/css'
 
 const pointLeftClass = css``
 const pointRightClass = css`

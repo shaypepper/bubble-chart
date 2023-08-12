@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 
 const circleClass = css`
   transition: opacity 100ms ease;

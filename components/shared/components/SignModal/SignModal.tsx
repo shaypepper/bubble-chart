@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { css, cx, styled } from 'pretty-lights'
+import { css, cx } from '@emotion/css'
 import { Button } from 'react-bootstrap'
+import styled from '@emotion/styled'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
 import { deepGrey, white } from '../../tokens/colors'

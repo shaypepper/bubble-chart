@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useContext } from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import { pxToRem } from '../../shared/tokens/spacing'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { FormatAction } from '../data/dataFormattingReducer'

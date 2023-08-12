@@ -24,11 +24,6 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
     [column, workersData]
   )
 
-  const shapeColor = useMemo<string>(
-    () => chartOptions.shapes[shapeIndex]?.color,
-    [chartOptions, shapeIndex]
-  )
-
   return (
     <div>
       <Form>

@@ -7,13 +7,14 @@ import {
   RefObject,
   useMemo,
 } from 'react'
+import { css } from '@emotion/css'
 import { renderToString } from 'react-dom/server'
 import { pack } from 'd3'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
-import { css } from 'pretty-lights'
 import { Layer, Stage } from 'react-konva'
-import { Button, ButtonGroup } from 'react-bootstrap'
+import { IconButton } from '@mui/material'
+import { ZoomIn, ZoomOut } from '@mui/icons-material'
 import { downloadURI } from './utils'
 import { Worker, Grouping, isWorker } from './data/types'
 import Legend from './Legend'
@@ -86,11 +87,11 @@ const BubbleChart: FC = () => {
 
   return (
     <>
-      <BubbleChartSVG
+      {/* <BubbleChartSVG
         bubbleData={bubbleData}
         chartOptions={chartOptions}
         multiplier={1}
-      />
+      /> */}
       <div
         style={{
           position: 'fixed',
@@ -113,40 +114,37 @@ const BubbleChart: FC = () => {
           <p style={{ padding: '0 10px', margin: 0, textAlign: 'right' }}>
             Click any bubble to zoom. Chart is also draggable.
           </p>
-          <ButtonGroup size="sm">
-            <Button
-              style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
-              variant="secondary"
-              onClick={() => {
-                setPosition((currentPosition) => {
-                  setScale((currentScale) => currentScale * 1.25)
-                  return {
-                    x: currentPosition.x * 1.25,
-                    y: currentPosition.y * 1.25,
-                  }
-                })
-              }}
-            >
-              +
-            </Button>
-            <Button
-              style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
-              variant="secondary"
-              onClick={() => {
-                setPosition((currentPosition) => {
-                  setScale((currentScale) => currentScale / 1.25)
-                  return {
-                    x: currentPosition.x / 1.25,
-                    y: currentPosition.y / 1.25,
-                  }
-                })
-              }}
-            >
-              -
-            </Button>
-          </ButtonGroup>
+          <IconButton
+            style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
+            color="secondary"
+            onClick={() => {
+              setPosition((currentPosition) => {
+                setScale((currentScale) => currentScale * 1.25)
+                return {
+                  x: currentPosition.x * 1.25,
+                  y: currentPosition.y * 1.25,
+                }
+              })
+            }}
+          >
+            <ZoomIn />
+          </IconButton>
+          <IconButton
+            style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
+            onClick={() => {
+              setPosition((currentPosition) => {
+                setScale((currentScale) => currentScale / 1.25)
+                return {
+                  x: currentPosition.x / 1.25,
+                  y: currentPosition.y / 1.25,
+                }
+              })
+            }}
+          >
+            <ZoomOut />
+          </IconButton>
         </div>
-        <div style={{ display: 'none' }}>
+        <div style={{ display: '' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}

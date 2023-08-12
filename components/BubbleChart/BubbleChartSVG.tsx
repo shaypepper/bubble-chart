@@ -7,7 +7,7 @@ import { SVGBubble } from './Bubble/SVGBubble'
 const BubbleChartSVG: FC<{
   bubbleData: d3.HierarchyCircularNode<Worker | Grouping>[]
   chartOptions: ChartOptions
-  multiplier: number
+  multiplier?: number
 }> = ({ bubbleData, chartOptions, multiplier = 100 }) => {
   return (
     <svg
@@ -19,7 +19,7 @@ const BubbleChartSVG: FC<{
     >
       <defs>
         <style type="text/css">
-          {`@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Lato:ital,wght@0,300;0,900;1,300&display=swap');`}
+          {`@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Lato:ital,wght@0,300;0,900;1,300&display=swap&family=Inter:wght@300;400;500;600;700');`}
         </style>
       </defs>
 
