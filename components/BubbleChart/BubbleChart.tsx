@@ -99,10 +99,18 @@ const BubbleChart: FC = () => {
             zIndex: 10,
             top: '10px',
             right: '10px',
+            fontSize: '10px',
+            lineHeight: '125%',
+            maxWidth: '180px',
+            display: 'flex',
           }}
         >
+          <p style={{ padding: '0 10px', margin: 0, textAlign: 'right' }}>
+            Click any bubble to zoom. Chart is also draggable.
+          </p>
           <ButtonGroup size="sm">
             <Button
+              style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
               variant="secondary"
               onClick={() => {
                 setPosition((currentPosition) => {
@@ -117,6 +125,7 @@ const BubbleChart: FC = () => {
               +
             </Button>
             <Button
+              style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
               variant="secondary"
               onClick={() => {
                 setPosition((currentPosition) => {
