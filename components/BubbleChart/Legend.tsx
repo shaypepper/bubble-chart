@@ -56,7 +56,8 @@ const Legend: FC = () => {
   const reducedShapes = shapes.reduce<
     { column: Column; values: ShapeOptions[] }[]
   >((memo, currentShape: ShapeOptions, index) => {
-    if (!currentShape.use) return memo
+    if (!currentShape.use || !currentShape.column || !currentShape.color)
+      return memo
 
     let columnFound = false
     memo.forEach((s, memoIndex) => {
@@ -103,7 +104,7 @@ const Legend: FC = () => {
           </li>
         )}
 
-        {reducedShapes.map(({ column, values }, index) => (
+        {reducedShapes.map(({ column, values }) => (
           <li key={`${column}`}>
             {column}
             <ul className={legendList}>

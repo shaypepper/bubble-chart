@@ -10,6 +10,8 @@ export function setShapeOption(
 ) {
   const newChartOptions = state.chartOptions.duplicate()
 
+  newChartOptions.shapes[shapeIndex].color =
+    newChartOptions.shapes[shapeIndex].color || 'black'
   switch (optionType) {
     case ShapeOptionsKeys.USE:
       if (typeof value === 'boolean') {
