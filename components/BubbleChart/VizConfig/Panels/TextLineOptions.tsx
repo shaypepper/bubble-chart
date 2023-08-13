@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react'
-import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
+import * as React from 'react'
+import { Autocomplete, TextField } from '@mui/material'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 
@@ -7,19 +8,21 @@ const TextLineOptions: FC<{ index: number }> = ({ index }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
 
   return (
-    <div>
-      <DropdownWithFilter
+    <div style={{ marginTop: '8px' }}>
+      <Autocomplete
         id="text-line-column-dropdown"
-        list={workersData?.columns || []}
-        onSelect={(eventKey) => {
+        options={workersData?.columns || []}
+        size="small"
+        onChange={(e: React.BaseSyntheticEvent) => {
           dispatch({
             type: FormatAction.SET_TEXT_LINE,
-            column: eventKey,
+            column: e.target.textContent,
             index,
           })
         }}
-        toggleText={chartOptions.textLineColumns[index]}
-        label={'Column'}
+        renderInput={(params) => (
+          <TextField {...params} label={chartOptions.textLineColumns[index]} />
+        )}
       />
     </div>
   )

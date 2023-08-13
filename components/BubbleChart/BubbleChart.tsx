@@ -107,50 +107,53 @@ const BubbleChart: FC = () => {
             right: '10px',
             fontSize: '10px',
             lineHeight: '125%',
-            maxWidth: '180px',
+            maxWidth: '130px',
             display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'right',
           }}
         >
-          <p style={{ padding: '0 10px', margin: 0, textAlign: 'right' }}>
-            Click any bubble to zoom. Chart is also draggable.
+          <p style={{ padding: '0', margin: 0, textAlign: 'right' }}>
+            Click any bubble to zoom. Chart is draggable.
           </p>
-          <IconButton
-            style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
-            color="secondary"
-            onClick={() => {
-              setPosition((currentPosition) => {
-                setScale((currentScale) => currentScale * 1.25)
-                return {
-                  x: currentPosition.x * 1.25,
-                  y: currentPosition.y * 1.25,
-                }
-              })
-            }}
-          >
-            <ZoomIn />
-          </IconButton>
-          <IconButton
-            style={{ padding: '0 6px', lineHeight: '100%', height: '20px' }}
-            onClick={() => {
-              setPosition((currentPosition) => {
-                setScale((currentScale) => currentScale / 1.25)
-                return {
-                  x: currentPosition.x / 1.25,
-                  y: currentPosition.y / 1.25,
-                }
-              })
-            }}
-          >
-            <ZoomOut />
-          </IconButton>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton
+              size="small"
+              color="secondary"
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale * 1.25)
+                  return {
+                    x: currentPosition.x * 1.25,
+                    y: currentPosition.y * 1.25,
+                  }
+                })
+              }}
+            >
+              <ZoomIn />
+            </IconButton>
+            <IconButton
+              size="small"
+              color={'secondary'}
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale / 1.25)
+                  return {
+                    x: currentPosition.x / 1.25,
+                    y: currentPosition.y / 1.25,
+                  }
+                })
+              }}
+            >
+              <ZoomOut />
+            </IconButton>
+          </div>
         </div>
         <div style={{ display: '' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}
               height={document.body.offsetHeight}
-              // width={width * 2}
-              // height={height * 2}
               ref={stageRef}
               className={stageClass}
               key={currentStageKey}

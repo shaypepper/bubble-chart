@@ -13,7 +13,7 @@ import { configTitleClass } from './styles'
 
 const containerClass = css`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: max-content min(30vw);
   grid-column-gap: ${pxToRem(36)};
 `
 
@@ -24,7 +24,12 @@ export type ConfigPanel = {
   translate: { x: number; y: number }
 }
 const configPanels: ConfigPanel[] = [
-  { name: 'Fill color', index: 0, type: 'fill', translate: { x: 5, y: -5 } },
+  {
+    name: 'Display name',
+    index: 0,
+    type: 'displayName',
+    translate: { x: 85, y: -8 },
+  },
   {
     name: 'Text line 1',
     index: 0,

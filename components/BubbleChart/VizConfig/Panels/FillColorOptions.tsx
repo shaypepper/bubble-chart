@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react'
+import { BaseSyntheticEvent, FC, useContext, useState } from 'react'
 import { css } from '@emotion/css'
 import {
   FormControl,
@@ -6,7 +6,7 @@ import {
   OverlayTrigger,
   Popover,
 } from 'react-bootstrap'
-import DropdownWithFilter from '../../../shared/components/DropdownWithFilter'
+import { Autocomplete, TextField } from '@mui/material'
 import { deepGrey, white } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { FormatAction } from '../../data/dataFormattingReducer'
@@ -41,18 +41,24 @@ const FillColorOptions: FC<{}> = ({}) => {
     )
   valueList && valueList.sort()
   return (
-    <div>
-      <DropdownWithFilter
+    <div
+      className={css`
+        grid-gap: 16px;
+        display: grid;
+        grid-template-coumns: 1fr;
+      `}
+    >
+      <Autocomplete
         id="fill-color-dropdown"
-        toggleText={colorColumn || 'Choose column here...'}
-        label="Column"
-        list={columnList}
-        onSelect={(eventKey) => {
+        options={columnList}
+        size="small"
+        onChange={(e: BaseSyntheticEvent) => {
           dispatch({
             type: FormatAction.SET_COLOR_COLUMN,
-            column: eventKey,
+            column: e.target.textContent,
           })
         }}
+        renderInput={(params) => <TextField {...params} label={`Column`} />}
       />
 
       {valueList && (

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { FormatColorFill } from '@mui/icons-material'
 import Pencil from '../../shared/icons/Pencil'
 import { deepGrey } from '../../shared/tokens/colors'
 import { latoFont } from '../../shared/tokens/fonts'
@@ -45,6 +46,19 @@ export const EditBubble: FC<
           transform={`scale(1.1) translate(-5 -5)`}
         />
       )}
+
+      <g
+        transform="translate(85 0) scale(0.1)"
+        onClick={generateOnClick({
+          name: 'Fill color',
+          index: 0,
+          type: 'fill',
+          translate: { x: 5, y: -5 },
+        })}
+      >
+        <rect height="100" width="100" fill="transparent" />
+        <FormatColorFill style={{ height: 20 }} />
+      </g>
 
       <path id="namePath" fill="none" stroke="none" d={`M 0,${R} H100`} />
       <text fill={innerTextColor}>

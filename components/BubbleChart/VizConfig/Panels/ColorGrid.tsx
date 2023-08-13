@@ -6,8 +6,8 @@ import { MiniBubbleSVG } from '../../Bubble/MiniBubble'
 
 const gridContainerClass = css`
   display: flex;
-  max-height: ${pxToRem(130)};
-  flex-direction: column;
+  max-width: ${pxToRem(130)};
+  flex-direction: row;
   flex-wrap: wrap;
   grid-gap: ${pxToRem(2)};
   align-content: center;
@@ -28,7 +28,13 @@ const ColorGrid: FC<{
   generateOnClick: (color: string, textColor: string) => () => void
   noText?: boolean
   disabled?: boolean
-}> = ({ generateOnClick, noText = false, disabled = false }) => {
+  selectedColor?: string
+}> = ({
+  generateOnClick,
+  noText = false,
+  disabled = false,
+  selectedColor = null,
+}) => {
   return (
     <div className={gridContainerClass}>
       {colorGridOptions.map((colorList) => {
@@ -38,6 +44,7 @@ const ColorGrid: FC<{
             <MiniBubbleSVG
               key={color}
               fillColor={color}
+              highlight={selectedColor === color}
               height={20}
               textColor={noText ? 'transparent' : textColor}
               onClick={disabled ? () => {} : generateOnClick(color, textColor)}

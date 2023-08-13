@@ -13,7 +13,7 @@ import TShirt from './TShirt'
 
 export type ShapeComponent = React.FC<{
   height: number
-  fillColor: string
+  fillColor?: string
   onClick?: React.MouseEventHandler
 }> & { pathCommands: string }
 
@@ -124,3 +124,9 @@ export const shapePaths = {
   // [Shapes.AVATAR]: Avatar,
   [Shapes.T_SHIRT]: TShirt,
 }
+
+export const Flag: React.FC<{ shape: Shapes; color: string; height: number }> =
+  ({ shape, color, height = 20 }) => {
+    const FlagShape = shapePaths[shape]
+    return <FlagShape height={height} fillColor={color} />
+  }

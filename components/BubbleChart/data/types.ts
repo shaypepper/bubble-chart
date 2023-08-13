@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { DSVRowArray } from 'd3'
 import { colors } from '../../shared/tokens/colors'
 import { Shapes } from '../shapes/Shape'
@@ -24,7 +25,6 @@ type ColorOptions = {
 }
 
 export type ColumnMap = {
-  uniqueIdentifier?: string
   displayName?: string
   groupings: string[]
 }
@@ -125,7 +125,6 @@ export class ListFromCSV {
     chartOptions?: ChartOptions
   ) {
     this.columnMap = {
-      uniqueIdentifier: '',
       displayName: '',
       groupings: [],
       ...(columnMap || {}),
@@ -185,20 +184,13 @@ export type Grouping = {
 export class Worker {
   rawData: Person
   parent: ListFromCSV
-  backupId: number
+  id: string
   nodeType = 'worker'
 
   constructor(rawData: any, parent: ListFromCSV) {
     this.rawData = rawData
     this.parent = parent
-    this.backupId = Math.round(Math.random() * 10000000)
-  }
-
-  get id(): string {
-    return `${
-      this.rawData[this.parent.columnMap.uniqueIdentifier || ''] ||
-      this.backupId
-    }`
+    this.id = `${uuidv4()}}`
   }
 
   get shapes() {
