@@ -24,7 +24,8 @@ export const KonvaBubble: FC<BubbleProps> = ({
   onClick = () => {},
 }) => {
   const R = radius * height
-
+  const fontSize =
+    displayName.length > 13 ? R / 5 : displayName.length > 10 ? R / 2.5 : R / 2
   return (
     <Group
       className={'leaf'}
@@ -50,21 +51,17 @@ export const KonvaBubble: FC<BubbleProps> = ({
         />
       )}
 
+      <Rect height={R / 2} width={R * 2} fill={'pink'} x={-R} y={-R / 4.6} />
       <Text
         text={displayName}
         x={-R}
-        y={-R / 4.6}
+        y={-R / 4.6 + (R / 2 - fontSize) / 2}
         fontFamily={bangersFont}
-        fontSize={
-          displayName.length > 13
-            ? R / 7
-            : displayName.length > 8
-            ? R / 3
-            : R / 2
-        }
+        fontSize={fontSize}
         fill={innerTextColor}
         align={'center'}
-        width={R * 2}
+        width={R * 1.9}
+        letterSpacing={-0.000005}
       />
 
       {shapes?.map(
