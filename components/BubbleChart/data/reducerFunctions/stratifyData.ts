@@ -8,9 +8,9 @@ export function stratifyData(state: State): State {
   const mappedGroupings: Grouping[] = createGroups(
     workersData?.uniqueGroupingValues || [],
     [],
-    workersData
+    workersData,
+    workersData?.uniqueGroupings || new Set<Value | undefined>()
   )
-  console.log({ mappedGroupings })
 
   const strat = stratify<Worker | Grouping>()
     .id((d) => `${d?.id}`)
@@ -22,7 +22,7 @@ export function stratifyData(state: State): State {
   const wtf: (Worker | Grouping)[] = [
     ...state.workersData.list,
     ...mappedGroupings,
-    { id: 'allGroups', displayName: '', grouping: '', nodeType: 'grouping' },
+    { id: 'g: allGroups', displayName: '', grouping: '', nodeType: 'grouping' },
   ]
   let stratifiedData
   try {
@@ -43,7 +43,8 @@ export function stratifyData(state: State): State {
 function createGroups(
   nestedGroups: { values: Value[]; colName: string }[],
   parentGroupingValues: { value: Value; colName: string }[],
-  workersData: Workers | undefined
+  workersData: Workers | undefined,
+  uniqueGroupings: Set<Value | undefined> = new Set()
 ) {
   if (!workersData) {
     return []
@@ -52,7 +53,7 @@ function createGroups(
   const newNestedGroups = nestedGroups.slice(1)
   const parentGroupingsId = parentGroupingValues
     .map((pg) => pg.value)
-    .join(' - ')
+    .join(' | ')
 
   if (nestedGroups.length === 1) {
     return [
@@ -60,11 +61,11 @@ function createGroups(
         .map(
           (gv): Grouping => ({
             id: parentGroupingsId
-              ? `g: ${parentGroupingsId} - ${gv || blankValue}`
+              ? `g: ${parentGroupingsId} | ${gv || blankValue}`
               : `g: ${gv || blankValue}`,
             grouping:
               parentGroupingValues.length === 0
-                ? 'allGroups'
+                ? 'g: allGroups'
                 : `g: ${parentGroupingsId}`,
             displayName: `${
               parentGroupingValues.length >= 2
@@ -74,11 +75,7 @@ function createGroups(
             nodeType: 'grouping',
           })
         )
-        .filter((g) =>
-          [...workersData?.uniqueGroupings].find((ug) =>
-            `${ug}`.startsWith(g.id)
-          )
-        ),
+        .filter((g) => uniqueGroupings.has(g.id)),
     ]
   }
 
@@ -89,13 +86,13 @@ function createGroups(
     if (parentGroupingValues.length === 0) {
       groupingList.push({
         id: `g: ${groupingValue}`,
-        grouping: 'allGroups',
+        grouping: 'g: allGroups',
         displayName: `${groupingValue}`,
         nodeType: 'grouping',
       })
     } else {
       groupingList.push({
-        id: `g: ${parentGroupingsId} - ${groupingValue}`,
+        id: `g: ${parentGroupingsId} | ${groupingValue}`,
         grouping: `g: ${parentGroupingsId}`,
         displayName: `${groupingValue}`,
         nodeType: 'grouping',
@@ -106,14 +103,13 @@ function createGroups(
       ...createGroups(
         newNestedGroups,
         [...parentGroupingValues, { value: groupingValue, ...currentGrouping }],
-        workersData
+        workersData,
+        uniqueGroupings
       )
     )
   })
 
-  return groupingList.filter((g) =>
-    [...workersData?.uniqueGroupings].find((ug) => `${ug}`.startsWith(g.id))
-  )
+  return groupingList.filter((g) => uniqueGroupings.has(g.id))
 }
 
 export default stratifyData

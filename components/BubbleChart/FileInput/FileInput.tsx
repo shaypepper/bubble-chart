@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useContext } from 'react'
-import { Form } from 'react-bootstrap'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { Steps } from '../data/dataFormattingReducer'
 import { pxToRem } from '../../shared/tokens/spacing'
@@ -11,13 +10,13 @@ const FileInput: React.FC = () => {
 
   return (
     <>
-      <Form
+      <form
         style={{
           maxWidth: pxToRem(600),
         }}
       >
         {currentStep === Steps.LOAD_WORKERS && (
-          <LoadCSV csvType={'worker'}>
+          <LoadCSV>
             <p
               style={{
                 fontSize: pxToRem(14),
@@ -44,7 +43,7 @@ const FileInput: React.FC = () => {
             </p>
           </LoadCSV>
         )}
-      </Form>
+      </form>
     </>
   )
 }

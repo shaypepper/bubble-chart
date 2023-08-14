@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { css, styled } from 'pretty-lights'
+import { css } from '@emotion/css'
+import styled from '@emotion/styled'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import { deepGrey, white } from '../../tokens/colors'
 import { bangersFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
-const SignHolder = styled.div`
+const signHolderClass = css`
   display: flex;
   justify-content: end;
   align-items: end;
@@ -30,16 +31,18 @@ const signButtonClass = css`
   box-shadow: white 1px 1px 10px;
   pointer-events: auto;
 `
-const SignMenuItemStyled = styled.div`
+const SignMenuItemStyled = styled.div<{ rotation: number }>(
+  (props) => `
   position: relative;
   transform-origin: 80%;
   transition: transform 200ms ease;
   padding-bottom: 20px;
 
   &:hover {
-    transform: rotate(${({ rotation = 10 }) => rotation}deg) translateY(-10px);
+    transform: rotate(${props.rotation}deg) translateY(-10px);
   }
 `
+)
 
 const rotations = [-15, 14, 0, -10]
 
@@ -54,13 +57,13 @@ export const SignMenuItem: React.FC<{
       <button className={signButtonClass} onClick={onClick}>
         <div>{children}</div>
       </button>
-      <SignHolder>
+      <div className={signHolderClass}>
         <HandHoldingSign
           stickLength={stickLength}
           className={handHoldClass}
           width={20}
         />
-      </SignHolder>
+      </div>
     </SignMenuItemStyled>
   )
 }

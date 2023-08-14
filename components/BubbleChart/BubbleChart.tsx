@@ -7,12 +7,14 @@ import {
   RefObject,
   useMemo,
 } from 'react'
+import { css } from '@emotion/css'
 import { renderToString } from 'react-dom/server'
 import { pack } from 'd3'
 import { Stage as StageType } from 'konva/types/Stage'
 import { Layer as LayerType } from 'konva/types/Layer'
-import { css } from 'pretty-lights'
 import { Layer, Stage } from 'react-konva'
+import { IconButton } from '@mui/material'
+import { ZoomIn, ZoomOut } from '@mui/icons-material'
 import { downloadURI } from './utils'
 import { Worker, Grouping, isWorker } from './data/types'
 import Legend from './Legend'
@@ -20,7 +22,8 @@ import { WorkerDataContext } from './data/WorkerDataProvider'
 import { height, width } from './tokens'
 import Signs from './Signs'
 import BubbleChartSVG from './BubbleChartSVG'
-import { BubbleKonva, GroupingBubble } from './Bubble'
+import { KonvaGroupingBubble } from './Bubble/KonvaGroupingBubble'
+import { KonvaBubble } from './Bubble/KonvaBubble'
 
 const stageClass = css`
   width: 100vw;
@@ -84,7 +87,11 @@ const BubbleChart: FC = () => {
 
   return (
     <>
-      {/* <BubbleChartSVG bubbleData={bubbleData} chartOptions={chartOptions} /> */}
+      {/* <BubbleChartSVG
+        bubbleData={bubbleData}
+        chartOptions={chartOptions}
+        multiplier={1}
+      /> */}
       <div
         style={{
           position: 'fixed',
@@ -92,18 +99,74 @@ const BubbleChart: FC = () => {
           width: '100vw',
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 1,
+            top: '10px',
+            right: '10px',
+            fontSize: '10px',
+            lineHeight: '125%',
+            maxWidth: '120px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'right',
+            backgroundColor: 'hsla(1,100%,100%,0.7)',
+            padding: '4px',
+          }}
+        >
+          <p style={{ padding: '0', margin: 0, textAlign: 'right' }}>
+            Click any bubble to zoom. Chart is draggable.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton
+              size="small"
+              color="secondary"
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale * 1.25)
+                  return {
+                    x: currentPosition.x * 1.25,
+                    y: currentPosition.y * 1.25,
+                  }
+                })
+              }}
+            >
+              <ZoomIn />
+            </IconButton>
+            <IconButton
+              size="small"
+              color={'secondary'}
+              onClick={() => {
+                setPosition((currentPosition) => {
+                  setScale((currentScale) => currentScale / 1.25)
+                  return {
+                    x: currentPosition.x / 1.25,
+                    y: currentPosition.y / 1.25,
+                  }
+                })
+              }}
+            >
+              <ZoomOut />
+            </IconButton>
+          </div>
+        </div>
         <div style={{ display: '' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}
               height={document.body.offsetHeight}
-              // width={width * 2}
-              // height={height * 2}
               ref={stageRef}
               className={stageClass}
               key={currentStageKey}
             >
-              <Layer ref={layerRef} draggable={true}>
+              <Layer
+                ref={layerRef}
+                draggable={true}
+                onDragEnd={(e) => {
+                  setPosition(e.target.attrs)
+                }}
+              >
                 {bubbleData?.map(
                   (d: d3.HierarchyCircularNode<Worker | Grouping>, idx) => {
                     const colors = isWorker(d.data) ? d.data.bubbleColors : null
@@ -132,7 +195,7 @@ const BubbleChart: FC = () => {
                     }
                     const circleR = d.r * height
                     return !isWorker(d.data) ? (
-                      <GroupingBubble
+                      <KonvaGroupingBubble
                         key={d.id}
                         radius={d.r}
                         translation={translation}
@@ -140,7 +203,7 @@ const BubbleChart: FC = () => {
                         displayName={`${d.data?.displayName}`}
                       />
                     ) : (
-                      <BubbleKonva
+                      <KonvaBubble
                         key={d.id}
                         radius={d.r}
                         bubbleFillColor={colors?.fillColor}
@@ -152,6 +215,7 @@ const BubbleChart: FC = () => {
                         displayName={
                           d.data?.displayName?.split(' ')[0] || '*******'
                         }
+                        bubbleShape={chartOptions.bubbleShape}
                       />
                     )
                   }

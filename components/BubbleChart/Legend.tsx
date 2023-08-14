@@ -1,10 +1,10 @@
 import { FC, useContext } from 'react'
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import { pxToRem } from '../shared/tokens/spacing'
-import { MiniBubbleSVG } from './Bubble'
 import { WorkerDataContext } from './data/WorkerDataProvider'
-import { ColorMap, Column, ShapeOptions } from './data/types'
+import { blankValue, ColorMap, Column, ShapeOptions } from './data/types'
 import { shapePaths } from './shapes/Shape'
+import { MiniBubbleSVG } from './Bubble/MiniBubble'
 
 const legendList = css`
   list-style-type: none;
@@ -35,7 +35,7 @@ const legendList = css`
 
 const containerClass = css`
   position: absolute;
-  right: 20px;
+  left: 20px;
   top: 20px;
   bottom: 0;
   z-index: 1;
@@ -56,7 +56,8 @@ const Legend: FC = () => {
   const reducedShapes = shapes.reduce<
     { column: Column; values: ShapeOptions[] }[]
   >((memo, currentShape: ShapeOptions, index) => {
-    if (!currentShape.use) return memo
+    if (!currentShape.use || !currentShape.column || !currentShape.color)
+      return memo
 
     let columnFound = false
     memo.forEach((s, memoIndex) => {
@@ -87,15 +88,15 @@ const Legend: FC = () => {
             <ul className={legendList}>
               {fillColorList
                 .sort(([value], [prevValue]) => (value > prevValue ? 1 : -1))
-                .map(([value, { fillColor, textColor }]) => {
+                .map(([value, { fillColor, textColor }], i) => {
                   return (
-                    <li key={value}>
+                    <li key={`${value} - i`}>
                       <MiniBubbleSVG
                         fillColor={fillColor}
                         textColor={textColor}
                         height={15}
                       />
-                      {value}
+                      {value || blankValue}
                     </li>
                   )
                 })}
@@ -103,7 +104,7 @@ const Legend: FC = () => {
           </li>
         )}
 
-        {reducedShapes.map(({ column, values }, index) => (
+        {reducedShapes.map(({ column, values }) => (
           <li key={`${column}`}>
             {column}
             <ul className={legendList}>

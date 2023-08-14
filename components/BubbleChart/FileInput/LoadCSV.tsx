@@ -1,89 +1,91 @@
 import * as React from 'react'
 import { useContext, useRef } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { MuiFileInput } from 'mui-file-input'
+import { Autocomplete, Button, TextField } from '@mui/material'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { FormatAction } from '../data/dataFormattingReducer'
-import DropdownWithFilter from '../../shared/components/DropdownWithFilter'
 import { pxToRem } from '../../shared/tokens/spacing'
 
 const columnMapLabels: { [s: string]: string } = {
-  uniqueIdentifier: 'Unique identifier',
   displayName: 'Display name',
 }
 
-const LoadCSV: React.FC<{
-  csvType: 'worker' | 'grouping'
-}> = ({ children = 'Load your outreach data', csvType }) => {
+const LoadCSV: React.FC = ({ children = 'Load your outreach data' }) => {
   const { convertCsv, dispatch, workersData } = useContext(WorkerDataContext)
   const action = FormatAction.LOAD_WORKERS_CSV
 
   const convertedCsv = workersData
 
   const inputRef = useRef<HTMLInputElement>(null)
+  const [file, setFile] = React.useState<File | null>(null)
+  const handleLoadFile = (newFile: File | null) => {
+    if (newFile) {
+      convertCsv(action, newFile)
+    }
+    setFile(newFile || null)
+  }
 
   return (
     <>
       <div>
         {children}
-
-        <Form.Group>
-          <Form.Label htmlFor={`${csvType}-data"`}>
-            <Form.Control
-              size="sm"
-              className={'form-control'}
-              ref={inputRef}
-              type="file"
-              name={`${csvType}-data"`}
-              accept=".csv"
-              placeholder={'Choose a CSV file with your worker data'}
-              onChange={() => {
-                if (!inputRef.current) return
-                const files = inputRef.current.files
-                if (files) {
-                  convertCsv(action, files)
-                }
-              }}
-            />
-          </Form.Label>
-          <Form.Label>
-            <Button
-              variant={'secondary'}
-              size="sm"
-              style={{ marginBottom: pxToRem(4), marginLeft: pxToRem(6) }}
-              onClick={() => {
-                dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
-              }}
-            >
-              ...or load example data
-            </Button>
-          </Form.Label>
-        </Form.Group>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gridGap: pxToRem(20),
+            width: '100%',
+          }}
+        >
+          <MuiFileInput
+            size="small"
+            ref={inputRef}
+            value={file}
+            label={'Load a csv of your worker data'}
+            inputProps={{
+              accept: '.csv',
+            }}
+            name={`worker-data"`}
+            onChange={handleLoadFile}
+          />
+          <Button
+            size="small"
+            style={{ marginBottom: pxToRem(4), marginLeft: pxToRem(6) }}
+            onClick={() => {
+              dispatch({ type: FormatAction.LOAD_EXAMPLE_DATA })
+            }}
+          >
+            ...or load example data
+          </Button>
+        </div>
 
         {convertedCsv && (
           <>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns:
-                  'max-content max-content max-content max-content',
+                gridTemplateColumns: '1fr 1fr 1fr',
                 gridGap: pxToRem(20),
+                width: '100%',
+                marginTop: pxToRem(20),
               }}
             >
               {Object.entries({
-                uniqueIdentifier: convertedCsv.columnMap.uniqueIdentifier,
                 displayName: convertedCsv.columnMap.displayName,
-              }).map(([key, columnLabel]) => (
-                <DropdownWithFilter
-                  id={`${key}-dropdown-for-csv`}
-                  list={convertedCsv.columns || []}
-                  label={columnMapLabels[`${key}`]}
+              }).map(([key]) => (
+                <Autocomplete
+                  size="small"
                   key={key}
-                  toggleText={columnLabel || 'Select column...'}
-                  onSelect={(eventKey) => {
+                  id={`${key}-dropdown-for-csv`}
+                  options={convertedCsv.columns || []}
+                  renderInput={(params) => (
+                    <TextField {...params} label={columnMapLabels[`${key}`]} />
+                  )}
+                  onChange={(e: React.BaseSyntheticEvent) => {
                     dispatch({
                       type: FormatAction.SET_COLUMN_MAP,
                       columnMap: {
-                        [key]: eventKey,
+                        [key]: e.target.textContent,
                       },
                       listFromCsv: convertedCsv,
                     })
@@ -94,43 +96,39 @@ const LoadCSV: React.FC<{
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns:
-                  'max-content max-content max-content max-content',
+                gridTemplateColumns: '1fr 1fr 1fr',
                 gridGap: pxToRem(20),
+                marginTop: pxToRem(20),
               }}
             >
               {[...convertedCsv.columnMap.groupings, null].map(
                 (columnLabel, groupingIndex) => (
-                  <DropdownWithFilter
-                    id={`grouping-${groupingIndex}-dropdown-for-csv`}
-                    list={convertedCsv.columns || []}
-                    label={`Grouping ${groupingIndex + 1}`}
-                    key={`${columnLabel} - ${groupingIndex}`}
-                    toggleText={columnLabel || 'Select column...'}
-                    dismissable={columnLabel !== null}
-                    onDismiss={() => {
-                      const newGroupings = [...convertedCsv.columnMap.groupings]
-                      newGroupings.splice(groupingIndex, 1)
-                      dispatch({
-                        type: FormatAction.SET_COLUMN_MAP,
-                        columnMap: {
-                          groupings: newGroupings,
-                        },
-                        listFromCsv: convertedCsv,
-                      })
-                    }}
-                    onSelect={(eventKey) => {
-                      const newGroupings = [...convertedCsv.columnMap.groupings]
-                      newGroupings[groupingIndex] = eventKey
-                      dispatch({
-                        type: FormatAction.SET_COLUMN_MAP,
-                        columnMap: {
-                          groupings: newGroupings,
-                        },
-                        listFromCsv: convertedCsv,
-                      })
-                    }}
-                  />
+                  <div key={`${columnLabel} - ${groupingIndex}`}>
+                    <Autocomplete
+                      size="small"
+                      id={`grouping-${groupingIndex}-dropdown-for-csv`}
+                      options={convertedCsv.columns || []}
+                      value={columnLabel}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={`Grouping ${groupingIndex + 1}`}
+                        />
+                      )}
+                      onChange={(e: React.BaseSyntheticEvent) => {
+                        let newGroupings = [...convertedCsv.columnMap.groupings]
+                        newGroupings[groupingIndex] = e.target.textContent
+                        newGroupings = newGroupings.filter((g) => g.length)
+                        dispatch({
+                          type: FormatAction.SET_COLUMN_MAP,
+                          columnMap: {
+                            groupings: newGroupings,
+                          },
+                          listFromCsv: convertedCsv,
+                        })
+                      }}
+                    />
+                  </div>
                 )
               )}
             </div>

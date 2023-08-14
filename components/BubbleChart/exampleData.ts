@@ -1,7 +1,6 @@
 import { DSVRowArray } from 'd3'
 
 export const exampleColumnMap = {
-  uniqueIdentifier: 'Full name',
   displayName: 'First Name',
   groupings: ['Department', 'Job'],
 }

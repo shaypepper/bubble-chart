@@ -13,9 +13,8 @@ export function loadWorkers(
   }
 
   const workersData = new Workers(parsedData, state.chartOptions, {
-    uniqueIdentifier: '',
     displayName: '',
-    groupings: []
+    groupings: [],
   })
 
   return {

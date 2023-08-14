@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { ChartOptions, ColorMap } from './data/types'
-import { MiniBubbleG } from './Bubble'
+import { MiniBubbleG } from './Bubble/MiniBubble'
+import { blankValue, ChartOptions, ColorMap } from './data/types'
 import { shapePaths } from './shapes/Shape'
 
 const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
@@ -96,8 +96,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
                         fontWeight: 400,
                       }}
                     >
-                      {' '}
-                      {value}
+                      {value || blankValue}
                     </text>
                   </g>
                 )

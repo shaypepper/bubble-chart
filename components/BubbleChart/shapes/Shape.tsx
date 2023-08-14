@@ -13,7 +13,7 @@ import TShirt from './TShirt'
 
 export type ShapeComponent = React.FC<{
   height: number
-  fillColor: string
+  fillColor?: string
   onClick?: React.MouseEventHandler
 }> & { pathCommands: string }
 
@@ -51,13 +51,15 @@ export const ShapeSVG: React.FC<{
   )
 }
 
-const shapeScale = 0.004
+const shapeScale = 0.003
 const multipliers = [
-  { x: -0.95, y: -0.55 },
-  { x: -0.65, y: -0.875 },
-  { x: -0.2, y: -1 },
-  { x: 0.225, y: -0.875 },
-  { x: 0.55, y: -0.55 },
+  { x: -0.87, y: -0.5 },
+  { x: -0.6, y: -0.825 },
+  { x: -0.425, y: -0.55 },
+  { x: -0.15, y: -0.925 },
+  { x: 0.05, y: -0.55 },
+  { x: 0.22, y: -0.825 },
+  { x: 0.525, y: -0.5 },
 ]
 const svgTransformFn = (n: number) => (R: number) =>
   `translate(${R * multipliers[n].x} ${R * multipliers[n].y}) scale(${
@@ -82,6 +84,8 @@ export const shapeTransform: {
     2: svgTransformFn(2),
     3: svgTransformFn(3),
     4: svgTransformFn(4),
+    5: svgTransformFn(5),
+    6: svgTransformFn(6),
   },
   Konva: {
     scale: (R: number) => ({ x: R * shapeScale, y: R * shapeScale }),
@@ -91,6 +95,8 @@ export const shapeTransform: {
       2: konvaTransformFn(2),
       3: konvaTransformFn(3),
       4: konvaTransformFn(4),
+      5: konvaTransformFn(5),
+      6: konvaTransformFn(6),
     },
   },
 }
@@ -118,3 +124,9 @@ export const shapePaths = {
   // [Shapes.AVATAR]: Avatar,
   [Shapes.T_SHIRT]: TShirt,
 }
+
+export const Flag: React.FC<{ shape: Shapes; color: string; height: number }> =
+  ({ shape, color, height = 20 }) => {
+    const FlagShape = shapePaths[shape]
+    return <FlagShape height={height} fillColor={color} />
+  }

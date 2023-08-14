@@ -1,4 +1,4 @@
-import { css } from 'pretty-lights'
+import { css } from '@emotion/css'
 import { latoFont } from '../../shared/tokens/fonts'
 import { pxToRem } from '../../shared/tokens/spacing'
 
