@@ -1,12 +1,13 @@
 import { BaseSyntheticEvent, FC, useContext, useState } from 'react'
 import { css } from '@emotion/css'
 import {
-  FormControl,
-  ListGroup,
-  OverlayTrigger,
+  Autocomplete,
+  List,
+  TextField,
+  ListItem,
   Popover,
-} from 'react-bootstrap'
-import { Autocomplete, TextField } from '@mui/material'
+  ListSubheader,
+} from '@mui/material'
 import { deepGrey, white } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { FormatAction } from '../../data/dataFormattingReducer'
@@ -27,6 +28,12 @@ const colorPickerClass = css`
 
 const FillColorOptions: FC<{}> = ({}) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [popoverKey, setPopoverKey] = useState<string>('')
+  const open = Boolean(anchorEl)
+
+  const handlePopoverClose = () => setAnchorEl(null)
+
   const columnList = workersData?.columns || []
   const colorColumn = chartOptions.colors.currentColumn
 
@@ -37,7 +44,7 @@ const FillColorOptions: FC<{}> = ({}) => {
     [...workersData?.listValues(chartOptions.colors.currentColumn)].filter(
       (val: Value) =>
         !valueListFilter ||
-        `${val}`.toLowerCase().startsWith(valueListFilter.toLowerCase())
+        `${val}`.toLowerCase().includes(valueListFilter.toLowerCase())
     )
   valueList && valueList.sort()
   return (
@@ -63,16 +70,16 @@ const FillColorOptions: FC<{}> = ({}) => {
 
       {valueList && (
         <div className={valueListClass}>
-          <ListGroup>
-            <ListGroup.Item>
-              <FormControl
+          <List>
+            <ListSubheader disableGutters>
+              <TextField
                 autoFocus
                 placeholder="Type to filter..."
                 onChange={(e) => setValueListFilter(e.target.value)}
                 value={valueListFilter}
-                size="sm"
+                size="small"
               />
-            </ListGroup.Item>
+            </ListSubheader>
             {valueList.map((val) => {
               const v = `${val}`
               const { fillColor: rowFillColor, textColor: rowTextColor } =
@@ -82,45 +89,52 @@ const FillColorOptions: FC<{}> = ({}) => {
                 }
 
               return (
-                <ListGroup.Item key={`${v}`}>
-                  <OverlayTrigger
-                    trigger="click"
-                    rootClose={true}
-                    key={v}
-                    placement={'left'}
-                    overlay={
-                      <Popover>
-                        <Popover.Header as="h3">{`Fill color for ${v}`}</Popover.Header>
-                        <Popover.Body style={{ minWidth: '200px' }}>
-                          <ColorGrid
-                            generateOnClick={(color, textColor) => () => {
-                              dispatch({
-                                type: FormatAction.SET_COLOR_MAP,
-                                colorMap: {
-                                  [v]: {
-                                    fillColor: color,
-                                    textColor: textColor,
-                                  },
-                                },
-                              })
-                            }}
-                          />
-                        </Popover.Body>
-                      </Popover>
-                    }
-                  >
-                    <div className={colorPickerClass}>
-                      <MiniBubbleSVG
-                        fillColor={rowFillColor}
-                        textColor={rowTextColor}
-                      />
-                    </div>
-                  </OverlayTrigger>
+                <ListItem
+                  key={`${v}`}
+                  onClick={(e) => {
+                    setAnchorEl(e.currentTarget)
+                    setPopoverKey(v)
+                  }}
+                  disableGutters
+                >
+                  <div className={colorPickerClass}>
+                    <MiniBubbleSVG
+                      fillColor={rowFillColor}
+                      textColor={rowTextColor}
+                    />
+                  </div>
                   {v || '(No value)'}
-                </ListGroup.Item>
+                </ListItem>
               )
             })}
-          </ListGroup>
+          </List>
+          <Popover
+            id={`popover`}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handlePopoverClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            style={{ padding: '10px' }}
+          >
+            <div style={{ padding: '10px' }}>
+              <ColorGrid
+                generateOnClick={(color, textColor) => () => {
+                  dispatch({
+                    type: FormatAction.SET_COLOR_MAP,
+                    colorMap: {
+                      [popoverKey]: {
+                        fillColor: color,
+                        textColor: textColor,
+                      },
+                    },
+                  })
+                }}
+              />
+            </div>
+          </Popover>
         </div>
       )}
     </div>

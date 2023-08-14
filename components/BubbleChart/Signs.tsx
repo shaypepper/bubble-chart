@@ -90,7 +90,7 @@ const Signs: FC<{
             setCurrentStep(SignSteps.UPLOAD_WORKERS)
           }}
         >
-          load data
+          load and group data
         </SignMenuItem>
         <SignMenuItem
           index={1}
@@ -101,12 +101,12 @@ const Signs: FC<{
           customize chart
         </SignMenuItem>
 
-        <SignMenuItem index={2} onClick={onReset}>
+        {/* <SignMenuItem index={2} onClick={onReset}>
           Reset Frame
-        </SignMenuItem>
-        <SignMenuItem index={3} onClick={onSaveImage}>
+        </SignMenuItem> */}
+        {/* <SignMenuItem index={3} onClick={onSaveImage}>
           Save Image
-        </SignMenuItem>
+        </SignMenuItem> */}
 
         <SignMenuItem index={4} onClick={onSaveAsSVG}>
           Print

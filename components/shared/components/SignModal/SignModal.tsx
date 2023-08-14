@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { css, cx } from '@emotion/css'
-import { Button } from 'react-bootstrap'
 import styled from '@emotion/styled'
+import { Button, IconButton } from '@mui/material'
+import { Close } from '@mui/icons-material'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
 import { deepGrey, white } from '../../tokens/colors'
@@ -39,25 +40,19 @@ const SignModal: React.FC<{
           {stepNumber && <p className={stepClass}>Step {stepNumber} </p>}
           <h2 className={signTitle}>{title}</h2>
 
-          <Button
-            size="sm"
-            variant=""
+          <IconButton
+            size="small"
             style={{ position: 'absolute', top: 0, right: 0 }}
             onClick={onDismiss}
+            color="info"
           >
-            <svg viewBox="0 0 10 10" height={14}>
-              <path
-                d="M 1,1 L 9,9 M 1,9 L 9,1"
-                fill="transparent"
-                stroke={white}
-              />
-            </svg>
-          </Button>
+            <Close />
+          </IconButton>
         </div>
         <div className={mainContentClass}>{children}</div>
         {actionText && (
           <div className={actionClass}>
-            <Button size="sm" onClick={actionOnClick}>
+            <Button variant="contained" size="small" onClick={actionOnClick}>
               {' '}
               {actionText}{' '}
             </Button>

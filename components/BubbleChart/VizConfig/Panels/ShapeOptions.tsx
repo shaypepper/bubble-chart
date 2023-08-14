@@ -35,10 +35,6 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [popoverType, setPopoverType] = useState<string>('')
 
-  const handlePopoverClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
   const handlePopoverClose = () => setAnchorEl(null)
 
   const open = Boolean(anchorEl)

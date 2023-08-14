@@ -25,12 +25,6 @@ export type ConfigPanel = {
 }
 const configPanels: ConfigPanel[] = [
   {
-    name: 'Display name',
-    index: 0,
-    type: 'displayName',
-    translate: { x: 85, y: -8 },
-  },
-  {
     name: 'Text line 1',
     index: 0,
     type: 'textLine',

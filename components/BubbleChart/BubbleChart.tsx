@@ -102,15 +102,17 @@ const BubbleChart: FC = () => {
         <div
           style={{
             position: 'absolute',
-            zIndex: 10,
+            zIndex: 1,
             top: '10px',
             right: '10px',
             fontSize: '10px',
             lineHeight: '125%',
-            maxWidth: '130px',
+            maxWidth: '120px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'right',
+            backgroundColor: 'hsla(1,100%,100%,0.7)',
+            padding: '4px',
           }}
         >
           <p style={{ padding: '0', margin: 0, textAlign: 'right' }}>
