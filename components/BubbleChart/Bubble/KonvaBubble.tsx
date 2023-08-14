@@ -51,7 +51,6 @@ export const KonvaBubble: FC<BubbleProps> = ({
         />
       )}
 
-      <Rect height={R / 2} width={R * 2} fill={'pink'} x={-R} y={-R / 4.6} />
       <Text
         text={displayName}
         x={-R}
