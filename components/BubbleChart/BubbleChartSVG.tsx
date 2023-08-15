@@ -56,7 +56,7 @@ const BubbleChartSVG: FC<{
           )
         }
       )}
-      <LegendSVG textSize={0.006} chartOptions={chartOptions} />
+      <LegendSVG textSize={0.006 * multiplier} chartOptions={chartOptions} />
     </svg>
   )
 }
