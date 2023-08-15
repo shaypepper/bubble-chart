@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { FormatColorFill } from '@mui/icons-material'
 import Pencil from '../../shared/icons/Pencil'
 import { deepGrey } from '../../shared/tokens/colors'
-import { latoFont } from '../../shared/tokens/fonts'
+import { interFont } from '../../shared/tokens/fonts'
 import { BubbleShape, ShapeOptions } from '../data/types'
 import Hex from '../shapes/Hex'
 import { shapePaths, shapeTransform } from '../shapes/Shape'
@@ -79,7 +79,7 @@ export const EditBubble: FC<
               id={`textLine${index}Path`}
               fill="none"
               stroke="none"
-              d={`M 0,${R * (1.2 + 0.12 * index)} H100`}
+              d={`M 0,${R * (1.2 + 0.14 * index)} H100`}
             />
             <text fill={innerTextColor}>
               <textPath
@@ -87,9 +87,10 @@ export const EditBubble: FC<
                 startOffset={'50%'}
                 href={`#textLine${index}Path`}
                 style={{
-                  fontFamily: latoFont,
-                  fontSize: '4px',
+                  fontFamily: interFont,
+                  fontSize: '5px',
                   fontWeight: 300,
+                  letterSpacing: -0.03,
                 }}
               >
                 {line}

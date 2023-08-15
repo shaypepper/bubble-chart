@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Group, Circle, Text, Path, Rect } from 'react-konva'
 import { deepGrey, white } from '../../shared/tokens/colors'
-import { bangersFont, latoFont } from '../../shared/tokens/fonts'
+import { bangersFont, interFont } from '../../shared/tokens/fonts'
 import { BubbleShape } from '../data/types'
 import Hex from '../shapes/Hex'
 import { shapePaths, shapeTransform } from '../shapes/Shape'
@@ -25,7 +25,7 @@ export const KonvaBubble: FC<BubbleProps> = ({
 }) => {
   const R = radius * height
   const fontSize =
-    displayName.length > 13 ? R / 5 : displayName.length > 10 ? R / 2.5 : R / 2
+    displayName.length > 13 ? R / 7 : displayName.length > 9 ? R / 2.5 : R / 2
   return (
     <Group
       className={'leaf'}
@@ -77,7 +77,7 @@ export const KonvaBubble: FC<BubbleProps> = ({
 
       {textLines?.map((t, i) => {
         const x = (-R * (1.6 - i * 0.15)) / 2
-        const y = R * 0.15 * (2.5 + i)
+        const y = R * 0.12 * (2.5 + i)
         const fontSize = R * 0.09
         const rectangleWidth = R * (1.6 - i * 0.15)
         return (
@@ -95,10 +95,11 @@ export const KonvaBubble: FC<BubbleProps> = ({
               y={y}
               align={'center'}
               width={R * 2}
-              fontFamily={latoFont}
+              fontFamily={interFont}
               fontSize={fontSize}
               text={t}
               fill={innerTextColor}
+              letterSpacing={-0.04}
             />
           </>
         )

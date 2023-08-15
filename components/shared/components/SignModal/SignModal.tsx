@@ -6,7 +6,7 @@ import { Close } from '@mui/icons-material'
 import HandHoldingSign from '../../icons/HandHoldingSign'
 import MinimalArrow from '../../icons/MinimalArrow'
 import { deepGrey, white } from '../../tokens/colors'
-import { bangersFont, latoFont } from '../../tokens/fonts'
+import { bangersFont, interFont } from '../../tokens/fonts'
 import { pxToRem } from '../../tokens/spacing'
 
 const SignModal: React.FC<{
@@ -89,7 +89,7 @@ const pageTitleClass = css`
 `
 
 const stepClass = css`
-  font-family: ${latoFont};
+  font-family: ${interFont};
   font-size: ${pxToRem(12)};
   line-height: 80%;
   margin: 0;

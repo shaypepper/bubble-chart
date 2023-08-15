@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { deepGrey } from '../../shared/tokens/colors'
-import { latoFont } from '../../shared/tokens/fonts'
+import { interFont } from '../../shared/tokens/fonts'
 import { BubbleShape } from '../data/types'
 import Hex from '../shapes/Hex'
 import { shapePaths, shapeTransform } from '../shapes/Shape'
@@ -19,7 +19,7 @@ export const SVGBubble: FC<BubbleProps> = ({
   return (
     <g
       style={{
-        fontFamily: latoFont,
+        fontFamily: interFont,
         fontSize: R / 10,
         fontWeight: 300,
       }}
@@ -59,7 +59,11 @@ export const SVGBubble: FC<BubbleProps> = ({
             stroke="none"
             d={`M ${-R}, ${R * (0.15 * lineIndex + 0.3)} H${R}`}
           />
-          <text fill={innerTextColor}>
+          <text
+            fill={innerTextColor}
+            fontFamily={interFont}
+            letterSpacing={-0.04}
+          >
             <textPath
               textAnchor="middle"
               startOffset={'50%'}

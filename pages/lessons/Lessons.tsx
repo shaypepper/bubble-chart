@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { DataForPowerPages } from '../../components/shared/components/Header'
-import { latoFont } from '../../components/shared/tokens/fonts'
+import { interFont } from '../../components/shared/tokens/fonts'
 import Layout from '../../components/shared/components/Layout'
 
 const Lessons = () => {
   return (
     <Layout currentPage={DataForPowerPages.LESSONS}>
       <div
-        style={{ fontFamily: latoFont, maxWidth: '1040px', padding: '40px' }}
+        style={{ fontFamily: interFont, maxWidth: '1040px', padding: '40px' }}
       >
         <h1>Lessons on leveraging data for your union</h1>
         <p>Coming soon! A few teasers in the meantime</p>

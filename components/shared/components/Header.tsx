@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { deepGrey, white, yellow } from '../tokens/colors'
 import { pxToRem } from '../tokens/spacing'
 import Scabby from '../icons/Scabby'
-import { latoFont, bangersFont } from '../tokens/fonts'
+import { interFont, bangersFont } from '../tokens/fonts'
 
 export enum DataForPowerPages {
   BUBBLE_CHART = 'bubble-chart',
@@ -32,7 +32,7 @@ const titleClass = css`
 
 const navClass = css`
   display: flex;
-  font-family: ${latoFont};
+  font-family: ${interFont};
   align-items: center;
 `
 const navItemClass = css`

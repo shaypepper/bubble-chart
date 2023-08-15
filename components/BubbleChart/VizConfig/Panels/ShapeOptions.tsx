@@ -44,8 +44,14 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
     newFormats: string[]
   ) => {
     setFormats(newFormats)
-
     if (newFormats.includes('use') !== active) {
+      dispatch({
+        type: FormatAction.SET_STAR_OPTION,
+        optionType: ShapeOptionsKeys.USE,
+        value: active,
+        shapeIndex,
+      })
+    } else {
       dispatch({
         type: FormatAction.SET_STAR_OPTION,
         optionType: ShapeOptionsKeys.USE,

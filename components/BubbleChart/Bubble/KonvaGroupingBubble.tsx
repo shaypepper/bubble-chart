@@ -3,7 +3,7 @@ import { TextPath as TextPathType } from 'konva/types/shapes/TextPath'
 import { Group, Circle, TextPath } from 'react-konva'
 import { height } from '../tokens'
 import { softGrey } from '../../shared/tokens/colors'
-import { latoFont } from '../../shared/tokens/fonts'
+import { interFont } from '../../shared/tokens/fonts'
 
 export const KonvaGroupingBubble = ({
   displayName = 'Shay Culpepper',
@@ -52,7 +52,7 @@ export const KonvaGroupingBubble = ({
         } a ${textR},${textR} 0 1,1 0,${2 * textR} `}
         fill={delayedRefresh ? softGrey : 'transparent'}
         fontSize={R / 10}
-        fontFamily={latoFont}
+        fontFamily={interFont}
         rotation={offset}
         text={displayName === 'g: allGroups' ? '' : displayName}
         textBaseline={'alphabetic'}
