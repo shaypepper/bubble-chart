@@ -19,7 +19,7 @@ type ColorMapByColumn = {
   [columnName: Column]: ColorMap
 }
 
-type ColorOptions = {
+export type ColorOptions = {
   currentColumn: Column
   colorMap: ColorMapByColumn
 }

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { FormatColorFill } from '@mui/icons-material'
+import FormatColorFill from '@mui/icons-material/FormatColorFill'
 import Pencil from '../../shared/icons/Pencil'
 import { deepGrey } from '../../shared/tokens/colors'
 import { interFont } from '../../shared/tokens/fonts'
@@ -119,15 +119,14 @@ export const EditBubble: FC<
         ))}
       </g>
       {configPanels.map((panel) => {
-        const {
-          name: panelName,
-          translate: { x, y },
-        } = panel
+        const { name: panelName, translate } = panel
         return (
           <Pencil
             key={panelName}
             size={7}
-            transform={`translate(${x} ${y - 5})`}
+            transform={`translate(${translate?.x} ${
+              typeof translate?.y == 'number' ? translate?.y - 5 : 0
+            })`}
             onClick={generateOnClick(panel)}
           />
         )

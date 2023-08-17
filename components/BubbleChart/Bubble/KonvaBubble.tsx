@@ -67,6 +67,7 @@ export const KonvaBubble: FC<BubbleProps> = ({
         (shape, shapeIndex: number) =>
           shape.show && (
             <Path
+              key={`${shapeIndex} - ${shape.show} - ${shape.fillColor} - ${shape.shape}`}
               data={shapePaths[shape.shape].pathCommands}
               fill={shape.fillColor}
               position={shapeTransform.Konva.position[shapeIndex](R)}

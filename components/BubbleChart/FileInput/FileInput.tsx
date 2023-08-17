@@ -23,8 +23,9 @@ const FileInput: React.FC = () => {
                 lineHeight: '120%',
               }}
             >
-              Upload a CSV file to get started. Not sure what your data should
-              look like? Peruse{' '}
+              Load a CSV file to get started. Not sure what your data should
+              look like? We are pretty agnostic here about what columns you have
+              defined in your CSV. If you need some ideas, peruse{' '}
               <a
                 target="_blank"
                 referrerPolicy="no-referrer"
@@ -36,10 +37,10 @@ const FileInput: React.FC = () => {
               of a fake exotic wild-life rehab center. If you want to take a
               test drive of this tool, you can also load the data here by
               downloading a CSV of the &quot;Unit Members &quot; tab. We know
-              organizing data can be sensitive. Rest assured this upload will
-              not be sent to a server and will not persist when you close the
-              window for the application. No one will be seeing this data but
-              you.
+              organizing data can be sensitive. Rest assured that when you load
+              your data, it will not be sent to a server and will not persist
+              when you close the browser window. No one will be seeing this data
+              except you! Unless you choose to via the Print option!
             </p>
           </LoadCSV>
         )}

@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react'
 import * as React from 'react'
-import { Autocomplete, TextField } from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 

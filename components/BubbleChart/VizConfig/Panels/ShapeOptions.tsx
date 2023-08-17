@@ -1,15 +1,15 @@
 import { BaseSyntheticEvent, FC, useContext, useMemo, useState } from 'react'
-import {
-  Autocomplete,
-  FormGroup,
-  Popover,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Popover from '@mui/material/Popover'
+import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import FormGroup from '@mui/material/FormGroup'
 
 import { css } from '@emotion/css'
-import { ArrowDropDown, Visibility, VisibilityOff } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 import { ShapeOptionsKeys, Value } from '../../data/types'
@@ -20,13 +20,10 @@ import ShapeGrid from './ShapeGrid'
 
 const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
-  const [formats, setFormats] = useState<string[]>([])
-
   const current = chartOptions.shapes[shapeIndex]
   const column = current?.column
   const active = current?.use
-
-  const value = useMemo<Value>(() => current?.value, [chartOptions, shapeIndex])
+  const [formats, setFormats] = useState<string[]>(active ? ['use'] : [])
 
   const possibleValues = useMemo<Set<Value>>(
     () => workersData?.listValues(column) || new Set(),
@@ -43,7 +40,7 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
     event: React.MouseEvent<HTMLElement>,
     newFormats: string[]
   ) => {
-    setFormats(newFormats)
+    console.log({ newFormats, active })
     if (newFormats.includes('use') && !active) {
       dispatch({
         type: FormatAction.SET_STAR_OPTION,
@@ -59,6 +56,7 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
         shapeIndex,
       })
     }
+    setFormats(newFormats)
   }
 
   return (
@@ -77,7 +75,11 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
             grid-column: span 2;
           `}
         >
-          <ToggleButton value="use" selected={active}>
+          <ToggleButton
+            value="use"
+            selected={active}
+            // onClick={(e) => console.log('click!', e)}
+          >
             {active ? <Visibility /> : <VisibilityOff />}
           </ToggleButton>
           <ToggleButton
