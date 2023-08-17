@@ -38,7 +38,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
               style={{
                 transform: `translateY(${index * textSize * 2}px)`,
               }}
-              key={`${shape.shape}: ${shape.value} (${index})`}
+              key={`${shape.shape}: ${shape.values} (${index})`}
             >
               <path
                 d={shapePaths[shape.shape].pathCommands}
@@ -55,7 +55,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
                   fontWeight: 400,
                 }}
               >
-                {shape.column}: {shape.value}
+                {shape.column}: {shape.values.join(', ')}
               </text>
             </g>
           ))}

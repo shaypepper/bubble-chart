@@ -18,8 +18,6 @@ export function setShapeOption(
         newChartOptions.shapes[shapeIndex][ShapeOptionsKeys.USE] = value
       }
       break
-
-    case ShapeOptionsKeys.VALUE:
     case ShapeOptionsKeys.COLOR:
     case ShapeOptionsKeys.COLUMN:
     case ShapeOptionsKeys.LABEL:
@@ -36,3 +34,18 @@ export function setShapeOption(
   return { ...state, chartOptions: newChartOptions }
 }
 export default setShapeOption
+
+export function setShapeValues(
+  state: State,
+  values: Value[],
+  shapeIndex: number
+) {
+  const newChartOptions = state.chartOptions.duplicate()
+
+  newChartOptions.shapes[shapeIndex].color =
+    newChartOptions.shapes[shapeIndex].color || 'black'
+  console.log(values)
+  newChartOptions.shapes[shapeIndex].values = values
+
+  return { ...state, chartOptions: newChartOptions }
+}

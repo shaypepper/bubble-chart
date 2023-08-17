@@ -37,7 +37,7 @@ export enum BubbleShape {
 export enum ShapeOptionsKeys {
   COLOR = 'color',
   COLUMN = 'column',
-  VALUE = 'value',
+  VALUES = 'values',
   LABEL = 'label',
   USE = 'use',
   SHAPE = 'shape',
@@ -48,7 +48,7 @@ export const blankValue = '(blank)'
 export class ShapeOptions {
   [ShapeOptionsKeys.COLOR]: string;
   [ShapeOptionsKeys.COLUMN]: Column;
-  [ShapeOptionsKeys.VALUE]: Value;
+  [ShapeOptionsKeys.VALUES]: Value[];
   [ShapeOptionsKeys.LABEL]: string;
   [ShapeOptionsKeys.USE]: boolean;
   [ShapeOptionsKeys.SHAPE]: Shapes
@@ -56,7 +56,7 @@ export class ShapeOptions {
   constructor() {
     this.column = ''
     this.color = ''
-    this.value = ''
+    this.values = []
     this.label = ''
     this.use = false
     this.shape = Shapes.HEART
@@ -196,9 +196,9 @@ export class Worker {
 
   get shapes() {
     const shapes = this.parent.chartOptions?.shapes || []
-    return shapes.map(({ value, column, color, use, shape }) => ({
+    return shapes.map(({ values, column, color, use, shape }) => ({
       fillColor: color,
-      show: value === this.rawData[column] && use,
+      show: values.includes(this.rawData[column]) && use,
       shape,
     }))
   }

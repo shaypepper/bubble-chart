@@ -108,7 +108,7 @@ export enum Shapes {
   FIST_2 = 'fist2',
   PILLOW = 'pillow',
   CLOUD = 'cloud',
-  STAR = 'star',
+  SHAPE = 'star',
   // AVATAR = 'avatar',
   T_SHIRT = 't-shirt',
 }
@@ -120,7 +120,7 @@ export const shapePaths = {
   [Shapes.FIST_2]: Fist2,
   [Shapes.PILLOW]: Pillow,
   [Shapes.CLOUD]: Cloud,
-  [Shapes.STAR]: Star,
+  [Shapes.SHAPE]: Star,
   // [Shapes.AVATAR]: Avatar,
   [Shapes.T_SHIRT]: TShirt,
 }
