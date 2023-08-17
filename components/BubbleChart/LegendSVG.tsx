@@ -17,9 +17,10 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
     <>
       <g
         style={{
-          transform: 'translate(0.01px, 0.02px)',
+          transform: 'translate(1px, 2px)',
           fontFamily: 'Lato',
           fontSize: textSize,
+          letterSpacing: 0,
         }}
       >
         {fillColorList.length || filteredShapes.length ? (
@@ -35,13 +36,13 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
           {filteredShapes.map((shape, index) => (
             <g
               style={{
-                transform: `translateY(${index * textSize * 1.7}px)`,
+                transform: `translateY(${index * textSize * 2}px)`,
               }}
-              key={`${shape.value}`}
+              key={`${shape.shape}: ${shape.value} (${index})`}
             >
               <path
                 d={shapePaths[shape.shape].pathCommands}
-                transform={`scale(0.0001)`}
+                transform={`scale(0.01)`}
                 fill={shape.color}
               />
               <text
@@ -63,11 +64,18 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
           <g
             style={{
               transform: `translateY(${
-                textSize * 2 * filteredShapes.length + 0.04
+                textSize * 2.5 * filteredShapes.length + 0.04
               }px)`,
             }}
           >
-            <text style={{ textTransform: 'uppercase' }}>
+            <text
+              style={{
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                letterSpacing: 0,
+                fontSize: textSize,
+              }}
+            >
               {colors.currentColumn}
             </text>
             {fillColorList
@@ -77,7 +85,7 @@ const LegendSVG: FC<{ textSize: number; chartOptions: ChartOptions }> = ({
                   <g
                     key={value}
                     style={{
-                      transform: `translateY(${i * textSize * 1.7 + 0.005}px)`,
+                      transform: `translateY(${i * textSize * 2 + 0.75}px)`,
                     }}
                   >
                     <MiniBubbleG
