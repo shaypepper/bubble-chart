@@ -109,7 +109,7 @@ const BubbleChart: FC = () => {
             right: '10px',
             fontSize: '10px',
             lineHeight: '125%',
-            maxWidth: '130px',
+            maxWidth: '140px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'right',
@@ -117,7 +117,9 @@ const BubbleChart: FC = () => {
             padding: '4px',
           }}
         >
-          <p style={{ padding: '0', margin: 0, textAlign: 'right' }}></p>
+          <p style={{ padding: '0', margin: 0, textAlign: 'right' }}>
+            Click any bubble to zoom. Chart is draggable.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <IconButton
               size="small"

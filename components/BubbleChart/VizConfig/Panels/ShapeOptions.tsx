@@ -40,7 +40,6 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
     event: React.MouseEvent<HTMLElement>,
     newFormats: string[]
   ) => {
-    console.log({ newFormats, active })
     if (newFormats.includes('use') && !active) {
       dispatch({
         type: FormatAction.SET_STAR_OPTION,

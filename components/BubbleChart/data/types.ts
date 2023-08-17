@@ -98,7 +98,8 @@ export class ChartOptions {
     const newOptions = new ChartOptions(
       this.shapes,
       this.textLineColumns,
-      this.colors
+      this.colors,
+      this.bubbleShape
     )
     return newOptions
   }
