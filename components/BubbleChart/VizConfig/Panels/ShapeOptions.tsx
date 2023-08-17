@@ -40,17 +40,16 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
     event: React.MouseEvent<HTMLElement>,
     newFormats: string[]
   ) => {
-    console.log({ newFormats, active })
     if (newFormats.includes('use') && !active) {
       dispatch({
-        type: FormatAction.SET_STAR_OPTION,
+        type: FormatAction.SET_SHAPE_OPTION,
         optionType: ShapeOptionsKeys.USE,
         value: true,
         shapeIndex,
       })
     } else if (!newFormats.includes('use') && active) {
       dispatch({
-        type: FormatAction.SET_STAR_OPTION,
+        type: FormatAction.SET_SHAPE_OPTION,
         optionType: ShapeOptionsKeys.USE,
         value: false,
         shapeIndex,
@@ -122,7 +121,7 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
             id="shape-options-column-dropdown"
             onChange={(e: BaseSyntheticEvent) => {
               dispatch({
-                type: FormatAction.SET_STAR_OPTION,
+                type: FormatAction.SET_SHAPE_OPTION,
                 optionType: ShapeOptionsKeys.COLUMN,
                 value: `${e.target.textContent}`,
                 shapeIndex,
@@ -141,11 +140,10 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
             <Autocomplete
               id="shape-options-value-dropdown"
               options={[...possibleValues].map((v) => `${v}`)}
-              onChange={(e: BaseSyntheticEvent) => {
+              onChange={(e: BaseSyntheticEvent, values) => {
                 dispatch({
-                  type: FormatAction.SET_STAR_OPTION,
-                  optionType: ShapeOptionsKeys.VALUE,
-                  value: e.target.textContent,
+                  type: FormatAction.SET_SHAPE_VALUES,
+                  values: values as Value[],
                   shapeIndex,
                 })
               }}
@@ -153,7 +151,8 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
               renderInput={(params) => (
                 <TextField {...params} label={`Value`} size="small" />
               )}
-              value={`${current.value}`}
+              multiple
+              value={current?.values?.map((v) => new String(v))}
             />
           )}
         </div>
@@ -178,7 +177,7 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
               <ShapeGrid
                 generateOnClick={(shape) => () => {
                   dispatch({
-                    type: FormatAction.SET_STAR_OPTION,
+                    type: FormatAction.SET_SHAPE_OPTION,
                     optionType: ShapeOptionsKeys.SHAPE,
                     value: shape,
                     shapeIndex,
@@ -190,7 +189,7 @@ const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
               <ColorGrid
                 generateOnClick={(color) => () => {
                   dispatch({
-                    type: FormatAction.SET_STAR_OPTION,
+                    type: FormatAction.SET_SHAPE_OPTION,
                     optionType: ShapeOptionsKeys.COLOR,
                     value: color,
                     shapeIndex,

@@ -111,7 +111,7 @@ export const EditBubble: FC<
       <g transform="translate(50 42.5) scale(1.75)">
         {shapeOptions.map((shapeOption, shapeOptionIndex) => (
           <path
-            key={`shape${shapeOptionIndex} - ${shapeOption.value}`}
+            key={`shape${shapeOptionIndex} - ${shapeOption.values}`}
             d={shapePaths[shapeOption.shape]?.pathCommands}
             transform={shapeTransform.SVG[shapeOptionIndex](R / 2)}
             fill={shapeOption.use ? shapeOption.color : placeHolderGrey}

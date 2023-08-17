@@ -100,7 +100,7 @@ export const KonvaBubble: FC<BubbleProps> = ({
               fontSize={fontSize}
               text={t}
               fill={innerTextColor}
-              letterSpacing={-0.04}
+              letterSpacing={-0.01}
             />
           </>
         )

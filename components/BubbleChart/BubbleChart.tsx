@@ -48,6 +48,7 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Worker | Grouping>[]
   >([])
   const { stratifiedData, chartOptions } = useContext(WorkerDataContext)
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     const windowWidth = document?.body.offsetWidth
@@ -91,7 +92,7 @@ const BubbleChart: FC = () => {
       {/* <BubbleChartSVG
         bubbleData={bubbleData}
         chartOptions={chartOptions}
-        multiplier={1}
+        multiplier={100}
       /> */}
       <div
         style={{
@@ -108,7 +109,7 @@ const BubbleChart: FC = () => {
             right: '10px',
             fontSize: '10px',
             lineHeight: '125%',
-            maxWidth: '120px',
+            maxWidth: '140px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'right',
@@ -152,7 +153,7 @@ const BubbleChart: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div style={{ display: '' }}>
+        <div style={{ display: '', cursor: dragging ? 'grabbing' : 'grab' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}
@@ -165,7 +166,17 @@ const BubbleChart: FC = () => {
                 ref={layerRef}
                 draggable={true}
                 onDragEnd={(e) => {
-                  setPosition(e.target.attrs)
+                  setPosition({
+                    x: e?.target?.attrs?.x || 0,
+                    y: e?.target?.attrs?.y || 0,
+                  })
+                  setDragging(false)
+                }}
+                onMouseDown={() => {
+                  setDragging(true)
+                }}
+                onMouseUp={() => {
+                  setDragging(false)
                 }}
               >
                 {bubbleData?.map(
@@ -175,6 +186,25 @@ const BubbleChart: FC = () => {
                       x: (idx ? d.x : 0.5) * width,
                       y: (idx ? d.y : 0.5) * height,
                     }
+                    const windowWidth = document?.body.offsetWidth
+                    const windowHeight = document?.body.offsetHeight
+                    const circleR = d.r * height
+                    const showTextLines =
+                      isWorker(d.data) && circleR * scale > windowHeight / 25
+
+                    // only render if it's in view
+                    if (
+                      isWorker(d.data) &&
+                      (-position.x / scale > translation.x + circleR * 2 ||
+                        -(position.x - windowWidth) / scale <
+                          translation.x - circleR ||
+                        -position.y / scale > translation.y + circleR * 2 ||
+                        -(position.y - windowHeight) / scale <
+                          translation.y - circleR)
+                    ) {
+                      return null
+                    }
+
                     function refocus() {
                       const windowWidth = document?.body.offsetWidth
                       const windowHeight = document?.body.offsetHeight
@@ -194,7 +224,6 @@ const BubbleChart: FC = () => {
                       })
                       setScale(newScale)
                     }
-                    const circleR = d.r * height
                     return !isWorker(d.data) ? (
                       <KonvaGroupingBubble
                         key={d.id}
@@ -209,7 +238,7 @@ const BubbleChart: FC = () => {
                         radius={d.r}
                         bubbleFillColor={colors?.fillColor}
                         innerTextColor={colors?.textColor}
-                        textLines={d.data.textLines}
+                        textLines={showTextLines ? d.data.textLines : []}
                         translation={translation}
                         shapes={d.data.shapes}
                         onClick={refocus}

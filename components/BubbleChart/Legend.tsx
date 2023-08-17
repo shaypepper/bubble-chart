@@ -111,9 +111,9 @@ const Legend: FC = () => {
               {values.map((s) => {
                 const ShapeComponent = shapePaths[s.shape]
                 return (
-                  <li key={`${s.value}`}>
+                  <li key={`${s.values}`}>
                     <ShapeComponent height={14} fillColor={s.color} />
-                    {s.value}
+                    {s.values.join(', ')}
                   </li>
                 )
               })}

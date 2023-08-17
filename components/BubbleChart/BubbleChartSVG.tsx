@@ -9,11 +9,12 @@ const BubbleChartSVG: FC<{
   chartOptions: ChartOptions
   multiplier?: number
 }> = ({ bubbleData, chartOptions, multiplier = 100 }) => {
+  const m = multiplier
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       // width={'100%'}
-      viewBox={`0 0 ${multiplier} ${multiplier}`}
+      viewBox={`${m * -0.1} ${m * -0.1} ${m * 1.2} ${m * 1.2}`}
       style={{ height: '100vmin' }}
       // viewBox={`0 0 ${width} ${width}`}
     >

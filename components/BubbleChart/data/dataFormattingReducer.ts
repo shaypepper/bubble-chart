@@ -25,6 +25,7 @@ import {
 } from './reducerFunctions'
 import { setBubbleShape } from './reducerFunctions/setBubbleShape'
 import uploadConfigJSON from './reducerFunctions/uploadConfigJSON'
+import { setShapeValues } from './reducerFunctions/setShapeOptions'
 
 export interface State {
   /**  Current step in the process */
@@ -53,8 +54,9 @@ export enum FormatAction {
   STRATIFY_DATA = 'stratifyData',
   SET_COLORS = 'setColors',
   GO_TO_STEP = 'goToStep',
-  SET_STAR_OPTION = 'setShapeOption',
-  TOGGLE_STAR = 'toggleShapeUse',
+  SET_SHAPE_OPTION = 'setShapeOption',
+  SET_SHAPE_VALUES = 'setShapeValues',
+  TOGGLE_SHAPE = 'toggleShapeUse',
   SET_TEXT_LINE = 'setTextLine',
   SET_COLOR_COLUMN = 'setColorColumn',
   SET_COLOR_MAP = 'setColorMap',
@@ -91,13 +93,18 @@ export type Action =
     }
   | { type: FormatAction.GO_TO_STEP; step: Steps }
   | {
-      type: FormatAction.SET_STAR_OPTION
+      type: FormatAction.SET_SHAPE_OPTION
       optionType: ShapeOptionsKeys
       value: Value
       shapeIndex: number
     }
   | {
-      type: FormatAction.TOGGLE_STAR
+      type: FormatAction.SET_SHAPE_VALUES
+      values: Value[]
+      shapeIndex: number
+    }
+  | {
+      type: FormatAction.TOGGLE_SHAPE
       shapeIndex: number
     }
   | {
@@ -147,13 +154,17 @@ const dataFormattingReducer: Reducer<State, Action> = (
       newState = stratifyData(state)
       break
 
-    case FormatAction.SET_STAR_OPTION:
+    case FormatAction.SET_SHAPE_OPTION:
       newState = setShapeOption(
         state,
         action.optionType,
         action.value,
         action.shapeIndex
       )
+      break
+
+    case FormatAction.SET_SHAPE_VALUES:
+      newState = setShapeValues(state, action.values, action.shapeIndex)
       break
 
     case FormatAction.SET_TEXT_LINE:
