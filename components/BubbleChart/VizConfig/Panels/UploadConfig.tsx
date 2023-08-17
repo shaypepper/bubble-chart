@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 

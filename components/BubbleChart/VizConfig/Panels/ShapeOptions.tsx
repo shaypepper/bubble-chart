@@ -1,13 +1,15 @@
 import { BaseSyntheticEvent, FC, useContext, useMemo, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
-import Popover from '@mui/material/Popover'
 import TextField from '@mui/material/TextField'
+import Popover from '@mui/material/Popover'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import FormGroup from '@mui/material/FormGroup'
 
 import { css } from '@emotion/css'
-import { ArrowDropDown, Visibility, VisibilityOff } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { FormatAction } from '../../data/dataFormattingReducer'
 import { WorkerDataContext } from '../../data/WorkerDataProvider'
 import { ShapeOptionsKeys, Value } from '../../data/types'
@@ -18,7 +20,6 @@ import ShapeGrid from './ShapeGrid'
 
 const ShapeOptionsForm: FC<{ shapeIndex: number }> = ({ shapeIndex = 0 }) => {
   const { workersData, dispatch, chartOptions } = useContext(WorkerDataContext)
-
   const current = chartOptions.shapes[shapeIndex]
   const column = current?.column
   const active = current?.use

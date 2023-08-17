@@ -1,13 +1,11 @@
 import { BaseSyntheticEvent, FC, useContext, useState } from 'react'
 import { css } from '@emotion/css'
-import {
-  Autocomplete,
-  List,
-  TextField,
-  ListItem,
-  Popover,
-  ListSubheader,
-} from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import List from '@mui/material/List'
+import TextField from '@mui/material/TextField'
+import ListItem from '@mui/material/ListItem'
+import Popover from '@mui/material/Popover'
+import ListSubheader from '@mui/material/ListSubheader'
 import { deepGrey, white } from '../../../shared/tokens/colors'
 import { pxToRem } from '../../../shared/tokens/spacing'
 import { FormatAction } from '../../data/dataFormattingReducer'
@@ -19,6 +17,7 @@ import ColorGrid from './ColorGrid'
 const valueListClass = css`
   overflow: scroll;
   max-height: 300px;
+  something: else;
 `
 
 const colorPickerClass = css`
