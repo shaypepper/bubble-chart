@@ -24,6 +24,7 @@ import {
   loadExampleWorkersAndChartOptions,
 } from './reducerFunctions'
 import { setBubbleShape } from './reducerFunctions/setBubbleShape'
+import uploadConfigJSON from './reducerFunctions/uploadConfigJSON'
 
 export interface State {
   /**  Current step in the process */
@@ -60,6 +61,7 @@ export enum FormatAction {
   RESET_CHART_FRAME = 'resetChartFrame',
   LOAD_EXAMPLE_DATA = 'loadExampleData',
   SET_BUBBLE_SHAPE = 'setBubbleShape',
+  UPLOAD_CONFIG = 'upoadConfigJSON',
 }
 
 export type Action =
@@ -113,6 +115,7 @@ export type Action =
     }
   | { type: FormatAction.LOAD_EXAMPLE_DATA }
   | { type: FormatAction.SET_BUBBLE_SHAPE; bubbleShape: BubbleShape }
+  | { type: FormatAction.UPLOAD_CONFIG; json: string }
 
 const dataFormattingReducer: Reducer<State, Action> = (
   state,
@@ -167,6 +170,10 @@ const dataFormattingReducer: Reducer<State, Action> = (
 
     case FormatAction.SET_BUBBLE_SHAPE:
       newState = setBubbleShape(state, action.bubbleShape)
+      break
+
+    case FormatAction.UPLOAD_CONFIG:
+      newState = uploadConfigJSON(state, action.json)
       break
 
     default:

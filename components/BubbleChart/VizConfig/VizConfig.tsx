@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { useContext } from 'react'
 import { css } from '@emotion/css'
+import { IconButton, Tooltip } from '@mui/material'
+import { ContentCopy, Upload } from '@mui/icons-material'
 import { pxToRem } from '../../shared/tokens/spacing'
 import { WorkerDataContext } from '../data/WorkerDataProvider'
 import { FormatAction } from '../data/dataFormattingReducer'
@@ -9,6 +11,7 @@ import { EditBubble } from '../Bubble/EditBubble'
 import FillColorOptions from './Panels/FillColorOptions'
 import ShapeOptions from './Panels/ShapeOptions'
 import TextLineOptions from './Panels/TextLineOptions'
+import { UploadConfig } from './Panels/UploadConfig'
 import { configTitleClass } from './styles'
 
 const containerClass = css`
@@ -21,7 +24,7 @@ export type ConfigPanel = {
   name: string
   index: number
   type: string
-  translate: { x: number; y: number }
+  translate?: { x: number; y: number }
 }
 const configPanels: ConfigPanel[] = [
   {
@@ -111,6 +114,33 @@ const VizConfig: React.FC = () => {
         )}
 
         {currentConfigPanel?.type === 'fill' && <FillColorOptions />}
+        {currentConfigPanel?.type === 'JSON' && <UploadConfig />}
+      </div>
+      <div>
+        <Tooltip title="Paste config values">
+          <IconButton
+            size="small"
+            onClick={() => {
+              setCurrentConfigPanel({
+                name: 'Paste config JSON',
+                index: 0,
+                type: 'JSON',
+              })
+            }}
+          >
+            <Upload />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Copy config values">
+          <IconButton
+            size="small"
+            onClick={() => {
+              navigator.clipboard.writeText(JSON.stringify(chartOptions))
+            }}
+          >
+            <ContentCopy />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   )

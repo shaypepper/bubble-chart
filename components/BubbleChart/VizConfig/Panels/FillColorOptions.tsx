@@ -18,7 +18,7 @@ import ColorGrid from './ColorGrid'
 
 const valueListClass = css`
   overflow: scroll;
-  height: 300px;
+  max-height: 300px;
 `
 
 const colorPickerClass = css`
