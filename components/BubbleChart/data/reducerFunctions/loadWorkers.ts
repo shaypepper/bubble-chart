@@ -13,8 +13,8 @@ export function loadWorkers(
   }
 
   const workersData = new Workers(parsedData, state.chartOptions, {
-    displayName: '',
-    groupings: [],
+    displayName: state.workersData?.columnMap?.displayName || '',
+    groupings: state.workersData?.columnMap?.groupings || [],
   })
 
   return {

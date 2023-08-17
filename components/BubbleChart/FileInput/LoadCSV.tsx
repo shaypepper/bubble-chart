@@ -13,6 +13,7 @@ const columnMapLabels: { [s: string]: string } = {
 const LoadCSV: React.FC = ({ children = 'Load your outreach data' }) => {
   const { convertCsv, dispatch, workersData } = useContext(WorkerDataContext)
   const action = FormatAction.LOAD_WORKERS_CSV
+  const displayName = workersData?.columnMap.displayName
 
   const convertedCsv = workersData
 
@@ -24,7 +25,6 @@ const LoadCSV: React.FC = ({ children = 'Load your outreach data' }) => {
     }
     setFile(newFile || null)
   }
-
   return (
     <>
       <div>
@@ -70,28 +70,25 @@ const LoadCSV: React.FC = ({ children = 'Load your outreach data' }) => {
                 marginTop: pxToRem(20),
               }}
             >
-              {Object.entries({
-                displayName: convertedCsv.columnMap.displayName,
-              }).map(([key]) => (
-                <Autocomplete
-                  size="small"
-                  key={key}
-                  id={`${key}-dropdown-for-csv`}
-                  options={convertedCsv.columns || []}
-                  renderInput={(params) => (
-                    <TextField {...params} label={columnMapLabels[`${key}`]} />
-                  )}
-                  onChange={(e: React.BaseSyntheticEvent) => {
-                    dispatch({
-                      type: FormatAction.SET_COLUMN_MAP,
-                      columnMap: {
-                        [key]: e.target.textContent,
-                      },
-                      listFromCsv: convertedCsv,
-                    })
-                  }}
-                />
-              ))}
+              <Autocomplete
+                size="small"
+                key="displayName"
+                id={`displayName-dropdown-for-csv`}
+                options={convertedCsv.columns || []}
+                renderInput={(params) => (
+                  <TextField {...params} label={columnMapLabels.displayName} />
+                )}
+                value={displayName}
+                onChange={(e: React.BaseSyntheticEvent) => {
+                  dispatch({
+                    type: FormatAction.SET_COLUMN_MAP,
+                    columnMap: {
+                      displayName: e.target.textContent,
+                    },
+                    listFromCsv: convertedCsv,
+                  })
+                }}
+              />
             </div>
             <div
               style={{
@@ -123,6 +120,7 @@ const LoadCSV: React.FC = ({ children = 'Load your outreach data' }) => {
                           type: FormatAction.SET_COLUMN_MAP,
                           columnMap: {
                             groupings: newGroupings,
+                            displayName,
                           },
                           listFromCsv: convertedCsv,
                         })
