@@ -48,6 +48,7 @@ const BubbleChart: FC = () => {
     d3.HierarchyCircularNode<Worker | Grouping>[]
   >([])
   const { stratifiedData, chartOptions } = useContext(WorkerDataContext)
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     const windowWidth = document?.body.offsetWidth
@@ -91,7 +92,7 @@ const BubbleChart: FC = () => {
       {/* <BubbleChartSVG
         bubbleData={bubbleData}
         chartOptions={chartOptions}
-        multiplier={1}
+        multiplier={100}
       /> */}
       <div
         style={{
@@ -150,7 +151,7 @@ const BubbleChart: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div style={{ display: '' }}>
+        <div style={{ display: '', cursor: dragging ? 'grabbing' : 'grab' }}>
           {stratifiedData && (
             <Stage
               width={document.body.offsetWidth}
@@ -167,6 +168,13 @@ const BubbleChart: FC = () => {
                     x: e?.target?.attrs?.x || 0,
                     y: e?.target?.attrs?.y || 0,
                   })
+                  setDragging(false)
+                }}
+                onMouseDown={() => {
+                  setDragging(true)
+                }}
+                onMouseUp={() => {
+                  setDragging(false)
                 }}
               >
                 {bubbleData?.map(
