@@ -62,7 +62,7 @@ export const SVGBubble: FC<BubbleProps> = ({
           <text
             fill={innerTextColor}
             fontFamily={interFont}
-            letterSpacing={-0.04}
+            letterSpacing={-0.005}
           >
             <textPath
               textAnchor="middle"
